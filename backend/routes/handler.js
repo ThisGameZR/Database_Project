@@ -28,9 +28,9 @@ router.post('/login',async (req,res) => {
                         let sql = `select firstname,middlename,lastname from employee where eid = ${result[0].EID}`;
                         pool.query(sql,(err,row) => {
                             if(row[0].middlename == "")
-                                res.send({message: `LOGIN AS: ${row[0].firstname} ${row[0].lastname}`});
+                                res.send({message: `${row[0].firstname} ${row[0].lastname}`});
                             else
-                                res.send({message: `LOGIN AS: ${row[0].firstname} ${row[0].middlename} ${row[0].lastname}`});
+                                res.send({message: `${row[0].firstname} ${row[0].middlename} ${row[0].lastname}`});
                         });
                     }else{
                         res.send({message: "Incorrect username or password"});
