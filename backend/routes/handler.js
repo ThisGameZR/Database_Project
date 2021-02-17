@@ -9,55 +9,53 @@ router.get('/product',(req,res) => {
     });
 });
 
-router.post('/login',async (req,res) => {
+router.post('/login',(req,res) => {
     const username = req.body.username;
     const password = req.body.password;
+    let success = false;
 
     if(username === "")
-        res.status(200).send({message: "Username cannot be blank"});
+        return res.status(200).send({message: "Username cannot be blank", success: success});
     if(password === "")
-        res.status(200).send({message: "Password cannot be blank"});
+        return res.status(200).send({message: "Password cannot be blank", success: success});
     try{
         let sql = `select * from employeeAccount where username = '${username}'`;
         pool.query(sql,(err,result) => {
             if(err)
-                res.send({message: err});
+                return res.send({message: err, success: success});
             if(result.length != 0){
-                try{
-                    if(bcrypt.compare(password,result[0].Password)){
-                        let sql = `select firstname,middlename,lastname from employee where eid = ${result[0].EID}`;
-                        pool.query(sql,(err,row) => {
-                            if(row[0].middlename == "")
-                                res.send({message: `${row[0].firstname} ${row[0].lastname}`});
-                            else
-                                res.send({message: `${row[0].firstname} ${row[0].middlename} ${row[0].lastname}`});
-                        });
-                    }else{
-                        res.send({message: "Incorrect username or password"});
-                    }
-                }catch{
-                    res.status(400).send();
+                if(bcrypt.compare(password,result[0].Password)){
+                    success = true;
+                    let sql = `select firstname,middlename,lastname from employee where eid = ${result[0].EID}`;
+                    pool.query(sql,(err,row) => {
+                        if(row[0].middlename == "")
+                            return res.send({message: `${row[0].firstname} ${row[0].lastname}`, success: success});
+                        else
+                            return res.send({message: `${row[0].firstname} ${row[0].middlename} ${row[0].lastname}`, success: success});
+                    });
+                }else{
+                    return res.send({message: "Incorrect username or password", success: success});
                 }
             }else
-            res.send({message: "There is more than one user"});
+            return res.send({message: "Incorrect username or password", success: success});
         });
     }catch{
-        res.status(400).send();
+        return res.status(400).send("2");
     }
 });
 
-router.post('/sqlInjection',async (req,res) => {
+router.post('/sqlInjection', (req,res) => {
     try{
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const hashedPassword = bcrypt.hash(req.body.password, 10);
         const user = {EID: req.body.eid, username: req.body.username, password:hashedPassword};
         const sql = `insert into employeeAccount(EID,username,password) values (${user.EID},'${user.username}','${user.password}')`
         pool.query(sql, (err,result) => {
             if(err)
                 console.log(err);
-            res.send("Successfully insert into database");
+            return res.send("Successfully insert into database");
         });
     }catch{
-        res.send("Error");
+        return res.send("Error");
     }
 });
 

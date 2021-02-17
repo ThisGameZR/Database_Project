@@ -1,10 +1,30 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Col, Container, Row, Button, Image, Navbar, Nav, FormControl, Form, Tab} from 'react-bootstrap';
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+const LOCAL_STORAGE_KEY_LOGIN = "loginForm.loginyet";
+const LOCAL_STORAGE_KEY_USER = "loginForm.user";
+
 export default function LoginForm() {
-    const [loginyet, setLoginyet] = useState(false); 
+    const [loginyet, setLoginyet] = useState(false);
+    const [user,setUser] = useState("");
+
+    useEffect(()=>{
+        const storedLoginyet = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_LOGIN));
+        const storedUser = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_USER));
+        if(storedLoginyet) setLoginyet(storedLoginyet);
+        if(storedUser) setUser(storedUser);
+    }, []);
+
+    useEffect(()=> {
+        localStorage.setItem(LOCAL_STORAGE_KEY_LOGIN, JSON.stringify(loginyet))
+    }, [loginyet]);
+
+    useEffect(()=>{
+        localStorage.setItem(LOCAL_STORAGE_KEY_USER, JSON.stringify(user))
+    },[user]);
+
     if(loginyet == false){
         return (
             <div>
@@ -20,7 +40,8 @@ export default function LoginForm() {
     }else{ // Already login 
         return(
             <>
-                <Navbar.Brand id="welcomeMessage"></Navbar.Brand>
+                <Navbar.Brand id="welcomeMessage">{user}</Navbar.Brand>
+                <Button onClick={(e) => logout(e)}>LOG OUT</Button>
             </>
         );
     }
@@ -31,11 +52,19 @@ export default function LoginForm() {
             password: document.getElementById('password').value
         }
         axios.post('/login',request).then(res =>{
-            setLoginyet(true);
-            document.getElementById('welcomeMessage').innerHTML = res.data.message;
+            console.log(res);
+            if(res.data.success == true){
+                setLoginyet(true);
+                setUser(res.data.message);
+            }else{
+                alert(res.data.message);
+            }
         }).catch(err=>{
             console.log(err);
         })
+    }
+    function logout(e){
+        setLoginyet(false);
     }
 }
 

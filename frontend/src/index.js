@@ -2,7 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+const config = {
+  headers: {
+    accept: 'application/json',
+  },
+  data: {},
+};
 ReactDOM.render(
   <React.StrictMode>
     <App />
