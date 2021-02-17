@@ -3,6 +3,7 @@ import Product from './components/Product';
 import {BrowserRouter as Router,Switch,Route} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavigationBar from './components/NavigationBar';
+import SQLInjection from './components/SQLInjection';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/product" exact component={Product}/>
+            <Route path="/sql" exact component={SQLInjection}></Route>
           </Switch>
         </Router>   
        

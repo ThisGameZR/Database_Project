@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {Col, Container, Row, Button, Image, Navbar, Nav, FormControl, Form, Tab} from 'react-bootstrap';
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import shoppingCart from './Images/shoppingCart.png';
 
 function NavigationBar(){
+
     return(
         <Container fluid >
             {/* Header bar */}
@@ -37,7 +38,7 @@ function login(e){
         username: document.getElementById('username').value,
         password: document.getElementById('password').value
     }
-    axios.post('/',request).then(res =>{
+    axios.post('/login',request).then(res =>{
         alert(res.data.message);
     }).catch(err=>{
         console.log(err);
