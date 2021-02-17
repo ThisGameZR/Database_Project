@@ -12,8 +12,8 @@ export default class Product extends Component {
     buttonClick = () => {
         axios.get("/product").then(res => {
            this.setState({
-               name: res.data[0].name,
-               price: res.data[0].price
+               name: res.data[1].ProductName,
+               price: res.data[1].Price
             });
         });
     };

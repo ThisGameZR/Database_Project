@@ -1,12 +1,23 @@
 const express = require('express');
 const router = express.Router();
+const mysql2 = require('mysql2');
+const con = mysql2.createConnection({
+    user: "root",
+    password: "root",
+    port:"3306",
+    database:"plasticShop"
+});
 
 router.get('/product',(req,res) => {
-    const data = [{
-        "name": "Bicycle",
-        "price": 200,
-    }];
-    res.end(JSON.stringify(data));
+    con.query("select * from Product",(err,result) => {
+        res.end(JSON.stringify(result));
+    });
+});
+
+router.post('/',(req,res) => {
+    res.status(200).send({
+        message:"LOGIN SUCCESSFUL"
+    })
 });
 
 
