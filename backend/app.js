@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql2 = require('mysql2');
+
 const port = 3030;
 
 const routeHandler = require('./routes/handler.js');
