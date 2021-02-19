@@ -6,7 +6,16 @@ This project is template for E-commerce web applications.
 ## Available Scripts
 
 In the project directory, you can execute the following commands:
-### `npm run client --prefix ./backend`
+
+### `npm install --prefix ./backend/`
+
+Install all dependecies which the server needs
+
+### `npm install --prefix ./frontend/`
+
+Install all dependencies which the application needs
+
+### `npm run client --prefix ./backend/`
 
 Runs the app(frontend) in the development mode.\
 Open [http://localhost:3000] to view it in the browser.
@@ -14,12 +23,12 @@ Open [http://localhost:3000] to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm run server --prefix ./backend`
+### `npm run server --prefix ./backend/`
 
 Runs the server on [http://localhost:3030]\
 The server will reload if you make edits.
 
-### `npm run dev --prefix ./backend`
+### `npm run dev --prefix ./backend/`
 
 Run both frontend and backend\
 The app and server will reload if you make edits
