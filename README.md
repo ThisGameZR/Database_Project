@@ -25,4 +25,6 @@ Run both frontend and backend
 The app and server will reload if you make edits\
 
 ## You also need database to make this work properly
-## You can create database by database.sql
+You can create database by execute database.sql file\
+The database needs to be on port 3306
+or you can configure it yourself in pool.js file
