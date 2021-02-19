@@ -5,7 +5,7 @@ This project is template for E-commerce web applications.
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory, you can execute the following commands:
 ### `npm run client --prefix ./backend`
 
 Runs the app(frontend) in the development mode.\
