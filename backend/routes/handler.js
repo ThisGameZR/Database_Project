@@ -9,7 +9,7 @@ router.get('/product',(req,res) => {
     });
 });
 
-router.post('/login',(req,res) => {
+router.post('/login',async (req,res) => {
     const username = req.body.username;
     const password = req.body.password;
     let success = false;
@@ -20,11 +20,11 @@ router.post('/login',(req,res) => {
         return res.status(200).send({message: "Password cannot be blank", success: success});
     try{
         let sql = `select * from employeeAccount where username = '${username}'`;
-        pool.query(sql,(err,result) => {
+        pool.query(sql,async (err,result) => {
             if(err)
                 return res.send({message: err, success: success});
             if(result.length != 0){
-                if(bcrypt.compare(password,result[0].Password)){
+                if(await bcrypt.compare(password,result[0].Password)){
                     success = true;
                     let sql = `select firstname,middlename,lastname from employee where eid = ${result[0].EID}`;
                     pool.query(sql,(err,row) => {

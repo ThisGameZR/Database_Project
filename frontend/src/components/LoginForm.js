@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Col, Container, Row, Button, Image, Navbar, Nav, FormControl, Form, Tab} from 'react-bootstrap';
+import {Button, Navbar, Form} from 'react-bootstrap';
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -13,9 +13,12 @@ export default function LoginForm() {
     useEffect(()=>{
         const storedLoginyet = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_LOGIN));
         const storedUser = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_USER));
+        
         if(storedLoginyet) setLoginyet(storedLoginyet);
         if(storedUser) setUser(storedUser);
+    
     }, []);
+
 
     useEffect(()=> {
         localStorage.setItem(LOCAL_STORAGE_KEY_LOGIN, JSON.stringify(loginyet))
@@ -26,22 +29,25 @@ export default function LoginForm() {
     },[user]);
 
     if(loginyet == false){
+    
         return (
             <div>
                 <Form inline onSubmit={(e) => login(e)}>                
                     <Form.Group>
                         <Form.Control autoComplete="off" type="text" placeholder="Employee ID" id="username" style={{marginRight:"10px"}}></Form.Control>
                         <Form.Control type="password" placeholder="Password" id="password" style={{marginRight:"10px"}}></Form.Control>
-                        <Button type="submit">LOGIN</Button>
+                        <Button variant="success" type="submit">LOGIN</Button>
                     </Form.Group>
                 </Form>
             </div>
         )
     }else{ // Already login 
+        
         return(
             <>
+                <div style={{width:"280px"}}></div>
                 <Navbar.Brand id="welcomeMessage">{user}</Navbar.Brand>
-                <Button onClick={(e) => logout(e)}>LOG OUT</Button>
+                <Button variant="success"onClick={(e) => logout(e)}>LOG OUT</Button>
             </>
         );
     }
@@ -52,12 +58,14 @@ export default function LoginForm() {
             password: document.getElementById('password').value
         }
         axios.post('/login',request).then(res =>{
-            console.log(res);
             if(res.data.success == true){
                 setLoginyet(true);
                 setUser(res.data.message);
+                alert("Successfully login as: " + res.data.message);
             }else{
                 alert(res.data.message);
+                document.getElementById('username').value = "";
+                document.getElementById('password').value = "";
             }
         }).catch(err=>{
             console.log(err);
