@@ -16,13 +16,13 @@ You will also see any lint errors in the console.
 
 ### `npm run server --prefix ./backend`
 
-Runs the server on [http://localhost:3030]
-The server will reload if you make edits.\
+Runs the server on [http://localhost:3030]\
+The server will reload if you make edits.
 
 ### `npm run dev --prefix ./backend`
 
-Run both frontend and backend
-The app and server will reload if you make edits\
+Run both frontend and backend\
+The app and server will reload if you make edits
 
 ## You also need database to make this work properly
 You can create database by execute database.sql file\
