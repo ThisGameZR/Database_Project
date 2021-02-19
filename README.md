@@ -9,7 +9,7 @@ In the project directory, you can execute the following commands:
 ### `npm run client --prefix ./backend`
 
 Runs the app(frontend) in the development mode.\
-Open [http://localhost:3000]to view it in the browser.
+Open [http://localhost:3000] to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
