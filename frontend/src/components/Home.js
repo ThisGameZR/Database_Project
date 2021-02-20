@@ -1,9 +1,11 @@
 import React from 'react';
-import bootstrap from 'react-bootstrap';
+import {Row,Col,Container} from 'react-bootstrap';
 
 function Home(){
     return(
-        <h1>THIS IS HOME PAGE</h1>
+        <div style={{marginRight:'15px',marginLeft:'15px'}}>
+            This is home page
+        </div>
     );
 }
 

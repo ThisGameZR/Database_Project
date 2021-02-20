@@ -1,8 +1,10 @@
-import React, {useRef} from 'react';
-import {Col, Container, Row, Button, Image, Navbar, Nav, FormControl, Form, Tab} from 'react-bootstrap';
+import React, {useState} from 'react';
+import {Container, Image, Navbar, Nav, NavDropdown, DropdownButton, Dropdown} from 'react-bootstrap';
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import shoppingCart from './Images/shoppingCart.png';
+import LoginForm from './LoginForm';
+import './CSS/Navigation.css';
 
 function NavigationBar(){
 
@@ -10,39 +12,39 @@ function NavigationBar(){
         <Container fluid >
             {/* Header bar */}
             <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
-                <Navbar.Brand href="/home">
+                <Navbar.Brand href="/">
                     <Image src={shoppingCart} roundedCircle style={{width:"100px",height:"100px"}}/>
                     PLASTIC SHOP
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-between" style={{marginLeft:"50px"}}>
+                <Navbar.Collapse id="responsive-navbar-nav" style={{marginLeft:"50px"}}>
                     <Nav mr="auto">
                         <Nav.Link href="/product">PRODUCT</Nav.Link>
+                        <NavDropdown title="Recommend" id="responsive-nav-dropdown" variant="dark">
+                            <NavDropdown.Item href="#" style={{color:"dodgerblue", fontSize:"14px"}}>Kitchen Tools</NavDropdown.Item>
+                            <NavDropdown.Item href="#" style={{color:"dodgerblue", fontSize:"14px"}}>Everyday Life</NavDropdown.Item>
+                            <NavDropdown.Item href="#" style={{color:"dodgerblue", fontSize:"14px"}}>Kid Toys</NavDropdown.Item>
+                        </NavDropdown>
+                        <NavDropdown title="Support" id="responsive-nav-dropdown" variant="dark">
+                            <NavDropdown.Item href="#">
+                                <div class="support-text">Contact Number</div>
+                                <div class="phone-number">123-456-789</div>
+                            </NavDropdown.Item>
+                            <NavDropdown.Item href="#">
+                                <div class="support-text">Facebook</div>
+                            </NavDropdown.Item>
+                            <NavDropdown.Item href="#">
+                                <div class="support-text">Line ID</div>
+                                <div class="phone-number">@AXIOS</div>
+                            </NavDropdown.Item>
+                        </NavDropdown>
                     </Nav>
-                    <Form inline onSubmit={(e) => login(e)}>
-                        <Form.Group>
-                            <Form.Control type="text" placeholder="Employee ID" id="username" style={{marginRight:"10px"}}></Form.Control>
-                            <Form.Control type="password" placeholder="Password" id="password" style={{marginRight:"10px"}}></Form.Control>
-                            <Button type="submit">LOGIN</Button>
-                        </Form.Group>
-                    </Form>
+                    <div style={{width:"400px"}}></div>
+                    <LoginForm/>
                 </Navbar.Collapse>
             </Navbar>
         </Container>
     );
-}
-
-function login(e){
-    e.preventDefault();
-    let request = {
-        username: document.getElementById('username').value,
-        password: document.getElementById('password').value
-    }
-    axios.post('/login',request).then(res =>{
-        alert(res.data.message);
-    }).catch(err=>{
-        console.log(err);
-    })
 }
 
 export default NavigationBar;
