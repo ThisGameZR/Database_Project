@@ -9,15 +9,14 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-      <NavigationBar></NavigationBar>
+      <NavigationBar/>
         <Router>
           <Switch>
             <Route path="/" exact component={Home} />
-            <Route path="/product" exact component={Product}/>
-            <Route path="/sql" exact component={SQLInjection}></Route>
+            <Route path="/products" exact component={Product}/>
+            <Route path="/sql" exact component={SQLInjection}/>
           </Switch>
         </Router>   
-       
       </header>
     </div>
   );

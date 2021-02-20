@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Button, Navbar, Form} from 'react-bootstrap';
 import axios from "axios";
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const LOCAL_STORAGE_KEY_LOGIN = "loginForm.loginyet";
 const LOCAL_STORAGE_KEY_USER = "loginForm.user";
@@ -33,7 +32,7 @@ export default function LoginForm() {
         return (
             <div>
                 <Form inline onSubmit={(e) => login(e)}>                
-                    <Form.Group>
+                    <Form.Group className="mr-sm-2">
                         <Form.Control autoComplete="off" type="text" placeholder="Employee ID" id="username" style={{marginRight:"10px"}}></Form.Control>
                         <Form.Control type="password" placeholder="Password" id="password" style={{marginRight:"10px"}}></Form.Control>
                         <Button variant="success" type="submit">LOGIN</Button>
