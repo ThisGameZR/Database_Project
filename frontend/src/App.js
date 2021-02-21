@@ -4,6 +4,7 @@ import {BrowserRouter as Router,Switch,Route} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavigationBar from './components/NavigationBar';
 import SQLInjection from './components/SQLInjection';
+import customerMember from './components/customerMember';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route path="/" exact component={Home} />
             <Route path="/products" exact component={Product}/>
             <Route path="/sql" exact component={SQLInjection}/>
+            <Route path="/customerMember" exact component={customerMember}></Route>
           </Switch>
         </Router>   
       </header>

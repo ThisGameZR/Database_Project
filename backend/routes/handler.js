@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const pool = require('../pool');
+const jwt = require('jsonwebtoken');
 
 router.get('/product',(req,res) => {
     pool.query("select * from Product",(err,result) => {
@@ -27,11 +28,17 @@ router.post('/login',async (req,res) => {
                 if(await bcrypt.compare(password,result[0].Password)){
                     success = true;
                     let sql = `select firstname,middlename,lastname from employee where eid = ${result[0].EID}`;
+
                     pool.query(sql,(err,row) => {
+                        const token = jwt.sign({
+                            id: result[0].EID,
+                            name: row[0].firstname + " " + row[0].lastname
+                        }, "somesecrettokenforjsonwebtoken");
+
                         if(row[0].middlename == "")
-                            return res.send({message: `${row[0].firstname} ${row[0].lastname}`, success: success});
+                            return res.send({message: `${row[0].firstname} ${row[0].lastname}`, success: success, token: token});
                         else
-                            return res.send({message: `${row[0].firstname} ${row[0].middlename} ${row[0].lastname}`, success: success});
+                            return res.send({message: `${row[0].firstname} ${row[0].middlename} ${row[0].lastname}`, success: success, token: token});
                     });
                 }else{
                     return res.send({message: "Incorrect username or password", success: success});

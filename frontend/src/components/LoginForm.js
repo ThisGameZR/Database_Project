@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Button, Navbar, Form} from 'react-bootstrap';
 import axios from "axios";
+import setAuthorizationToken from '../utils/setAuthorizationToken';
 
 const LOCAL_STORAGE_KEY_LOGIN = "loginForm.loginyet";
 const LOCAL_STORAGE_KEY_USER = "loginForm.user";
@@ -61,6 +62,10 @@ export default function LoginForm() {
                 setLoginyet(true);
                 setUser(res.data.message);
                 alert("Successfully login as: " + res.data.message);
+                const token = res.data.token;
+                localStorage.setItem('jwtToken', token);
+                setAuthorizationToken(token);
+                window.location.reload(false);
             }else{
                 alert(res.data.message);
                 document.getElementById('username').value = "";
@@ -72,6 +77,7 @@ export default function LoginForm() {
     }
     function logout(e){
         setLoginyet(false);
+        window.location.reload(false);
     }
 }
 
