@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {} from 'react-bootstrap';
-import {Link} from 'react-router-dom';
+import {Link,} from 'react-router-dom';
 
 export class customerMember extends Component {
     render() {
@@ -18,7 +18,7 @@ export class customerMember extends Component {
 
         return (
             <div>
-                <h2>Customer Membership page</h2>
+                
             </div>
         )
     }

@@ -28,7 +28,6 @@ router.post('/login',async (req,res) => {
                 if(await bcrypt.compare(password,result[0].Password)){
                     success = true;
                     let sql = `select firstname,middlename,lastname from employee where eid = ${result[0].EID}`;
-
                     pool.query(sql,(err,row) => {
                         const token = jwt.sign({
                             id: result[0].EID,

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Button, Navbar, Form} from 'react-bootstrap';
 import axios from "axios";
 import setAuthorizationToken from '../utils/setAuthorizationToken';
+import ToastBox from './ToastBox';
 
 const LOCAL_STORAGE_KEY_LOGIN = "loginForm.loginyet";
 const LOCAL_STORAGE_KEY_USER = "loginForm.user";
@@ -9,14 +10,14 @@ const LOCAL_STORAGE_KEY_USER = "loginForm.user";
 export default function LoginForm() {
     const [loginyet, setLoginyet] = useState(false);
     const [user,setUser] = useState("");
+    const [toast, setToast] = useState(false);
 
     useEffect(()=>{
         const storedLoginyet = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_LOGIN));
         const storedUser = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_USER));
-        
         if(storedLoginyet) setLoginyet(storedLoginyet);
         if(storedUser) setUser(storedUser);
-    
+        
     }, []);
 
 
@@ -32,6 +33,7 @@ export default function LoginForm() {
     
         return (
             <div>
+                <ToastBox message={user} ></ToastBox>
                 <Form inline onSubmit={(e) => login(e)}>                
                     <Form.Group className="mr-sm-2">
                         <Form.Control autoComplete="off" type="text" placeholder="Employee ID" id="username" style={{marginRight:"10px"}}></Form.Control>
@@ -45,6 +47,7 @@ export default function LoginForm() {
         
         return(
             <>
+                <ToastBox message={"You login as " + user} ></ToastBox>
                 <div style={{width:"280px"}}></div>
                 <Navbar.Brand id="welcomeMessage">{user}</Navbar.Brand>
                 <Button variant="success"onClick={(e) => logout(e)}>LOG OUT</Button>
@@ -61,13 +64,15 @@ export default function LoginForm() {
             if(res.data.success == true){
                 setLoginyet(true);
                 setUser(res.data.message);
-                alert("Successfully login as: " + res.data.message);
+                setMyToast(true);
                 const token = res.data.token;
                 localStorage.setItem('jwtToken', token);
                 setAuthorizationToken(token);
                 window.location.reload(false);
             }else{
-                alert(res.data.message);
+                setUser(res.data.message);
+                setMyToast(true);
+                window.location.reload(false);
                 document.getElementById('username').value = "";
                 document.getElementById('password').value = "";
             }
@@ -78,6 +83,10 @@ export default function LoginForm() {
     function logout(e){
         setLoginyet(false);
         window.location.reload(false);
+    }
+    function setMyToast(x){
+        setToast(x);
+        localStorage.setItem("loginForm.toast",x);
     }
 }
 
