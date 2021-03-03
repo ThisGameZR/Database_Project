@@ -4,8 +4,8 @@ const bcrypt = require('bcrypt');
 const pool = require('../pool');
 const jwt = require('jsonwebtoken');
 
-router.get('/product',(req,res) => {
-    pool.query("select * from Product",(err,result) => {
+router.get('/products', (req,res) => {
+    pool.query("select * from product", (err, result) => {
         res.end(JSON.stringify(result));
     });
 });
