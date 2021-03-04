@@ -50,11 +50,11 @@ export default class Product extends Component {
     ProductRender = () => {
         return this.state.products.map((item) => {
             return (
-                <Card key={item.ID}>
+                <Card key={item.PID}>
                     <Card.Body>
                         <Card.Title>{item.ProductName}</Card.Title>
-                        <h1>${item.Price}</h1>
-                        <Button varient="primary" id={item.ID}>Add to Cart</Button>
+                        <h1>${item.UnitPrice}</h1>
+                        <Button varient="primary" id={item.PID}>Add to Cart</Button>
                     </Card.Body>
                 </Card>
             )

@@ -4,7 +4,6 @@ import {Toast} from 'react-bootstrap'
 const toast = localStorage.getItem("loginForm.toast");
 export default function ToastBox({message}) {
     const [show,setShow] = useState(true);
-    console.log(toast,show);
 
     function closeToast(){
         setShow(false);

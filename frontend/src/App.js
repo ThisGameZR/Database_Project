@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import NavigationBar from './components/NavigationBar';
 import SQLInjection from './components/SQLInjection';
 import customerMember from './components/customerMember';
+import insertProduct from './components/insertProduct';
 
 function App() {
   return (
@@ -16,7 +17,8 @@ function App() {
             <Route path="/" exact component={Home} />
             <Route path="/products" exact component={Product}/>
             <Route path="/sql" exact component={SQLInjection}/>
-            <Route path="/customerMember" exact component={customerMember}></Route>
+            <Route path="/customerMember" exact component={customerMember}/>
+            <Route path="/insertProduct" exact component={insertProduct}/>
           </Switch>
         </Router>   
       </header>
