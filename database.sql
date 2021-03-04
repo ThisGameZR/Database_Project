@@ -16,6 +16,140 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `customer`
+--
+
+DROP TABLE IF EXISTS `customer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `customer` (
+  `CID` int NOT NULL,
+  `FirstName` varchar(45) NOT NULL,
+  `MiddleName` varchar(10) DEFAULT NULL,
+  `LastName` varchar(45) NOT NULL,
+  `Contact` varchar(45) NOT NULL,
+  `Points` int NOT NULL,
+  PRIMARY KEY (`CID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `customer`
+--
+
+LOCK TABLES `customer` WRITE;
+/*!40000 ALTER TABLE `customer` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `customer_addr`
+--
+
+DROP TABLE IF EXISTS `customer_addr`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `customer_addr` (
+  `CAddrID` int NOT NULL,
+  `CID` int DEFAULT NULL,
+  `Address` varchar(255) NOT NULL,
+  `City` varchar(45) NOT NULL,
+  `Province` varchar(45) NOT NULL,
+  `PostalCode` varchar(45) NOT NULL,
+  `Country` varchar(45) NOT NULL,
+  PRIMARY KEY (`CAddrID`),
+  KEY `fk_CUSTOMER_ADDR_CUSTOMER1_idx` (`CID`),
+  CONSTRAINT `fk_CUSTOMER_ADDR_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `customer_addr`
+--
+
+LOCK TABLES `customer_addr` WRITE;
+/*!40000 ALTER TABLE `customer_addr` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customer_addr` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `customer_card`
+--
+
+DROP TABLE IF EXISTS `customer_card`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `customer_card` (
+  `CardID` int NOT NULL,
+  `CID` int DEFAULT NULL,
+  `CardNumber` varchar(100) NOT NULL,
+  PRIMARY KEY (`CardID`),
+  KEY `fk_CUSTOMER_CARD_CUSTOMER1_idx` (`CID`),
+  CONSTRAINT `fk_CUSTOMER_CARD_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `customer_card`
+--
+
+LOCK TABLES `customer_card` WRITE;
+/*!40000 ALTER TABLE `customer_card` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customer_card` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `department`
+--
+
+DROP TABLE IF EXISTS `department`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `department` (
+  `Dno` int NOT NULL AUTO_INCREMENT,
+  `DeptMgr` int DEFAULT NULL,
+  `DeptName` varchar(45) NOT NULL,
+  PRIMARY KEY (`Dno`),
+  KEY `fk_DEPARTMENT_EMPLOYEE1_idx` (`DeptMgr`),
+  CONSTRAINT `fk_DEPARTMENT_EMPLOYEE1` FOREIGN KEY (`DeptMgr`) REFERENCES `employee` (`EID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `department`
+--
+
+LOCK TABLES `department` WRITE;
+/*!40000 ALTER TABLE `department` DISABLE KEYS */;
+INSERT INTO `department` VALUES (100,1000003,'Marketing');
+/*!40000 ALTER TABLE `department` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dept_location`
+--
+
+DROP TABLE IF EXISTS `dept_location`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `dept_location` (
+  `Dno` int NOT NULL,
+  `Address` varchar(255) NOT NULL,
+  KEY `fk_DEPT_LOCATION_DEPARTMENT1_idx` (`Dno`),
+  CONSTRAINT `fk_DEPT_LOCATION_DEPARTMENT1` FOREIGN KEY (`Dno`) REFERENCES `department` (`Dno`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dept_location`
+--
+
+LOCK TABLES `dept_location` WRITE;
+/*!40000 ALTER TABLE `dept_location` DISABLE KEYS */;
+/*!40000 ALTER TABLE `dept_location` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `employee`
 --
 
@@ -23,16 +157,17 @@ DROP TABLE IF EXISTS `employee`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `employee` (
-  `EID` int NOT NULL AUTO_INCREMENT,
-  `FirstName` text,
-  `MiddleName` text,
-  `LastName` text,
-  `MID` int DEFAULT NULL,
-  `jobTitle` varchar(50) DEFAULT NULL,
+  `EID` int NOT NULL,
+  `FirstName` varchar(45) NOT NULL,
+  `MiddleName` varchar(10) DEFAULT NULL,
+  `LastName` varchar(45) NOT NULL,
+  `Position` varchar(45) NOT NULL,
+  `Salary` int NOT NULL,
+  `Dno` int DEFAULT NULL,
   PRIMARY KEY (`EID`),
-  KEY `MID` (`MID`),
-  CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`MID`) REFERENCES `employee` (`EID`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_EMPLOYEE_DEPARTMENT1_idx` (`Dno`),
+  CONSTRAINT `fk_EMPLOYEE_DEPARTMENT1` FOREIGN KEY (`Dno`) REFERENCES `department` (`Dno`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,34 +176,158 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1,'John','','Smith',NULL,NULL),(2,'Berry','','Barton',1,NULL),(3,'Leon','S.','Kenedy',1,NULL);
+INSERT INTO `employee` VALUES (1000001,'John','','Smith','General',20000,100),(1000002,'Berry','','Barton','General',20000,100),(1000003,'Albert','','Wesker','Manager',50000,100);
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `employeeaccount`
+-- Table structure for table `employee_account`
 --
 
-DROP TABLE IF EXISTS `employeeaccount`;
+DROP TABLE IF EXISTS `employee_account`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `employeeaccount` (
-  `EID` int DEFAULT NULL,
-  `Username` varchar(255) DEFAULT NULL,
-  `Password` varchar(255) DEFAULT NULL,
-  KEY `EID` (`EID`),
-  CONSTRAINT `employeeaccount_ibfk_1` FOREIGN KEY (`EID`) REFERENCES `employee` (`EID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `employee_account` (
+  `EID` int NOT NULL,
+  `Password` varchar(255) NOT NULL,
+  KEY `fk_EMPLOYEE_ACCOUNT_EMPLOYEE_idx` (`EID`),
+  CONSTRAINT `fk_EMPLOYEE_ACCOUNT_EMPLOYEE` FOREIGN KEY (`EID`) REFERENCES `employee` (`EID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `employeeaccount`
+-- Dumping data for table `employee_account`
 --
 
-LOCK TABLES `employeeaccount` WRITE;
-/*!40000 ALTER TABLE `employeeaccount` DISABLE KEYS */;
-INSERT INTO `employeeaccount` VALUES (1,'johnsmith','$2b$10$lc8NXw08DYNGBaABtAEwiePnXoAd4uHh7Bz4bs.82tRf.12XSukh6'),(2,'berrybarton','$2b$10$B1Jhmn7.yFsitxwCKK8IYe5skTAfcD1yEWoQhXaZgLA0n784rFt5m'),(3,'leonkenedy','$2b$10$/lqTiZ.1F9IYgmw6866mYeDXeLNLte3kMCVhjrg1tVQzrzJf1UCrq');
-/*!40000 ALTER TABLE `employeeaccount` ENABLE KEYS */;
+LOCK TABLES `employee_account` WRITE;
+/*!40000 ALTER TABLE `employee_account` DISABLE KEYS */;
+INSERT INTO `employee_account` VALUES (1000001,'$2b$10$7QVsn26bkc59OAFGWrhQ3eQq0j5OSgj83.yQnVURIL7K0UJv4H0Q.'),(1000002,'$2b$10$IYd3SdG/Riw37L/EBWqTFefuzvRBrWK67/UIlBJD.ii6i4mIyqdQ.'),(1000003,'$2b$10$Bz/u.gbVdvyx/T9g4BSEse9kmjA59CX640Gbpf6PjWH72nOZp.pjy');
+/*!40000 ALTER TABLE `employee_account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `invoice`
+--
+
+DROP TABLE IF EXISTS `invoice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `invoice` (
+  `InvoiceID` int NOT NULL AUTO_INCREMENT,
+  `CID` int DEFAULT NULL,
+  `OrderID` int DEFAULT NULL,
+  `StatusID` int DEFAULT NULL,
+  PRIMARY KEY (`InvoiceID`),
+  KEY `fk_INVOICE_INVOICE_STATUS1_idx` (`StatusID`),
+  KEY `fk_INVOICE_CUSTOMER1_idx` (`CID`),
+  KEY `fk_INVOICE_ORDER1_idx` (`OrderID`),
+  CONSTRAINT `fk_INVOICE_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_INVOICE_INVOICE_STATUS1` FOREIGN KEY (`StatusID`) REFERENCES `invoice_status` (`StatusID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_INVOICE_ORDER1` FOREIGN KEY (`OrderID`) REFERENCES `order` (`OrderID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `invoice`
+--
+
+LOCK TABLES `invoice` WRITE;
+/*!40000 ALTER TABLE `invoice` DISABLE KEYS */;
+/*!40000 ALTER TABLE `invoice` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `invoice_status`
+--
+
+DROP TABLE IF EXISTS `invoice_status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `invoice_status` (
+  `StatusID` int NOT NULL AUTO_INCREMENT,
+  `Description` varchar(255) NOT NULL,
+  PRIMARY KEY (`StatusID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `invoice_status`
+--
+
+LOCK TABLES `invoice_status` WRITE;
+/*!40000 ALTER TABLE `invoice_status` DISABLE KEYS */;
+/*!40000 ALTER TABLE `invoice_status` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order`
+--
+
+DROP TABLE IF EXISTS `order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order` (
+  `OrderID` int NOT NULL AUTO_INCREMENT,
+  `EID` int DEFAULT NULL,
+  `CID` int DEFAULT NULL,
+  `CardID` int DEFAULT NULL,
+  `CAddrID` int DEFAULT NULL,
+  `TotalPrice` float NOT NULL,
+  `TotalPoints` int NOT NULL,
+  `PromoCode` varchar(20) DEFAULT NULL,
+  `OrderDate` datetime NOT NULL,
+  `RequiredDate` datetime DEFAULT NULL,
+  `PaymentDate` datetime NOT NULL,
+  `Comment` text,
+  PRIMARY KEY (`OrderID`),
+  KEY `fk_ORDER_EMPLOYEE1_idx` (`EID`),
+  KEY `fk_ORDER_CUSTOMER1_idx` (`CID`),
+  KEY `fk_ORDER_CUSTOMER_CARD1_idx` (`CardID`),
+  KEY `fk_ORDER_CUSTOMER_ADDR1_idx` (`CAddrID`),
+  CONSTRAINT `fk_ORDER_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_ORDER_CUSTOMER_ADDR1` FOREIGN KEY (`CAddrID`) REFERENCES `customer_addr` (`CAddrID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_ORDER_CUSTOMER_CARD1` FOREIGN KEY (`CardID`) REFERENCES `customer_card` (`CardID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_ORDER_EMPLOYEE1` FOREIGN KEY (`EID`) REFERENCES `employee` (`EID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order`
+--
+
+LOCK TABLES `order` WRITE;
+/*!40000 ALTER TABLE `order` DISABLE KEYS */;
+/*!40000 ALTER TABLE `order` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_detail`
+--
+
+DROP TABLE IF EXISTS `order_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order_detail` (
+  `OrderID` int DEFAULT NULL,
+  `PID` int DEFAULT NULL,
+  `Quantity` int NOT NULL,
+  `TotalPrice` float NOT NULL,
+  `SubtotalPrice` float NOT NULL,
+  `Points` int NOT NULL,
+  KEY `fk_ORDER_DETAIL_ORDER1_idx` (`OrderID`),
+  KEY `fk_ORDER_DETAIL_PRODUCT1_idx` (`PID`),
+  CONSTRAINT `fk_ORDER_DETAIL_ORDER1` FOREIGN KEY (`OrderID`) REFERENCES `order` (`OrderID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_ORDER_DETAIL_PRODUCT1` FOREIGN KEY (`PID`) REFERENCES `product` (`PID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_detail`
+--
+
+LOCK TABLES `order_detail` WRITE;
+/*!40000 ALTER TABLE `order_detail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `order_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -79,11 +338,16 @@ DROP TABLE IF EXISTS `product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product` (
-  `ID` int NOT NULL AUTO_INCREMENT,
-  `ProductName` varchar(255) DEFAULT NULL,
-  `Price` int DEFAULT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `PID` int NOT NULL AUTO_INCREMENT,
+  `SID` int DEFAULT NULL,
+  `ProductName` varchar(100) NOT NULL,
+  `UnitPrice` float(8,2) DEFAULT NULL,
+  `Size` varchar(5) DEFAULT NULL,
+  `Stocks` int NOT NULL,
+  PRIMARY KEY (`PID`),
+  KEY `fk_PRODUCT_SUPPLIER1_idx` (`SID`),
+  CONSTRAINT `fk_PRODUCT_SUPPLIER1` FOREIGN KEY (`SID`) REFERENCES `supplier` (`SID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,8 +356,86 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'Bicycle',200),(2,'Hat',300),(3,'Fork',400);
+INSERT INTO `product` VALUES (1,2,'Soft-Sensu Fork (1 x 12)',10.00,'s',300),(2,3,'Ionic Fork (1 x 24)',20.00,'m',42),(3,3,'Ionic Cake Shovel',30.14,'m',17),(4,1,'Fusion Butter Knife',35.00,'m',52),(5,2,'Soft-Sensu ToothPick ( 1 x 50 )',50.00,'s',100),(6,2,'Soft-Sensu Cutting Board',48.00,'m',11);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `promocode`
+--
+
+DROP TABLE IF EXISTS `promocode`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `promocode` (
+  `Code` varchar(20) NOT NULL,
+  `PID` int DEFAULT NULL,
+  `Discount` int NOT NULL,
+  `ExpiredDate` datetime NOT NULL,
+  PRIMARY KEY (`Code`),
+  KEY `fk_PROMOCODE_PRODUCT1_idx` (`PID`),
+  CONSTRAINT `fk_PROMOCODE_PRODUCT1` FOREIGN KEY (`PID`) REFERENCES `product` (`PID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `promocode`
+--
+
+LOCK TABLES `promocode` WRITE;
+/*!40000 ALTER TABLE `promocode` DISABLE KEYS */;
+/*!40000 ALTER TABLE `promocode` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `shipment`
+--
+
+DROP TABLE IF EXISTS `shipment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `shipment` (
+  `OrderID` int DEFAULT NULL,
+  `ShippingDate` datetime NOT NULL,
+  `Status` varchar(45) NOT NULL,
+  KEY `fk_SHIPMENT_ORDER1_idx` (`OrderID`),
+  CONSTRAINT `fk_SHIPMENT_ORDER1` FOREIGN KEY (`OrderID`) REFERENCES `order` (`OrderID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `shipment`
+--
+
+LOCK TABLES `shipment` WRITE;
+/*!40000 ALTER TABLE `shipment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `shipment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `supplier`
+--
+
+DROP TABLE IF EXISTS `supplier`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `supplier` (
+  `SID` int NOT NULL AUTO_INCREMENT,
+  `SName` varchar(100) NOT NULL,
+  `Contact` varchar(45) NOT NULL,
+  `Address` varchar(255) NOT NULL,
+  PRIMARY KEY (`SID`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `supplier`
+--
+
+LOCK TABLES `supplier` WRITE;
+/*!40000 ALTER TABLE `supplier` DISABLE KEYS */;
+INSERT INTO `supplier` VALUES (1,'FuseTronic Co., Ltd.','+66 (0) 2 260 7290','28th Floor, CTI Tower 191/16 New Ratchadapisek Road Klongtoey 2 10110 Thailand'),(2,'Softsensu Co., Ltd.','66 0-2883-0994','656/179-180, Charansanitwong Rd., Bang Phat'),(3,'PolyIonic Co., Ltd.','+66 02 651-1000','193/6266 16Th Floor Lake Ratchada Office Complex Ratchadapisek Road');
+/*!40000 ALTER TABLE `supplier` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -105,4 +447,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-02-19 21:37:16
+-- Dump completed on 2021-03-04 21:48:56
