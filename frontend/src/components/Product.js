@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import axios from "axios";
 import { Container, Navbar, InputGroup, FormControl, Card, Button, CardColumns, Spinner, Form} from "react-bootstrap";
+import SelectSearch, { fuzzySearch } from 'react-select-search'
+import './CSS/SelectSearch.css'
 
 export default class Product extends Component {
     constructor(){
@@ -12,7 +14,10 @@ export default class Product extends Component {
             products: [],
             filter: [],
             filterReady: false,
-            productReady: false
+            productReady: false,
+            supplierOptions: [],
+            supplierValue: 0,
+            filteredProduct: []
         }
 
         this.GetAllProducts();
@@ -74,38 +79,34 @@ export default class Product extends Component {
                 <Spinner animation="border" role="status"/>
             )
         }
-        else
         return this.state.products.map((item) => {
-            return (
-                <Card key={item.PID}>
-                    <Card.Body>
-                        <Card.Title>{item.ProductName}</Card.Title>
-                        <h1>${item.UnitPrice}</h1>
-                        <Button varient="primary" id={item.PID}>Add to Cart</Button>
-                    </Card.Body>
-                </Card>
-            )
+            if(this.state.supplierValue == item.SID || this.state.supplierValue == 0){
+                return (
+                    <Card key={item.PID}>
+                        <Card.Body>
+                            <Card.Title>{item.ProductName}</Card.Title>
+                            <h1>${item.UnitPrice}</h1>
+                            <Button varient="primary" id={item.PID}>Add to Cart</Button>
+                        </Card.Body>
+                    </Card>
+                )
+            }
         })
     }
 
     Supplier_FilterRender = () => {
+
         if (!this.state.filterReady)
         {
             return (
                 <Spinner animation="border" role="status"/>
             )
         }
-        else
-        return this.state.filter[0].map(filter => {
-            return (
-                <Form.Check
-                    type="checkbox"
-                    key={filter.SID}
-                    name={filter.SName}
-                    label={filter.SName}
-                />
-            )
-        })
+        
+        else return this.state.filter[0].map((filter,i) => {
+            this.state.supplierOptions[i] =
+                {name: `${filter.SName}`, value : filter.SID}
+            })
     }
 
     Size_FilterRender = () => {
@@ -119,6 +120,7 @@ export default class Product extends Component {
         return this.state.filter[1].map((filter, i) => {
             return (
                 <Form.Check
+                    style={{display:"inline-block"}}
                     type="checkbox"
                     key={i}
                     name={filter.Size}
@@ -126,6 +128,12 @@ export default class Product extends Component {
                 />
             )
         })
+    }
+
+    updateSupplierValue(e){
+        this.setState({ supplierValue : e })
+        if(this.state.supplierOptions[this.state.supplierOptions.length-1].value != 0)
+            this.setState({ supplierOptions: this.state.supplierOptions.concat([{name: "Select Supplier" , value: 0}])})
     }
 
     render() {
@@ -140,11 +148,20 @@ export default class Product extends Component {
                         <FormControl onChange={(e) => this.ProductSearch(e)}/>
                     </InputGroup>
                 </Navbar>
-
+            
                 <Form.Group>
                     <Form.Check.Label>Supplier</Form.Check.Label>
                     {this.Supplier_FilterRender()}
-                    <Form.Check.Label>Size</Form.Check.Label>
+                    {this.state.filterReady ? <div><SelectSearch search
+                                                    value={this.state.supplierValue}
+                                                    onChange={(e) => this.updateSupplierValue(e)} 
+                                                    emptyMessage="Result not found"
+                                                    placeholder="Select Supplier" 
+                                                    options={this.state.supplierOptions}
+                                                    filterOptions={fuzzySearch}
+                                                    ></SelectSearch></div>
+                    : <></>}
+                    <Form.Check.Label>Size</Form.Check.Label> 
                     {this.Size_FilterRender()}
                 </Form.Group>
                 
