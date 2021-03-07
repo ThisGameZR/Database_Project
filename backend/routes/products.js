@@ -9,4 +9,16 @@ router.get('/', (req,res) => {
     });
 });
 
+router.get('/getsupplier', (req, res) => {
+    pool.query("select SID, SName from supplier", (err, result) => {
+        res.end(JSON.stringify(result));
+    });
+})
+
+router.get('/getsize', (req, res) => {
+    pool.query("select distinct Size from product", (err, result) => {
+        res.end(JSON.stringify(result));
+    });
+})
+
 module.exports = router;

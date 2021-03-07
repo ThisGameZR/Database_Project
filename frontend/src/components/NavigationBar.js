@@ -24,10 +24,8 @@ export class NavigationBar extends Component{
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav mr="auto" style={{marginRight: "auto"}}>
                             <NavDropdown title="PRODUCT" id="responsive-nav-dropdown" variant="dark">
-                            <NavDropdown.Item href="/products" style={{color:"dodgerblue", fontSize:"14px"}}>All</NavDropdown.Item>
-                                <NavDropdown.Item href="/products/kitchenTools" style={{color:"dodgerblue", fontSize:"14px"}}>Kitchen Tools</NavDropdown.Item>
-                                <NavDropdown.Item href="/products/everydayTools" style={{color:"dodgerblue", fontSize:"14px"}}>Everyday Life</NavDropdown.Item>
-                                <NavDropdown.Item href="/products/kidToys" style={{color:"dodgerblue", fontSize:"14px"}}>Kid Toys</NavDropdown.Item>
+                            <NavDropdown.Item style={{color:"dodgerblue", fontSize:"14px"}}>All</NavDropdown.Item>
+                                <NavDropdown.Item href="/products" style={{color:"dodgerblue", fontSize:"14px"}}>All</NavDropdown.Item>
                             </NavDropdown>
                             <NavDropdown title="Support" id="responsive-nav-dropdown" variant="dark">
                                 <NavDropdown.Item href="#">
