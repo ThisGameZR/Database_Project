@@ -147,8 +147,9 @@ export default class Product extends Component {
                     <Form.Check.Label>Size</Form.Check.Label>
                     {this.Size_FilterRender()}
                 </Form.Group>
-
-                <h1>{this.state.search}</h1>
+                
+                { this.state.search == "" ? <></> : <h2>Search for: {this.state.search} </h2>}
+                {this.state.products.length == 0? <h2>No result</h2> : <></>}
                 <CardColumns>
                     {this.ProductRender()}
                 </CardColumns>

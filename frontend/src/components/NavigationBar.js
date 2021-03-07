@@ -23,10 +23,7 @@ export class NavigationBar extends Component{
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav mr="auto" style={{marginRight: "auto"}}>
-                            <NavDropdown title="PRODUCT" id="responsive-nav-dropdown" variant="dark">
-                            <NavDropdown.Item style={{color:"dodgerblue", fontSize:"14px"}}>All</NavDropdown.Item>
-                                <NavDropdown.Item href="/products" style={{color:"dodgerblue", fontSize:"14px"}}>All</NavDropdown.Item>
-                            </NavDropdown>
+                            <Nav.Link href="/products" id="responsive-nav-dropdown" variant="dark">Product</Nav.Link>
                             <NavDropdown title="Support" id="responsive-nav-dropdown" variant="dark">
                                 <NavDropdown.Item href="#">
                                     <div class="support-text">Contact Number</div>
