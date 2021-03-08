@@ -3,6 +3,7 @@ import axios from "axios";
 import { Container, Navbar, InputGroup, FormControl, Card, Button, CardColumns, Spinner, Form} from "react-bootstrap";
 import SelectSearch, { fuzzySearch } from 'react-select-search'
 import './CSS/SelectSearch.css'
+import images from './Images/images'
 
 export default class Product extends Component {
     constructor(){
@@ -83,6 +84,7 @@ export default class Product extends Component {
             if(this.state.supplierValue == item.SID || this.state.supplierValue == 0){
                 return (
                     <Card key={item.PID}>
+                        {images.map(({id,image}) => item.PID == id ? <Card.Img src={image} id={id} /> : null )}
                         <Card.Body>
                             <Card.Title>{item.ProductName}</Card.Title>
                             <h1>${item.UnitPrice}</h1>
@@ -160,7 +162,7 @@ export default class Product extends Component {
                                                     options={this.state.supplierOptions}
                                                     filterOptions={fuzzySearch}
                                                     ></SelectSearch></div>
-                    : <></>}
+                    : null}
                     <Form.Check.Label>Size</Form.Check.Label> 
                     {this.Size_FilterRender()}
                 </Form.Group>

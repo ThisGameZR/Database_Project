@@ -347,7 +347,7 @@ CREATE TABLE `product` (
   PRIMARY KEY (`PID`),
   KEY `fk_PRODUCT_SUPPLIER1_idx` (`SID`),
   CONSTRAINT `fk_PRODUCT_SUPPLIER1` FOREIGN KEY (`SID`) REFERENCES `supplier` (`SID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -356,7 +356,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,2,'Soft-Sensu Fork (1 x 12)',10.00,'s',300),(2,3,'Ionic Fork (1 x 24)',20.00,'m',42),(3,3,'Ionic Cake Shovel',30.14,'m',17),(4,1,'Fusion Butter Knife',35.00,'m',52),(5,2,'Soft-Sensu ToothPick ( 1 x 50 )',50.00,'s',100),(6,2,'Soft-Sensu Cutting Board',48.00,'m',11);
+INSERT INTO `product` VALUES (1,2,'Soft-Sensu Fork (1 x 12)',10.00,'s',300),(2,3,'Ionic Fork (1 x 24)',20.00,'m',42),(3,3,'Ionic Cake Shovel',30.14,'m',17),(4,1,'Fusion Butter Knife',35.00,'m',52),(5,2,'Soft-Sensu ToothPick ( 1 x 50 )',50.00,'s',100),(6,2,'Soft-Sensu Cutting Board',48.00,'m',11),(7,5,'Corona Plastic Bottle ( 1 x 5 )',86.00,'l',84),(8,6,'Plastivo Chopstick ( 1 x 24 )',30.00,'m',67),(9,7,'Tineric Chopstick ( 1 x 24 )',29.00,'m',108),(10,9,'Acrylicc Chopstick ( 1 x 24 )',50.00,'m',15),(11,8,'Plastific Cutting board ',275.00,'xl',131),(12,10,'Kitta Cutting board ',98.00,'l',16),(13,2,'Soft-Sensu Spatula',61.00,'m',134),(14,1,'Fusion Spatula',30.00,'m',258),(15,5,'Corona Butter Knife ( 1 x 4 )',250.00,'s',55),(16,9,'Acrylicc Butter Knife ( 1 x 3 )',160.00,'s',229),(17,4,'Cutler Butter Knife ( 1 x 3 )',170.00,'s',2),(18,4,'Cutler Scoop',145.00,'l',39),(19,4,'Cutler Broom',133.00,'xl',189),(20,4,'Cutler Spatula',90.00,'l',149);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -425,7 +425,7 @@ CREATE TABLE `supplier` (
   `Contact` varchar(45) NOT NULL,
   `Address` varchar(255) NOT NULL,
   PRIMARY KEY (`SID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -434,7 +434,7 @@ CREATE TABLE `supplier` (
 
 LOCK TABLES `supplier` WRITE;
 /*!40000 ALTER TABLE `supplier` DISABLE KEYS */;
-INSERT INTO `supplier` VALUES (1,'FuseTronic Co., Ltd.','+66 (0) 2 260 7290','28th Floor, CTI Tower 191/16 New Ratchadapisek Road Klongtoey 2 10110 Thailand'),(2,'Softsensu Co., Ltd.','66 0-2883-0994','656/179-180, Charansanitwong Rd., Bang Phat'),(3,'PolyIonic Co., Ltd.','+66 02 651-1000','193/6266 16Th Floor Lake Ratchada Office Complex Ratchadapisek Road');
+INSERT INTO `supplier` VALUES (1,'FuseTronic Co., Ltd.','+66 (0) 2 260 7290','28th Floor, CTI Tower 191/16 New Ratchadapisek Road Klongtoey 2 10110 Thailand'),(2,'Softsensu Co., Ltd.','66 0-2883-0994','656/179-180, Charansanitwong Rd., Bang Phat'),(3,'PolyIonic Co., Ltd.','+66 02 651-1000','193/6266 16Th Floor Lake Ratchada Office Complex Ratchadapisek Road'),(4,'Cutlesloft Co., Ltd.','+66 2 312-8409-15','64 MOO 1, BANGNA-TRAD ROAD KM.21 SRISAJORAKAEYAI 2 10540'),(5,'Corational Part., Ltd.','+66 0-2691-3786','Pracharajbamphen Rd., Samsen Nok, Huai Khwang Bangkok 10310'),(6,'Plastivo Pub Co., Ltd.','+66 02 932-6373','66/1 ladprao 80 Wangthonglang 2 10310'),(7,'Tineric Inc.','+66 02 658-4589','460/8-9 Siam Square Soi 8 Rama 1 Road, 2 10330'),(8,'Plastific Co., Ltd.','+66 02 656-8231','88/3-90 Soi Pathumkongka, Trimitr Rd., Samphantawong'),(9,'Acrylicc Pub Co., Ltd.','+66 02 287-0222','246 Unit#10-02C 10Th Floor Time Square Building Sukhumvit Road'),(10,'Kitary Part., Ltd','+66 02 716-1800','2034/72 Itathai Tower New Petchburi Road Bangkapi, Huaykwang 2 10320');
 /*!40000 ALTER TABLE `supplier` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -447,4 +447,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-04 21:48:56
+-- Dump completed on 2021-03-08 16:30:52
