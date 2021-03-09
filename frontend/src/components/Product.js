@@ -75,6 +75,10 @@ export default class Product extends Component {
         })
     };
 
+    addToCart = (e) => {
+        console.log(e.target.value)
+    }
+
     ProductRender = () => {
         if (!this.state.productReady)
         {
@@ -94,8 +98,8 @@ export default class Product extends Component {
                                     <Card.Title>{item.ProductName}</Card.Title>
                                     <Card.Text>Made by {item.SName}</Card.Text>
                                     <Card.Text>Size: {item.Size}</Card.Text>
-                                    <h1>${item.UnitPrice}</h1>
-                                    <Button varient="primary" value={item.PID}>Add to Cart</Button>
+                                    <h2>${item.UnitPrice}</h2>
+                                    <Button varient="primary" value={item.PID} onClick={(e) => this.addToCart(e)}>Add to Cart</Button>
                                 </Card.Body>
                             </Card>
                         )
@@ -116,7 +120,7 @@ export default class Product extends Component {
                                     <Card.Text>Made by {item.SName}</Card.Text>
                                     <Card.Text>Size: {item.Size}</Card.Text>
                                     <h1>${item.UnitPrice}</h1>
-                                    <Button varient="primary" value={item.PID}>Add to Cart</Button>
+                                    <Button varient="primary" value={item.PID} onClick={(e) => this.addToCart(e)}>Add to Cart</Button>
                                 </Card.Body>
                             </Card>
                         )
@@ -183,8 +187,9 @@ export default class Product extends Component {
                     </InputGroup>
                 </div>
             
+
+                {/*Filter Bar*/}
                 <Form.Group style={{position:"relative",top:"-2px", display:"inline-flex", flexDirection:'row'}}>
-                    
                     {this.Supplier_FilterRender()}
                     {this.state.filterReady ?   <div style={{marginBottom:"10px", marginRight:"40px"}}><SelectSearch search
                                                     onChange={(e) => this.updateSupplierValue(e)} 
@@ -208,9 +213,12 @@ export default class Product extends Component {
                 
                 { this.state.search == "" ? <></> : <h2>Search for: {this.state.search} </h2>}
                 {this.state.products.length == 0? <h2>No result</h2> : <></>}
+
+                {/*Product Cards*/}
                 <CardColumns>
                     {this.ProductRender()}
                 </CardColumns>
+                
             </Container>
         )
     }
