@@ -178,36 +178,36 @@ export default class Product extends Component {
         return (
             <Container>
                 {/*Searching Bar*/}
-                <Navbar variant="dark">
-                    <InputGroup size="sm" className="mb-3">
+                <div style={{width:"300px", marginTop:"20px", display:"inline-block", marginRight:"40px"}}>
+                    <InputGroup className="mb-3">
                         <InputGroup.Prepend>
                             <InputGroup.Text>Search</InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl onChange={(e) => this.ProductSearch(e)}/>
                     </InputGroup>
-                </Navbar>
+                </div>
             
+
                 {/*Filter Bar*/}
-                <Form.Group>
-                    <Form.Check.Label>Supplier</Form.Check.Label>
+                <Form.Group style={{position:"relative",top:"-2px", display:"inline-flex", flexDirection:'row'}}>
                     {this.Supplier_FilterRender()}
-                    {this.state.filterReady ?   <SelectSearch search
+                    {this.state.filterReady ?   <div style={{marginBottom:"10px", marginRight:"40px"}}><SelectSearch search
                                                     onChange={(e) => this.updateSupplierValue(e)} 
                                                     emptyMessage="Result not found"
                                                     placeholder="Select Supplier" 
                                                     options={this.state.supplierOptions}
                                                     filterOptions={fuzzySearch}
-                                                />
+                                                /></div>
                     : null}
-                    <Form.Check.Label>Size</Form.Check.Label>
+
                     {this.Size_FilterRender()}
-                    {this.state.filterReady ?   <Select 
+                    {this.state.filterReady ?   <div style={{width:"300px", fontFamily: 'Noto Sans, sans-serif', fontSize:"14px"}}><Select 
                                                     isMulti
                                                     emptyMessage="Result not found"
                                                     placeholder="Select Size"
                                                     options={this.state.sizeOptions}
                                                     onChange={(e) => this.updateSizeValue(e)}
-                                                />
+                                                /></div>
                     : null}
                 </Form.Group>
                 
