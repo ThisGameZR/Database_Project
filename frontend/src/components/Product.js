@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import axios from "axios";
 import { Container, Navbar, InputGroup, FormControl, Card, Button, CardColumns, Spinner, Form} from "react-bootstrap";
-import SelectSearch, { fuzzySearch } from 'react-select-search'
+import SelectSearch, {fuzzySearch } from 'react-select-search'
+import Select from 'react-select'
 import './CSS/SelectSearch.css'
 import images from './Images/images'
 
@@ -17,8 +18,9 @@ export default class Product extends Component {
             filterReady: false,
             productReady: false,
             supplierOptions: [],
+            sizeOptions: [],
+            sizeValue: [],
             supplierValue: 0,
-            filteredProduct: []
         }
 
         this.GetAllProducts();
@@ -80,20 +82,48 @@ export default class Product extends Component {
                 <Spinner animation="border" role="status"/>
             )
         }
-        return this.state.products.map((item) => {
-            if(this.state.supplierValue == item.SID || this.state.supplierValue == 0){
-                return (
-                    <Card key={item.PID}>
-                        {images.map(({id,image}) => item.PID == id ? <Card.Img src={image} id={id} /> : null )}
-                        <Card.Body>
-                            <Card.Title>{item.ProductName}</Card.Title>
-                            <h1>${item.UnitPrice}</h1>
-                            <Button varient="primary" id={item.PID}>Add to Cart</Button>
-                        </Card.Body>
-                    </Card>
-                )
-            }
-        })
+        else
+        {
+            return this.state.products.map((item) => {
+                if(this.state.sizeValue.length == 0)
+                {
+                    if(this.state.supplierValue == item.SID || this.state.supplierValue == 0){
+                        return (
+                            <Card key={item.PID}>
+                                <Card.Body>
+                                    <Card.Title>{item.ProductName}</Card.Title>
+                                    <Card.Text>Made by {item.SName}</Card.Text>
+                                    <Card.Text>Size: {item.Size}</Card.Text>
+                                    <h1>${item.UnitPrice}</h1>
+                                    <Button varient="primary" value={item.PID}>Add to Cart</Button>
+                                </Card.Body>
+                            </Card>
+                        )
+                    }
+                }
+                else
+                {
+                    let sizeFilter = []
+                    this.state.sizeValue.forEach(item => {
+                        sizeFilter.push(item.name)
+                    })
+
+                    if((this.state.supplierValue == item.SID || this.state.supplierValue == 0) && sizeFilter.includes(item.Size)){
+                        return (
+                            <Card key={item.PID}>
+                                <Card.Body>
+                                    <Card.Title>{item.ProductName}</Card.Title>
+                                    <Card.Text>Made by {item.SName}</Card.Text>
+                                    <Card.Text>Size: {item.Size}</Card.Text>
+                                    <h1>${item.UnitPrice}</h1>
+                                    <Button varient="primary" value={item.PID}>Add to Cart</Button>
+                                </Card.Body>
+                            </Card>
+                        )
+                    }
+                }
+            })
+        }
     }
 
     Supplier_FilterRender = () => {
@@ -120,22 +150,24 @@ export default class Product extends Component {
         }
         else
         return this.state.filter[1].map((filter, i) => {
-            return (
-                <Form.Check
-                    style={{display:"inline-block"}}
-                    type="checkbox"
-                    key={i}
-                    name={filter.Size}
-                    label={filter.Size}
-                />
-            )
+            this.state.sizeOptions[i] = {
+                name: filter.Size,
+                label: filter.Size,
+                value: i+1
+            }
         })
     }
 
     updateSupplierValue(e){
         this.setState({ supplierValue : e })
         if(this.state.supplierOptions[this.state.supplierOptions.length-1].value != 0)
-            this.setState({ supplierOptions: this.state.supplierOptions.concat([{name: "Select Supplier" , value: 0}])})
+            this.setState({ supplierOptions: this.state.supplierOptions.concat([{name: "All" , value: 0}])})
+    }
+
+    updateSizeValue(e){
+        this.setState({
+            sizeValue: e
+        })
     }
 
     render() {
@@ -154,17 +186,24 @@ export default class Product extends Component {
                 <Form.Group>
                     <Form.Check.Label>Supplier</Form.Check.Label>
                     {this.Supplier_FilterRender()}
-                    {this.state.filterReady ? <div><SelectSearch search
-                                                    value={this.state.supplierValue}
+                    {this.state.filterReady ?   <SelectSearch search
                                                     onChange={(e) => this.updateSupplierValue(e)} 
                                                     emptyMessage="Result not found"
                                                     placeholder="Select Supplier" 
                                                     options={this.state.supplierOptions}
                                                     filterOptions={fuzzySearch}
-                                                    ></SelectSearch></div>
+                                                />
                     : null}
-                    <Form.Check.Label>Size</Form.Check.Label> 
+                    <Form.Check.Label>Size</Form.Check.Label>
                     {this.Size_FilterRender()}
+                    {this.state.filterReady ?   <Select 
+                                                    isMulti
+                                                    emptyMessage="Result not found"
+                                                    placeholder="Select Size"
+                                                    options={this.state.sizeOptions}
+                                                    onChange={(e) => this.updateSizeValue(e)}
+                                                />
+                    : null}
                 </Form.Group>
                 
                 { this.state.search == "" ? <></> : <h2>Search for: {this.state.search} </h2>}

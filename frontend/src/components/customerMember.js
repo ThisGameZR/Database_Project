@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {} from 'react-bootstrap';
 import {Link,} from 'react-router-dom';
 
-export class customerMember extends Component {
+export class CustomerMember extends Component {
     render() {
 
         const loginYet = localStorage.getItem('loginForm.loginyet');
@@ -24,4 +24,4 @@ export class customerMember extends Component {
     }
 }
 
-export default customerMember
+export default CustomerMember
