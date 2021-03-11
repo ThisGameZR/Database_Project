@@ -7,8 +7,8 @@ import './CSS/SelectSearch.css'
 import images from './Images/images'
 import ShoppingCart from './ShoppingCart'
 export default class Product extends Component {
-    constructor(props){
-        super(props);
+    constructor(){
+        super();
 
         this.state = {
             search: "",
@@ -95,7 +95,7 @@ export default class Product extends Component {
                                     <Card.Text>Made by {item.SName}</Card.Text>
                                     <Card.Text>Size: {item.Size}</Card.Text>
                                     <h2>${item.UnitPrice}</h2>
-                                    <Button varient="primary" value={item.PID} name={item.ProductName} onClick={(e) => this.addToCart(e)}>Add to Cart</Button>
+                                    <Button varient="primary" value={item.PID} name={item.ProductName} onClick={(e) => this.AddToCart(e)}>Add to Cart</Button>
                                 </Card.Body>
                             </Card>
                         )
@@ -116,7 +116,7 @@ export default class Product extends Component {
                                     <Card.Text>Made by {item.SName}</Card.Text>
                                     <Card.Text>Size: {item.Size}</Card.Text>
                                     <h1>${item.UnitPrice}</h1>
-                                    <Button varient="primary" value={item.PID} name={item.ProductName} onClick={(e) => this.addToCart(e)}>Add to Cart</Button>
+                                    <Button varient="primary" value={item.PID} name={item.ProductName} onClick={(e) => this.AddToCart(e)}>Add to Cart</Button>
                                 </Card.Body>
                             </Card>
                         )
@@ -170,32 +170,22 @@ export default class Product extends Component {
         })
     }
 
-    showCart = () => {
-        this.setState({
-            cartOpen: true
-        })
-    }
-
     // When you want to use method of 'ShoppingCart' class
-    // 1.) add function name and assign variable to func as ref
-    // 2.) when you want to use, just call the variable 
-    handleCartShowRef = ({CartShow, AddtoCart}) => {
-        this.showCart = CartShow
-        this.addProductToCart = AddtoCart    
+    // 1.) add ref to component and assign component to object
+    // 2.) when you want to call method, just call it regularly on that object
+
+    DisplayCart = () => {
+        this._cart.CartShow()
     }
 
-    displayCart = () => {
-        this.showCart()
-    }
-
-    addToCart = (e) => {
+    AddToCart = (e) => {
         let item = {
             pid: e.target.value,
             name: e.target.name,
             amount: 1
         }
 
-        this.addProductToCart(item)
+        this._cart.AddItem(item)
     }
 
     render() {
@@ -235,8 +225,8 @@ export default class Product extends Component {
                     : null}
                 </Form.Group>
                 
-                <Button varient="primary" onClick={this.displayCart}>Cart</Button>
-                <ShoppingCart ref={this.handleCartShowRef}/>
+                <Button varient="primary" onClick={this.DisplayCart}>Cart</Button>
+                <ShoppingCart ref={(cart) => this._cart = cart}/>
 
                 {this.state.search == "" ? <></> : <h2>Search for: {this.state.search}</h2>}
                 {this.state.products.length == 0? <h2>No result</h2> : <></>}

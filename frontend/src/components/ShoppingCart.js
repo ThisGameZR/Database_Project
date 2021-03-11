@@ -3,8 +3,8 @@ import {Modal, Button} from 'react-bootstrap'
 import axios from "axios";
 
 export default class ShoppingCart extends Component {
-    constructor(props){
-        super(props)
+    constructor(){
+        super()
 
         this.state = {
             showCart: false,
@@ -25,7 +25,7 @@ export default class ShoppingCart extends Component {
         })
     }
 
-    AddtoCart = (item) => {
+    AddItem = (item) => {
         this.state.cart.push(item)
     }
 
