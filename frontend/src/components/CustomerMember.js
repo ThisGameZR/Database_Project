@@ -9,7 +9,8 @@ export class CustomerMember extends Component {
     constructor(){
         super();
         this.state = {
-            active: 0
+            active: 0,
+            maxAddress: 3,
 
         }
     }
@@ -88,19 +89,45 @@ export class CustomerMember extends Component {
     }
     renderAddress = () => {
         let items = [];
-        for(let number = 1; number <= 4; number++){
+        for(let number = 1; number <= this.state.maxAddress ; number++){
+            
+            if(number === this.state.maxAddress-1){
+                number = "+"
+            }
+            if(number === this.state.maxAddress){
+                number = "-"
+            }
             items.push(
                 <Pagination.Item key={number} active={this.state.active == number} onClick={(e) => this.pageAddress(e,number)}>
                     {number}
                 </Pagination.Item>
             )
+            if(number === "+"){
+                number = this.state.maxAddress-1
+            }
         }
         return items
     }
     pageAddress = (e, number) => {
         this.setState({active:number})
+        if(number === parseInt(number,10) && number != this.state.maxAddress-1){
+
+
+
+        }
         
+        if(number == this.state.maxAddress-1){ /// number === "+"
+            
+            this.setState({maxAddress: this.state.maxAddress+1})
+
+        }
+        if(number == "-"){
+            
+            this.setState({maxAddress: this.state.maxAddress-1})
+
+        }
     }
 }
 
 export default CustomerMember
+
