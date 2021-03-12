@@ -1,18 +1,18 @@
 import React, {Component} from "react";
 import axios from "axios";
-import { Container, Navbar, InputGroup, FormControl, Card, Button, CardColumns, Spinner, Form} from "react-bootstrap";
+import { Container, InputGroup, FormControl, Card, Button, CardColumns, Spinner, Form, Modal} from "react-bootstrap";
 import SelectSearch, {fuzzySearch } from 'react-select-search'
 import Select from 'react-select'
 import './CSS/SelectSearch.css'
 import images from './Images/images'
-
+import ShoppingCart from './ShoppingCart'
 export default class Product extends Component {
     constructor(){
         super();
+
         this.state = {
             search: "",
             loading: false,
-            error: null,
             products: [],
             filter: [],
             filterReady: false,
@@ -75,10 +75,6 @@ export default class Product extends Component {
         })
     };
 
-    addToCart = (e) => {
-        console.log(e.target.value)
-    }
-
     ProductRender = () => {
         if (!this.state.productReady)
         {
@@ -99,7 +95,7 @@ export default class Product extends Component {
                                     <Card.Text>Made by {item.SName}</Card.Text>
                                     <Card.Text>Size: {item.Size}</Card.Text>
                                     <h2>${item.UnitPrice}</h2>
-                                    <Button varient="primary" value={item.PID} onClick={(e) => this.addToCart(e)}>Add to Cart</Button>
+                                    <Button varient="primary" value={item.PID} name={item.ProductName} onClick={(e) => this.AddToCart(e)}>Add to Cart</Button>
                                 </Card.Body>
                             </Card>
                         )
@@ -120,7 +116,7 @@ export default class Product extends Component {
                                     <Card.Text>Made by {item.SName}</Card.Text>
                                     <Card.Text>Size: {item.Size}</Card.Text>
                                     <h1>${item.UnitPrice}</h1>
-                                    <Button varient="primary" value={item.PID} onClick={(e) => this.addToCart(e)}>Add to Cart</Button>
+                                    <Button varient="primary" value={item.PID} name={item.ProductName} onClick={(e) => this.AddToCart(e)}>Add to Cart</Button>
                                 </Card.Body>
                             </Card>
                         )
@@ -174,9 +170,29 @@ export default class Product extends Component {
         })
     }
 
+    // When you want to use method of 'ShoppingCart' class
+    // 1.) add ref to component and assign component to object
+    // 2.) when you want to call method, just call it regularly on that object
+
+    DisplayCart = () => {
+        this._cart.CartShow()
+    }
+
+    AddToCart = (e) => {
+        let item = {
+            pid: e.target.value,
+            name: e.target.name,
+            amount: 1
+        }
+
+        this._cart.AddItem(item)
+    }
+
     render() {
         return (
-            <Container fluid="xl">
+
+            <Container fluid='xl'>
+
                 {/*Searching Bar*/}
                 <div style={{width:"32%", marginTop:"20px", display:"inline-block", marginRight:"2%"}}>
                     <InputGroup className="mb-3">
@@ -212,7 +228,10 @@ export default class Product extends Component {
                     : null}
                 </Form.Group>
                 
-                { this.state.search == "" ? <></> : <h2>Search for: {this.state.search} </h2>}
+                <Button varient="primary" onClick={this.DisplayCart}>Cart</Button>
+                <ShoppingCart ref={(cart) => this._cart = cart}/>
+
+                {this.state.search == "" ? <></> : <h2>Search for: {this.state.search}</h2>}
                 {this.state.products.length == 0? <h2>No result</h2> : <></>}
 
                 {/*Product Cards*/}
