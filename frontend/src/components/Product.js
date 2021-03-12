@@ -190,9 +190,11 @@ export default class Product extends Component {
 
     render() {
         return (
+
             <Container fluid='xl'>
+
                 {/*Searching Bar*/}
-                <div style={{width:"300px", marginTop:"20px", display:"inline-block", marginRight:"40px"}}>
+                <div style={{width:"32%", marginTop:"20px", display:"inline-block", marginRight:"2%"}}>
                     <InputGroup className="mb-3">
                         <InputGroup.Prepend>
                             <InputGroup.Text>Search</InputGroup.Text>
@@ -205,7 +207,8 @@ export default class Product extends Component {
                 {/*Filter Bar*/}
                 <Form.Group style={{position:"relative",top:"-2px", display:"inline-flex", flexDirection:'row'}}>
                     {this.Supplier_FilterRender()}
-                    {this.state.filterReady ?   <div style={{marginBottom:"10px", marginRight:"40px"}}><SelectSearch search
+                    {this.state.filterReady ?   <div style={{marginBottom:"10px", marginRight:"20px"}}><SelectSearch search
+                                                
                                                     onChange={(e) => this.updateSupplierValue(e)} 
                                                     emptyMessage="Result not found"
                                                     placeholder="Select Supplier" 

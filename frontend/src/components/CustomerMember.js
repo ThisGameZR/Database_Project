@@ -11,7 +11,8 @@ export class CustomerMember extends Component {
         this.state = {
             active: 0,
             maxAddress: 3,
-
+            address: [],
+            
         }
     }
 
@@ -36,7 +37,7 @@ export class CustomerMember extends Component {
                     </Card.Header>
                     <Card.Body>
                         <Card.Text>
-                            <Form>
+                            <Form onSubmit={(e) => }>
                                 <Form.Group controlId="customer-first-name">
                                     <Form.Control type="text" placeholder="First name"></Form.Control>
                                 </Form.Group>
@@ -49,6 +50,7 @@ export class CustomerMember extends Component {
                                 <Form.Group controlId="customer-contact">
                                     <Form.Control type="text" placeholder="Contact"></Form.Control>
                                 </Form.Group>
+                                <Button variant="success">SUBMIT</Button>
                             </Form>
                         </Card.Text>
                     </Card.Body>
@@ -62,7 +64,29 @@ export class CustomerMember extends Component {
                     </Card.Header>
                     <Card.Body>
                         <Card.Text>
-
+                            <Form>
+                                <fieldset id="customer-address-form" disabled>
+                                    <Form.Group controlId="customer-id">
+                                        <Form.Control type="text" placeholder="Customer ID"></Form.Control>
+                                    </Form.Group>
+                                    <Form.Group controlId="customer-address">
+                                        <Form.Control type="text" placeholder="Address"></Form.Control>
+                                    </Form.Group>
+                                    <Form.Group controlId="customer-address-city">
+                                        <Form.Control type="text" placeholder="City"></Form.Control>
+                                    </Form.Group>
+                                    <Form.Group controlId="customer-address-province">
+                                        <Form.Control type="text" placeholder="Province"></Form.Control>
+                                    </Form.Group>
+                                    <Form.Group controlId="customer-address-postal-code">
+                                        <Form.Control type="text" placeholder="Postal Code"></Form.Control>
+                                    </Form.Group>
+                                    <Form.Group controlId="customer-address-country">
+                                        <Form.Control type="text" placeholder="Country"></Form.Control>
+                                    </Form.Group>
+                                    <Button variant="success">SUBMIT</Button>
+                                </fieldset>
+                            </Form>
                         </Card.Text>
                     </Card.Body>
                     <Card.Footer style={{display:"flex", justifyContent:"center", alignItems:"center", textAlign:"center"}}>
@@ -77,7 +101,17 @@ export class CustomerMember extends Component {
                     </Card.Header>
                     <Card.Body>
                         <Card.Text>
-                            
+                            <Form>
+                                <fieldset id="customer-card-form" disabled>
+                                    <Form.Group controlId="customer-id">
+                                        <Form.Control type="text" placeholder="Customer ID"></Form.Control>
+                                    </Form.Group>
+                                    <Form.Group controlId="customer-card-number">
+                                        <Form.Control type="text" placeholder="Card Number"></Form.Control>
+                                    </Form.Group>
+                                    <Button variant="success">SUBMIT</Button>
+                                </fieldset>
+                            </Form>
                         </Card.Text>
                     </Card.Body>
                     <Card.Footer>
@@ -87,6 +121,11 @@ export class CustomerMember extends Component {
             </div>
         )
     }
+
+    submitCustomer = () => {
+        
+    }
+
     renderAddress = () => {
         let items = [];
         for(let number = 1; number <= this.state.maxAddress ; number++){
@@ -112,7 +151,7 @@ export class CustomerMember extends Component {
         this.setState({active:number})
         if(number === parseInt(number,10) && number != this.state.maxAddress-1){
 
-
+            
 
         }
         
