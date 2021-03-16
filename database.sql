@@ -23,14 +23,14 @@ DROP TABLE IF EXISTS `customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customer` (
-  `CID` int NOT NULL,
+  `CID` int NOT NULL AUTO_INCREMENT,
   `FirstName` varchar(45) NOT NULL,
   `MiddleName` varchar(10) DEFAULT NULL,
   `LastName` varchar(45) NOT NULL,
   `Contact` varchar(45) NOT NULL,
   `Points` int NOT NULL,
   PRIMARY KEY (`CID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,6 +39,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
+INSERT INTO `customer` VALUES (1,'Jaylen','S.','Ponce','+1-202-555-0194',0),(2,'Toby','E.','Newton','+1-202-555-0153',0),(3,'Asma','J.','Goulding','+1-202-555-0103',0),(4,'Pamela','','Person','+1-202-555-0143',0);
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -50,7 +51,7 @@ DROP TABLE IF EXISTS `customer_addr`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customer_addr` (
-  `CAddrID` int NOT NULL,
+  `CAddrID` int NOT NULL AUTO_INCREMENT,
   `CID` int DEFAULT NULL,
   `Address` varchar(255) NOT NULL,
   `City` varchar(45) NOT NULL,
@@ -60,7 +61,7 @@ CREATE TABLE `customer_addr` (
   PRIMARY KEY (`CAddrID`),
   KEY `fk_CUSTOMER_ADDR_CUSTOMER1_idx` (`CID`),
   CONSTRAINT `fk_CUSTOMER_ADDR_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,6 +70,7 @@ CREATE TABLE `customer_addr` (
 
 LOCK TABLES `customer_addr` WRITE;
 /*!40000 ALTER TABLE `customer_addr` DISABLE KEYS */;
+INSERT INTO `customer_addr` VALUES (1,1,'2156  Cook Hill Road','Hartford','Connecticut','06103','United States'),(2,2,'367  Emeral Dreams Drive','Streator','Illinois','61364','United States'),(3,3,'588  Spring Haven Trail','Montclair','New Jersey','07042','United States'),(4,4,'3242  Jarvisville Road','Freeport','New York','11520','United States');
 /*!40000 ALTER TABLE `customer_addr` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -80,13 +82,13 @@ DROP TABLE IF EXISTS `customer_card`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customer_card` (
-  `CardID` int NOT NULL,
+  `CardID` int NOT NULL AUTO_INCREMENT,
   `CID` int DEFAULT NULL,
   `CardNumber` varchar(100) NOT NULL,
   PRIMARY KEY (`CardID`),
   KEY `fk_CUSTOMER_CARD_CUSTOMER1_idx` (`CID`),
   CONSTRAINT `fk_CUSTOMER_CARD_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,6 +97,7 @@ CREATE TABLE `customer_card` (
 
 LOCK TABLES `customer_card` WRITE;
 /*!40000 ALTER TABLE `customer_card` DISABLE KEYS */;
+INSERT INTO `customer_card` VALUES (1,1,'4929211165011852'),(2,2,'5170781072991027'),(3,3,'5529518997623147'),(4,4,'344935312051883');
 /*!40000 ALTER TABLE `customer_card` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -447,4 +450,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-08 16:30:52
+-- Dump completed on 2021-03-17  0:50:23
