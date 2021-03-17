@@ -15,6 +15,7 @@ export default function LoginForm() {
     useEffect(()=>{
         const storedLoginyet = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_LOGIN));
         const storedUser = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_USER));
+
         if(storedLoginyet) setLoginyet(storedLoginyet);
         if(storedUser) setUser(storedUser);
         
@@ -47,6 +48,7 @@ export default function LoginForm() {
         
         return(
             <>
+                
                 <ToastBox message={"You login as " + user} ></ToastBox>
                 <div style={{width:"280px"}}></div>
                 <Navbar.Brand id="welcomeMessage">{user}</Navbar.Brand>
@@ -64,10 +66,8 @@ export default function LoginForm() {
             if(res.data.success == true){
                 setLoginyet(true);
                 setUser(res.data.message);
-                setMyToast(true);
-                const token = res.data.token;
-                localStorage.setItem('jwtToken', token);
-                setAuthorizationToken(token);
+                setMyToast(true);   
+                localStorage.setItem("employee.eid", JSON.stringify(res.data.eid))
                 window.location.reload(false);
             }else{
                 setUser(res.data.message);

@@ -2,11 +2,16 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const pool = require('../pool');
+const regex = require('../regex');
 
 router.post('/',async (req,res) => {
     const eid = req.body.username;
     const password = req.body.password;
     let success = false;
+
+    if(regex.test(eid) || regex.test(password)){
+        return res.send({message:"Error special characters are not allowed" , success: success})
+    }
 
     if(eid === "")
         return res.status(200).send({message: "Username cannot be blank", success: success});
@@ -23,8 +28,8 @@ router.post('/',async (req,res) => {
                     let sql = `select firstname,middlename,lastname from employee where eid = ${parseInt(result[0].EID)}`;
                     pool.query(sql,(err,row) => {
                         if(row[0].middleName == "")
-                            return res.send({message: `${row[0].firstname} ${row[0].lastname}`, success: success});
-                        return res.send({message: `${row[0].firstname} ${row[0].middlename} ${row[0].lastname}`, success: success});
+                            return res.send({message: `${row[0].firstname} ${row[0].lastname}`, success: success, eid:result[0].EID});
+                        return res.send({message: `${row[0].firstname} ${row[0].middlename} ${row[0].lastname}`, success: success, eid:result[0].EID});
                     });
                 }else{
                     return res.send({message: "Incorrect username or password", success: success});

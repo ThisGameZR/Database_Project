@@ -192,7 +192,7 @@ export default class Product extends Component {
         return (
 
             <Container fluid='xl'>
-
+                
                 {/*Searching Bar*/}
                 <div style={{width:"32%", marginTop:"20px", display:"inline-block", marginRight:"2%"}}>
                     <InputGroup className="mb-3">
