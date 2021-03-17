@@ -1,10 +1,11 @@
 import React, {Component} from "react";
-import {Modal, Button, Table} from 'react-bootstrap'
+import {Modal, Button, Table, Form, FormGroup, ButtonGroup, Col} from 'react-bootstrap'
+import {BsFillXCircleFill} from 'react-icons/bs'
 import axios from "axios";
-
+import Product from "./Product";
 export default class ShoppingCart extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
 
         this.state = {
             showCart: false,
@@ -59,9 +60,19 @@ export default class ShoppingCart extends Component {
                         <td>{item.name}</td>
                         <td>{item.price} ฿</td>
                         <td>{item.amount}</td>
+                        <td>
+                            <ButtonGroup size="sm">
+                                <Button value={i} onClick={(e) => this.DecreaseAmount(e)}>-</Button>
+                                <Button value={i} onClick={(e) => this.IncreaseAmount(e)}>+</Button>
+                                <Button variant="danger" value={i} onClick={(e) => this.DeleteItem(e)}>
+                                    <BsFillXCircleFill/>
+                                </Button>
+                            </ButtonGroup>
+                        </td>
                     </tr>      
             )
         })
+
     }
 
     GetCartSize = () => {
@@ -80,11 +91,56 @@ export default class ShoppingCart extends Component {
             </thead>
         )
     }
+
+    IncreaseAmount = (e) => {
+        let tempCart = this.state.cart
+        tempCart[e.target.value].amount += 1;
+        tempCart[e.target.value].price = tempCart[e.target.value].baseprice * tempCart[e.target.value].amount
+
+        this.setState({
+            cart: tempCart
+        })
+    }
+
+    DecreaseAmount = (e) => {
+        let tempCart = this.state.cart
+
+        tempCart[e.target.value].amount -= 1;
+
+        if (tempCart[e.target.value].amount < 0)
+        {
+            this.DeleteItem(e)
+        }
+        else
+        {
+            tempCart[e.target.value].price = tempCart[e.target.value].baseprice * tempCart[e.target.value].amount
+
+            this.setState({
+                cart: tempCart
+            })
+        }
+    }
+
+    DeleteItem = (e) => {
+        let tempCart = this.state.cart
+        tempCart.splice(e.target.value, 1)
+
+        this.setState({
+            cart: tempCart
+        }, () => {
+            this.props.changeBadge();
+        })
+    }
+
     render() {
         return (
             <Modal show={this.state.showCart} onHide={this.CartHide} size="lg">
                 <Modal.Header closeButton>
-                    <Modal.Title>Shopping Cart</Modal.Title>
+                    <Form>
+                        <FormGroup>
+                            <Form.Control type="text" placeholder="Customer ID"/>
+                        </FormGroup>
+                    </Form>
                 </Modal.Header>
                 <Modal.Body>
                     <Table striped bordered hover responsive>
@@ -95,10 +151,9 @@ export default class ShoppingCart extends Component {
                     </Table>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={this.CartHide} disable>Place Order</Button>
+                    <Button variant="primary" onClick={this.CartHide}>Place Order</Button>
                 </Modal.Footer>
           </Modal>
         )
     }
 }
-
