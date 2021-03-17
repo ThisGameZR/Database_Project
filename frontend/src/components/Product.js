@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import axios from "axios";
-import { Container, InputGroup, FormControl, Card, Button, CardColumns, Spinner, Form, Modal} from "react-bootstrap";
+import { Container, InputGroup, FormControl, Card, Button, CardColumns, Spinner, Form, Modal, Badge} from "react-bootstrap";
 import SelectSearch, {fuzzySearch } from 'react-select-search'
 import Select from 'react-select'
 import './CSS/SelectSearch.css'
@@ -21,6 +21,8 @@ export default class Product extends Component {
             sizeOptions: [],
             sizeValue: [],
             supplierValue: 0,
+            _cart: null,
+            some: [],
         }
 
         this.GetAllProducts();
@@ -88,6 +90,7 @@ export default class Product extends Component {
                 if(this.state.sizeValue.length == 0)
                 {
                     if(this.state.supplierValue == item.SID || this.state.supplierValue == 0){
+                        {this.state.some[item.PID] = item}
                         return (
                             <Card key={item.PID}>
                                 <Card.Body>
@@ -95,7 +98,7 @@ export default class Product extends Component {
                                     <Card.Text>Made by {item.SName}</Card.Text>
                                     <Card.Text>Size: {item.Size}</Card.Text>
                                     <h2>${item.UnitPrice}</h2>
-                                    <Button varient="primary" value={item.PID} name={item.ProductName} onClick={(e) => this.AddToCart(e)}>Add to Cart</Button>
+                                    <Button varient="primary" value={item.PID} onClick={(e) => this.AddToCart(e)}>Add to Cart</Button>
                                 </Card.Body>
                             </Card>
                         )
@@ -107,8 +110,8 @@ export default class Product extends Component {
                     this.state.sizeValue.forEach(item => {
                         sizeFilter.push(item.name)
                     })
-
                     if((this.state.supplierValue == item.SID || this.state.supplierValue == 0) && sizeFilter.includes(item.Size)){
+                        {this.state.some[item.PID] = item}
                         return (
                             <Card key={item.PID}>
                                 <Card.Body>
@@ -116,7 +119,7 @@ export default class Product extends Component {
                                     <Card.Text>Made by {item.SName}</Card.Text>
                                     <Card.Text>Size: {item.Size}</Card.Text>
                                     <h1>${item.UnitPrice}</h1>
-                                    <Button varient="primary" value={item.PID} name={item.ProductName} onClick={(e) => this.AddToCart(e)}>Add to Cart</Button>
+                                    <Button varient="primary" value={item.PID} onClick={(e) => this.AddToCart(e)}>Add to Cart</Button>
                                 </Card.Body>
                             </Card>
                         )
@@ -175,17 +178,27 @@ export default class Product extends Component {
     // 2.) when you want to call method, just call it regularly on that object
 
     DisplayCart = () => {
-        this._cart.CartShow()
+        this.state._cart.CartShow()
     }
 
     AddToCart = (e) => {
+        let data = this.state.some[e.target.value]
+        
         let item = {
-            pid: e.target.value,
-            name: e.target.name,
-            amount: 1
+            pid: data.PID,
+            name: data.ProductName,
+            amount: 1,
+            price: data.UnitPrice
         }
 
-        this._cart.AddItem(item)
+        this.state._cart.AddItem(item)
+        this.renderCartLength()
+    }
+
+    renderCartLength = () => {
+        
+        document.getElementById('badge').innerHTML = this.state._cart.GetCartSize()
+        
     }
 
     render() {
@@ -228,8 +241,13 @@ export default class Product extends Component {
                     : null}
                 </Form.Group>
                 
-                <Button varient="primary" onClick={this.DisplayCart}>Cart</Button>
-                <ShoppingCart ref={(cart) => this._cart = cart}/>
+                <ShoppingCart ref={(cart) => this.state._cart = cart}/>
+                
+                <Button varient="primary" onClick={this.DisplayCart}>Cart
+                    <Badge variant="light" id="badge">
+                        
+                    </Badge>
+                </Button>
 
                 {this.state.search == "" ? <></> : <h2>Search for: {this.state.search}</h2>}
                 {this.state.products.length == 0? <h2>No result</h2> : <></>}

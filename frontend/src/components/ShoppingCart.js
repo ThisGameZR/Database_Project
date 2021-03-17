@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Modal, Button} from 'react-bootstrap'
+import {Modal, Button, Container, Col, Row} from 'react-bootstrap'
 import axios from "axios";
 
 export default class ShoppingCart extends Component {
@@ -30,28 +30,40 @@ export default class ShoppingCart extends Component {
     }
 
     DisplayCart = () => {
-        return this.state.cart.map(item => {
+        return this.state.cart.map((item,i) => {
             return (
-                <p>
-                    Item: {item.pid}
-                    Name: {item.name}
-                    Amount: {item.amount}
-                </p>
+                    <Row>
+                        <Col sm={2}>{i+1}</Col>
+                        <Col sm={4}>{item.name}</Col>
+                        <Col sm={2}>{item.price}</Col>
+                        <Col sm={1}>{item.amount}</Col>
+                    </Row>      
             )
         })
     }
 
+    GetCartSize = () => {
+        return this.state.cart.length
+    }
+
     render() {
         return (
-            <Modal show={this.state.showCart} onHide={this.CartHide}>
+            <Modal show={this.state.showCart} onHide={this.CartHide} size="lg">
                 <Modal.Header closeButton>
                     <Modal.Title>Shopping Cart</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                <Container>
+                    <Row style={{backgroundColor: "#e5e5e5"}}>
+                        <Col sm={2}>Number</Col>
+                        <Col sm={4}>Name</Col>
+                        <Col sm={2}>Price</Col>
+                        <Col sm={1}>Amount</Col>
+                    </Row>
                     {this.DisplayCart()}
+                </Container>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={this.CartHide}>Close</Button>
                     <Button variant="primary" onClick={this.CartHide} disable>Place Order</Button>
                 </Modal.Footer>
           </Modal>
