@@ -188,7 +188,9 @@ export default class Product extends Component {
             pid: data.PID,
             name: data.ProductName,
             amount: 1,
-            price: data.UnitPrice
+            price: data.UnitPrice,
+            baseprice: data.UnitPrice,
+            stocks: data.Stocks
         }
 
         this.state._cart.AddItem(item)
@@ -244,9 +246,7 @@ export default class Product extends Component {
                 <ShoppingCart ref={(cart) => this.state._cart = cart}/>
                 
                 <Button varient="primary" onClick={this.DisplayCart}>Cart
-                    <Badge variant="light" id="badge">
-                        
-                    </Badge>
+                    <Badge variant="light" id="badge"/>
                 </Button>
 
                 {this.state.search == "" ? <></> : <h2>Search for: {this.state.search}</h2>}

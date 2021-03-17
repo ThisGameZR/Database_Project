@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Modal, Button, Container, Col, Row} from 'react-bootstrap'
+import {Modal, Button, Table} from 'react-bootstrap'
 import axios from "axios";
 
 export default class ShoppingCart extends Component {
@@ -26,18 +26,40 @@ export default class ShoppingCart extends Component {
     }
 
     AddItem = (item) => {
-        this.state.cart.push(item)
+        if (this.state.cart.length == 0)
+        {
+            this.state.cart.push(item)
+        }
+        else
+        {
+            let pushstate = false;
+            this.state.cart.forEach((elem, i) => {
+                if (elem.pid === item.pid)
+                {
+                    this.state.cart[i].amount += 1;
+                    this.state.cart[i].price = this.state.cart[i].baseprice * this.state.cart[i].amount;
+                    pushstate = true;
+                }
+            })
+
+            if (pushstate == false)
+            {
+                this.state.cart.push(item)
+            }
+        }
+        
+        console.log(this.state.cart)
     }
 
     DisplayCart = () => {
         return this.state.cart.map((item,i) => {
             return (
-                    <Row>
-                        <Col sm={2}>{i+1}</Col>
-                        <Col sm={4}>{item.name}</Col>
-                        <Col sm={2}>{item.price}</Col>
-                        <Col sm={1}>{item.amount}</Col>
-                    </Row>      
+                    <tr>
+                        <td>{i+1}</td>
+                        <td>{item.name}</td>
+                        <td>{item.price} ฿</td>
+                        <td>{item.amount}</td>
+                    </tr>      
             )
         })
     }
@@ -46,6 +68,18 @@ export default class ShoppingCart extends Component {
         return this.state.cart.length
     }
 
+    CartHeaderRender = () => {
+        return (
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Amount</th>
+                </tr>         
+            </thead>
+        )
+    }
     render() {
         return (
             <Modal show={this.state.showCart} onHide={this.CartHide} size="lg">
@@ -53,15 +87,12 @@ export default class ShoppingCart extends Component {
                     <Modal.Title>Shopping Cart</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                <Container>
-                    <Row style={{backgroundColor: "#e5e5e5"}}>
-                        <Col sm={2}>Number</Col>
-                        <Col sm={4}>Name</Col>
-                        <Col sm={2}>Price</Col>
-                        <Col sm={1}>Amount</Col>
-                    </Row>
-                    {this.DisplayCart()}
-                </Container>
+                    <Table striped bordered hover responsive>
+                        {this.CartHeaderRender()}
+                        <tbody>
+                            {this.DisplayCart()}
+                        </tbody>
+                    </Table>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={this.CartHide} disable>Place Order</Button>
