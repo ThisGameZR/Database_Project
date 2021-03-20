@@ -8,9 +8,19 @@ import {connect} from 'react-redux';
 
 export class NavigationBar extends Component{
 
-    
+    constructor(){
+        super();
+        this.state = {
+            loginYet: false,
+        }
+        axios.get('/login').then(res => {
+            if(res.data.session?.user){
+                this.setState({loginYet : true})
+            }
+        })
+    }
+
     render(){
-        const loginYet = localStorage.getItem('loginForm.loginyet');
 
         return(
             <Container fluid>
@@ -37,8 +47,7 @@ export class NavigationBar extends Component{
                                     <div class="phone-number">@AXIOS</div>
                                 </NavDropdown.Item>
                             </NavDropdown>
-                            
-                            {loginYet == "true" ? <Nav.Link href="/customerMember">Customer Membership</Nav.Link> : <div></div>}
+                            {this.state.loginYet == true ? <Nav.Link href="/customerMember">Customer Registration</Nav.Link> : <div></div>}
                         </Nav>
                         <LoginForm/>
                     </Navbar.Collapse>
