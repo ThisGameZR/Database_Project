@@ -6,9 +6,11 @@ import Select from 'react-select'
 import './CSS/SelectSearch.css'
 import images from './Images/images'
 import ShoppingCart from './ShoppingCart'
+
 export default class Product extends Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
+
 
         this.state = {
             search: "",
@@ -21,7 +23,7 @@ export default class Product extends Component {
             sizeOptions: [],
             sizeValue: [],
             supplierValue: 0,
-            _cart: null,
+            cartNum: 0,
             some: [],
         }
 
@@ -178,7 +180,7 @@ export default class Product extends Component {
     // 2.) when you want to call method, just call it regularly on that object
 
     DisplayCart = () => {
-        this.state._cart.CartShow()
+        this._cart.CartShow()
     }
 
     AddToCart = (e) => {
@@ -190,17 +192,19 @@ export default class Product extends Component {
             pid: data.PID,
             name: data.ProductName,
             amount: 1,
-            price: data.UnitPrice
+            price: data.UnitPrice,
+            baseprice: data.UnitPrice,
+            stocks: data.Stocks
         }
 
-        this.state._cart.AddItem(item)
+        this._cart.AddItem(item)
         this.renderCartLength()
     }
 
     renderCartLength = () => {
-        
-        document.getElementById('badge').innerHTML = this.state._cart.GetCartSize()
-        
+        this.setState({
+            cartNum: this._cart.GetCartSize()
+        })
     }
 
     render() {
@@ -243,13 +247,11 @@ export default class Product extends Component {
                     : null}
                 </Form.Group>
                 
-                <ShoppingCart ref={(cart) => this.state._cart = cart}/>
-                
-                <Button varient="primary" onClick={this.DisplayCart}>
-                    <span>Cart </span>
-                    <Badge variant="danger" id="badge">
-                        
-                    </Badge>
+
+                <ShoppingCart ref={(cart) => this._cart = cart} changeBadge={this.renderCartLength}/>
+                <Button varient="primary" onClick={this.DisplayCart}>Cart
+                <Badge variant="light" id="badge">{this.state.cartNum}</Badge>
+
                 </Button>
 
                 {this.state.search == "" ? <></> : <h2>Search for: {this.state.search}</h2>}
