@@ -250,7 +250,7 @@ export default class Product extends Component {
 
                 <ShoppingCart ref={(cart) => this._cart = cart} changeBadge={this.renderCartLength}/>
                 <Button varient="primary" onClick={this.DisplayCart}>Cart
-                <Badge variant="light" id="badge">{this.state.cartNum}</Badge>
+                <Badge variant="danger" id="badge" style={{marginLeft:"4px"}}>{this.state.cartNum}</Badge>
 
                 </Button>
 
