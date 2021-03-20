@@ -10,7 +10,7 @@ export default class ShoppingCart extends Component {
         this.state = {
             showCart: false,
             cartReady: false,
-            cart: []
+            cart: [],
         }
     }
 
@@ -27,6 +27,7 @@ export default class ShoppingCart extends Component {
     }
 
     AddItem = (item) => {
+
         if (this.state.cart.length == 0)
         {
             this.state.cart.push(item)
@@ -55,6 +56,7 @@ export default class ShoppingCart extends Component {
     DisplayCart = () => {
         return this.state.cart.map((item,i) => {
             return (
+
                     <tr>
                         <td>{i+1}</td>
                         <td>{item.name}</td>
@@ -70,13 +72,18 @@ export default class ShoppingCart extends Component {
                             </ButtonGroup>
                         </td>
                     </tr>      
+
             )
         })
 
     }
 
     GetCartSize = () => {
-        return this.state.cart.length
+        let count = 0;
+        this.state.cart.map(item => {
+            count += item.amount;
+        })
+        return count
     }
 
     CartHeaderRender = () => {
@@ -133,6 +140,7 @@ export default class ShoppingCart extends Component {
     }
 
     render() {
+        
         return (
             <Modal show={this.state.showCart} onHide={this.CartHide} size="lg">
                 <Modal.Header closeButton>
@@ -143,6 +151,7 @@ export default class ShoppingCart extends Component {
                     </Form>
                 </Modal.Header>
                 <Modal.Body>
+
                     <Table striped bordered hover responsive>
                         {this.CartHeaderRender()}
                         <tbody>
@@ -152,8 +161,26 @@ export default class ShoppingCart extends Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={this.CartHide}>Place Order</Button>
+
                 </Modal.Footer>
           </Modal>
         )
     }
+
 }
+
+
+    placeOrder = () => {
+        this.CartHide();
+        axios.get('/login').then(res => {
+            if(res.data.session?.user){
+                localStorage.setItem("itemInCart", JSON.stringify(this.state.cart))
+                window.location.href = "/PlaceOrder"
+            }else{
+                alert("You need to login to place the order")
+            }
+        })
+    }
+}
+
+

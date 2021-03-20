@@ -13,14 +13,18 @@ export class CustomerMember extends Component {
             maxAddress: 3,
             address: [],
             cid: null,
+            loginYet: false,
         }
+        axios.get('/login').then(res => {
+            if(res.data.session?.user){
+                this.setState({loginYet:true})
+            }
+        })
     }
 
     render() {
 
-        const loginYet = localStorage.getItem('loginForm.loginyet');
-
-        if(loginYet == "false"){
+        if(this.state.loginYet == false){
             return(
                 <div style={{margin:"20px"}}>
                     <h2>Sorry.. This page is only for our employee!</h2>

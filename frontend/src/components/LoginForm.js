@@ -12,19 +12,24 @@ export default function LoginForm() {
     const [user,setUser] = useState("");
     const [toast, setToast] = useState(false);
 
+    useEffect(() => {
+        axios.get('/login').then(res => {
+            if(res.data.session?.user){
+                setLoginyet(true)
+            }else{
+                setLoginyet(false)
+            }
+        })
+    });
+
     useEffect(()=>{
-        const storedLoginyet = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_LOGIN));
+        
         const storedUser = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_USER));
 
-        if(storedLoginyet) setLoginyet(storedLoginyet);
         if(storedUser) setUser(storedUser);
         
     }, []);
 
-
-    useEffect(()=> {
-        localStorage.setItem(LOCAL_STORAGE_KEY_LOGIN, JSON.stringify(loginyet))
-    }, [loginyet]);
 
     useEffect(()=>{
         localStorage.setItem(LOCAL_STORAGE_KEY_USER, JSON.stringify(user))
@@ -64,10 +69,8 @@ export default function LoginForm() {
         }
         axios.post('/login',request).then(res =>{
             if(res.data.success == true){
-                setLoginyet(true);
                 setUser(res.data.message);
-                setMyToast(true);   
-                localStorage.setItem("employee.eid", JSON.stringify(res.data.eid))
+                setMyToast(true);
                 window.location.reload(false);
             }else{
                 setUser(res.data.message);
@@ -82,6 +85,9 @@ export default function LoginForm() {
     }
     function logout(e){
         setLoginyet(false);
+        axios.get('/login/logout').then(res => {
+            console.log(res.data);
+        })
         window.location.reload(false);
     }
     function setMyToast(x){

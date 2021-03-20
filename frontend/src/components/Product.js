@@ -187,6 +187,8 @@ export default class Product extends Component {
         let data = this.state.some[e.target.value]
         
         let item = {
+            sname: data.SName,
+            size: data.Size,
             pid: data.PID,
             name: data.ProductName,
             amount: 1,
@@ -245,9 +247,11 @@ export default class Product extends Component {
                     : null}
                 </Form.Group>
                 
+
                 <ShoppingCart ref={(cart) => this._cart = cart} changeBadge={this.renderCartLength}/>
                 <Button varient="primary" onClick={this.DisplayCart}>Cart
                 <Badge variant="light" id="badge">{this.state.cartNum}</Badge>
+
                 </Button>
 
                 {this.state.search == "" ? <></> : <h2>Search for: {this.state.search}</h2>}
