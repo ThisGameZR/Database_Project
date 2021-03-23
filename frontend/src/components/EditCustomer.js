@@ -67,7 +67,7 @@ export class EditCustomer extends Component {
                             <Col sm={9}>
                                 <Tab.Content style={{width:"60%"}}>
                                     <Tab.Pane eventKey="profile">
-                                        <EditCustomerProfile/>
+                                        <EditCustomerProfile cid={this.state.customerValue}/>
                                     </Tab.Pane>
                                     <Tab.Pane eventKey="address">
                                         <EditCustomerAddress/>
