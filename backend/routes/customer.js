@@ -13,7 +13,7 @@ router.get('/editProfile',(req,res) => {
     let cid = req.query.cid
     let sql = `select * from customer where cid = ${cid}`
     pool.query(sql,(err,result) => {
-        return res.send({customerInfo:result})
+        return res.send({customerInfo:result[0]})
     })
 })
 

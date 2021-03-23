@@ -17,10 +17,10 @@ export class EditCustomerProfile extends Component {
         let cid = this.props.cid
         axios.get('/customer/editProfile', {params: {cid}}).then(res => {
             this.state.customerInfo = res.data.customerInfo
-            document.getElementById('FirstName').value = res.data.customerInfo[0].FirstName
-            document.getElementById('MiddleName').value = res.data.customerInfo[0].MiddleName
-            document.getElementById('LastName').value = res.data.customerInfo[0].LastName
-            document.getElementById('contact').value = res.data.customerInfo[0].Contact
+            document.getElementById('FirstName').value = res.data.customerInfo.FirstName
+            document.getElementById('MiddleName').value = res.data.customerInfo.MiddleName
+            document.getElementById('LastName').value = res.data.customerInfo.LastName
+            document.getElementById('contact').value = res.data.customerInfo.Contact
         })
     }
 
