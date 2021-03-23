@@ -1,0 +1,18 @@
+#first-name:disabled,#last-name:disabled,#middle-name:disabled,#contact:disabled{
+    background-color:#ffc2c9;
+}
+
+.card-body > .input-group > .form-control{
+    background-color: #dfffd6;
+}
+
+.input-group-prepend{
+    width:20%;
+    background-color: #e9ecef;
+    text-align: center;
+    justify-content:center;
+    align-items: center;
+}
+.input-group-text{
+    border: 0px
+}
