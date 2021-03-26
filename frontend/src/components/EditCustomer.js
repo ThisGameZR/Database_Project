@@ -70,10 +70,10 @@ export class EditCustomer extends Component {
                                         <EditCustomerProfile cid={this.state.customerValue}/>
                                     </Tab.Pane>
                                     <Tab.Pane eventKey="address">
-                                        <EditCustomerAddress/>
+                                        <EditCustomerAddress cid={this.state.customerValue}/>
                                     </Tab.Pane>
                                     <Tab.Pane eventKey="card">
-                                        <EditCustomerCard/>
+                                        <EditCustomerCard cid={this.state.customerValue}/>
                                     </Tab.Pane>
                                 </Tab.Content>
                             </Col>

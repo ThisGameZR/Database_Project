@@ -1,4 +1,6 @@
-#FirstName:disabled,#LastName:disabled,#MiddleName:disabled,#contact:disabled{
+#FirstName:disabled,#LastName:disabled,#MiddleName:disabled,#contact:disabled,
+#Address:disabled,#City:disabled,#Province:disabled,#PostalCode:disabled,#Country:disabled
+{
     background-color:#ffc2c9;
 }
 

@@ -1,7 +1,9 @@
 import React from 'react'
 import axios from 'axios'
 
-export default function EditInfo(e,cid) {
+export default function EditInfo(e,cid,caddrid,cardid) {
+    caddrid = caddrid || "nothing";
+    cardid = cardid || "nothing";
     let parentId = e.target.id.replaceAll("-edit","");
     if(e.target.innerHTML == "EDIT"){
         e.preventDefault()
@@ -19,10 +21,15 @@ export default function EditInfo(e,cid) {
         let value = document.getElementById(parentId).value
         let name = parentId
         
-        let data = {value,name,cid}
+        if(caddrid == "nothing" && cardid == "nothing"){
+            let data = {value,name,cid}
+            axios.post('/customer/editProfile', data).then(res => {
 
-        axios.post('/customer/editProfile', data).then(res => {
+            })
+        }else if(cardid == "nothing"){
+            
+        }else if(caddrid == "nothing"){
 
-        })
+        }
     }
 }

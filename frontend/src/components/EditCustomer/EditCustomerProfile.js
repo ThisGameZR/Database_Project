@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { Component } from 'react'
-import { Col, Container, Nav, Row, Button, Tab, Form,Card, InputGroup, FormControl} from 'react-bootstrap'
+import { Button,Card, InputGroup, FormControl} from 'react-bootstrap'
 import EditInfo from './EditInfo'
 
 export class EditCustomerProfile extends Component {

@@ -1,5 +1,7 @@
 
 import React, { Component } from 'react'
+import { Button,Card, InputGroup, FormControl} from 'react-bootstrap'
+import EditInfo from './EditInfo'
 
 export class EditCustomerCard extends Component {
     
