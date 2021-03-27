@@ -145,7 +145,7 @@ export default class ShoppingCart extends Component {
             <Modal show={this.state.showCart} onHide={this.CartHide} size="lg">
                 <Modal.Header closeButton>
                     <Form>
-                        <FormGroup>
+                        <FormGroup controlId="customerId">
                             <Form.Control type="text" placeholder="Customer ID"/>
                         </FormGroup>
                     </Form>
@@ -160,27 +160,32 @@ export default class ShoppingCart extends Component {
                     </Table>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={this.CartHide}>Place Order</Button>
+                    <Button variant="primary" onClick={this.placeOrder}>Place Order</Button>
 
                 </Modal.Footer>
           </Modal>
         )
     }
 
-}
 
 
     placeOrder = () => {
         this.CartHide();
+        let customerId = document.getElementById('customerId').value;
+        document.getElementById('customerId').value = "";
+        if(customerId == ""){
+            alert("Please enter customer id")
+            return;
+        }
         axios.get('/login').then(res => {
             if(res.data.session?.user){
                 localStorage.setItem("itemInCart", JSON.stringify(this.state.cart))
+                localStorage.setItem("customerId", JSON.stringify(customerId))
                 window.location.href = "/PlaceOrder"
             }else{
                 alert("You need to login to place the order")
             }
         })
     }
+
 }
-
-

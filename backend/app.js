@@ -7,7 +7,7 @@ const cors = require('cors')
 const port = 3030,
       SESSION_NAME = 'sid',
       SESSION_SECRET = 'mysecretpass123',
-      SESSION_LIFETIME = 3600000;
+      SESSION_LIFETIME = 999999999; /// when deploy set to 3600000 (1 hour)
 
 const app = express();
 app.use(cors())
@@ -33,5 +33,6 @@ app.use('/products',require('./routes/products'));
 app.use('/sqlInjection',require('./routes/sqlInjection'));
 app.use('/insertProduct',require('./routes/insertProduct'));
 app.use('/customerMember',require('./routes/customerMember'));
+app.use('/customer', require('./routes/customer'))
 
 app.listen(port,() => {console.log(`Successfully start server on port ${port}`)});

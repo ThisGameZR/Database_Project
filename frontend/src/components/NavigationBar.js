@@ -47,7 +47,8 @@ export class NavigationBar extends Component{
                                     <div class="phone-number">@AXIOS</div>
                                 </NavDropdown.Item>
                             </NavDropdown>
-                            {this.state.loginYet == true ? <Nav.Link href="/customerMember">Customer Registration</Nav.Link> : <div></div>}
+                            {this.state.loginYet == true ? <Nav.Link href="/customerMember">Customer Registration</Nav.Link> : null}
+                            {this.state.loginYet == true ? <Nav.Link href="/EditCustomer">Edit Customer</Nav.Link> : null}
                         </Nav>
                         <LoginForm/>
                     </Navbar.Collapse>

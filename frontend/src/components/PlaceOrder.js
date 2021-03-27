@@ -11,6 +11,7 @@ export class PlaceOrder extends Component {
         this.state = {
              loginYet:false,
              cart:[],
+             customerId: null,
         }
         axios.get('/login').then(res => {
             if(res.data.session?.user){
@@ -23,6 +24,8 @@ export class PlaceOrder extends Component {
     componentDidMount(){
         let items = JSON.parse(localStorage.getItem("itemInCart")) 
         this.state.cart = items
+        let customerId = JSON.parse(localStorage.getItem("customerId"))
+        this.setState({customerId})
     }
 
     itemDisplay = () => {
@@ -35,7 +38,7 @@ export class PlaceOrder extends Component {
             return (
                 <div>
                     <h2>PLACE ORDER PAGE</h2>
-                    {console.log(this.state.cart)}
+                    {console.log(this.state.cart,this.state.customerId)}
                 </div>
             )
         }else{

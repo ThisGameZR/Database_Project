@@ -7,6 +7,7 @@ import SQLInjection from './components/SQLInjection';
 import CustomerMember from './components/CustomerMember';
 import InsertProduct from './components/InsertProduct';
 import PlaceOrder from './components/PlaceOrder';
+import EditCustomer from './components/EditCustomer';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/customerMember" exact component={CustomerMember}/>
             <Route path="/insertProduct" exact component={InsertProduct}/>
             <Route path="/PlaceOrder" exact component={PlaceOrder}/>
+            <Route path="/EditCustomer" exact component={EditCustomer}/>
           </Switch>
         </Router>   
       </header>
