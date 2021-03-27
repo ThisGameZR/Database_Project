@@ -16,6 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `cheque`
+--
+
+DROP TABLE IF EXISTS `cheque`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cheque` (
+  `ChequeID` int NOT NULL,
+  `Amount` int DEFAULT NULL,
+  `Owner_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ChequeID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cheque`
+--
+
+LOCK TABLES `cheque` WRITE;
+/*!40000 ALTER TABLE `cheque` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cheque` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `customer`
 --
 
@@ -30,7 +54,7 @@ CREATE TABLE `customer` (
   `Contact` varchar(45) NOT NULL,
   `Points` int NOT NULL,
   PRIMARY KEY (`CID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +63,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (1,'Jaylen','S.','Ponce','+1-202-555-0194',0),(2,'Toby','E.','Newton','+1-202-555-0153',0),(3,'Asma','J.','Goulding','+1-202-555-0103',0),(4,'Pamela','','Person','+1-202-555-0143',0);
+INSERT INTO `customer` VALUES (1,'Jaylen','S.','Ponce','+1-202-555-0194',0),(2,'Toby','E.','Newton','+1-202-555-0153',0),(3,'Asma','J.','Goulding','+1-202-555-0103',0),(4,'Pamela','','Pearson','+1-202-555-0143',0),(5,'Caio','','Newton','+66-955-567-724',0);
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,7 +85,7 @@ CREATE TABLE `customer_addr` (
   PRIMARY KEY (`CAddrID`),
   KEY `fk_CUSTOMER_ADDR_CUSTOMER1_idx` (`CID`),
   CONSTRAINT `fk_CUSTOMER_ADDR_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +94,7 @@ CREATE TABLE `customer_addr` (
 
 LOCK TABLES `customer_addr` WRITE;
 /*!40000 ALTER TABLE `customer_addr` DISABLE KEYS */;
-INSERT INTO `customer_addr` VALUES (1,1,'2156  Cook Hill Road','Hartford','Connecticut','06103','United States'),(2,2,'367  Emeral Dreams Drive','Streator','Illinois','61364','United States'),(3,3,'588  Spring Haven Trail','Montclair','New Jersey','07042','United States'),(4,4,'3242  Jarvisville Road','Freeport','New York','11520','United States');
+INSERT INTO `customer_addr` VALUES (1,1,'2156 Cook Hill Road , Hartford','Hartford','Connecticut','06103','United States'),(2,2,'367  Emeral Dreams Drive','Streator','Illinois','61364','United States'),(3,3,'588  Spring Haven Trail','Montclair','New Jersey','07042','United States'),(4,4,'3242  Jarvisville Road','Freeport','New York','11520','United States'),(5,5,'586  Spring Haven Trail','Montclair','New Jersey','07042','United States');
 /*!40000 ALTER TABLE `customer_addr` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -359,7 +383,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,2,'Soft-Sensu Fork (1 x 12)',10.00,'s',300),(2,3,'Ionic Fork (1 x 24)',20.00,'m',42),(3,3,'Ionic Cake Shovel',30.14,'m',17),(4,1,'Fusion Butter Knife',35.00,'m',52),(5,2,'Soft-Sensu ToothPick ( 1 x 50 )',50.00,'s',100),(6,2,'Soft-Sensu Cutting Board',48.00,'m',11),(7,5,'Corona Plastic Bottle ( 1 x 5 )',86.00,'l',84),(8,6,'Plastivo Chopstick ( 1 x 24 )',30.00,'m',67),(9,7,'Tineric Chopstick ( 1 x 24 )',29.00,'m',108),(10,9,'Acrylicc Chopstick ( 1 x 24 )',50.00,'m',15),(11,8,'Plastific Cutting board ',275.00,'xl',131),(12,10,'Kitta Cutting board ',98.00,'l',16),(13,2,'Soft-Sensu Spatula',61.00,'m',134),(14,1,'Fusion Spatula',30.00,'m',258),(15,5,'Corona Butter Knife ( 1 x 4 )',250.00,'s',55),(16,9,'Acrylicc Butter Knife ( 1 x 3 )',160.00,'s',229),(17,4,'Cutler Butter Knife ( 1 x 3 )',170.00,'s',2),(18,4,'Cutler Scoop',145.00,'l',39),(19,4,'Cutler Broom',133.00,'xl',189),(20,4,'Cutler Spatula',90.00,'l',149);
+INSERT INTO `product` VALUES (1,2,'Soft-Sensu Fork (1 x 12)',10.00,'s',300),(2,3,'Ionic Fork (1 x 24)',20.00,'m',42),(3,3,'Ionic Cake Shovel',30.14,'m',12),(4,1,'Fusion Butter Knife',35.00,'m',52),(5,2,'Soft-Sensu ToothPick ( 1 x 50 )',50.00,'s',100),(6,2,'Soft-Sensu Cutting Board',48.00,'m',8),(7,5,'Corona Plastic Bottle ( 1 x 5 )',86.00,'l',84),(8,6,'Plastivo Chopstick ( 1 x 24 )',30.00,'m',67),(9,7,'Tineric Chopstick ( 1 x 24 )',29.00,'m',108),(10,9,'Acrylicc Chopstick ( 1 x 24 )',50.00,'m',0),(11,8,'Plastific Cutting board ',275.00,'xl',131),(12,10,'Kitta Cutting board ',98.00,'l',16),(13,2,'Soft-Sensu Spatula',61.00,'m',134),(14,1,'Fusion Spatula',30.00,'m',258),(15,5,'Corona Butter Knife ( 1 x 4 )',250.00,'s',55),(16,9,'Acrylicc Butter Knife ( 1 x 3 )',160.00,'s',229),(17,4,'Cutler Butter Knife ( 1 x 3 )',170.00,'s',2),(18,4,'Cutler Scoop',145.00,'l',39),(19,4,'Cutler Broom',133.00,'xl',189),(20,4,'Cutler Spatula',90.00,'l',149);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -450,4 +474,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-17  0:50:23
+-- Dump completed on 2021-03-28  0:19:06
