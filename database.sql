@@ -99,33 +99,6 @@ INSERT INTO `customer_addr` VALUES (1,1,'2156 Cook Hill Road , Hartford','Hartfo
 UNLOCK TABLES;
 
 --
--- Table structure for table `customer_card`
---
-
-DROP TABLE IF EXISTS `customer_card`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `customer_card` (
-  `CardID` int NOT NULL AUTO_INCREMENT,
-  `CID` int DEFAULT NULL,
-  `CardNumber` varchar(100) NOT NULL,
-  PRIMARY KEY (`CardID`),
-  KEY `fk_CUSTOMER_CARD_CUSTOMER1_idx` (`CID`),
-  CONSTRAINT `fk_CUSTOMER_CARD_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `customer_card`
---
-
-LOCK TABLES `customer_card` WRITE;
-/*!40000 ALTER TABLE `customer_card` DISABLE KEYS */;
-INSERT INTO `customer_card` VALUES (1,1,'4929211165011852'),(2,2,'5170781072991027'),(3,3,'5529518997623147'),(4,4,'344935312051883');
-/*!40000 ALTER TABLE `customer_card` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `department`
 --
 
@@ -297,7 +270,6 @@ CREATE TABLE `order` (
   `OrderID` int NOT NULL AUTO_INCREMENT,
   `EID` int DEFAULT NULL,
   `CID` int DEFAULT NULL,
-  `CardID` int DEFAULT NULL,
   `CAddrID` int DEFAULT NULL,
   `TotalPrice` float NOT NULL,
   `TotalPoints` int NOT NULL,
@@ -309,11 +281,9 @@ CREATE TABLE `order` (
   PRIMARY KEY (`OrderID`),
   KEY `fk_ORDER_EMPLOYEE1_idx` (`EID`),
   KEY `fk_ORDER_CUSTOMER1_idx` (`CID`),
-  KEY `fk_ORDER_CUSTOMER_CARD1_idx` (`CardID`),
   KEY `fk_ORDER_CUSTOMER_ADDR1_idx` (`CAddrID`),
   CONSTRAINT `fk_ORDER_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_ORDER_CUSTOMER_ADDR1` FOREIGN KEY (`CAddrID`) REFERENCES `customer_addr` (`CAddrID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_ORDER_CUSTOMER_CARD1` FOREIGN KEY (`CardID`) REFERENCES `customer_card` (`CardID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_ORDER_EMPLOYEE1` FOREIGN KEY (`EID`) REFERENCES `employee` (`EID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
