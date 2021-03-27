@@ -9,9 +9,9 @@ export class PlaceOrder extends Component {
         super(props)
     
         this.state = {
-             loginYet:false,
-             cart:[],
-             customerId: null,
+            loginYet:false,
+            cart:[],
+            customerId: null,
         }
         axios.get('/login').then(res => {
             if(res.data.session?.user){

@@ -5,8 +5,8 @@ const cors = require('cors')
 
 
 const port = 3030,
-      SESSION_NAME = 'sid',
-      SESSION_SECRET = 'mysecretpass123',
+    SESSION_NAME = 'sid',
+    SESSION_SECRET = 'mysecretpass123',
       SESSION_LIFETIME = 999999999; /// when deploy set to 3600000 (1 hour)
 
 const app = express();

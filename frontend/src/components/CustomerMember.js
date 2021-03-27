@@ -99,28 +99,7 @@ export class CustomerMember extends Component {
                             </Card.Footer>
                         </Card>
                     </Col>
-                    <Col md={3}>
-                        <Card >
-                        <Card.Header>
-                                <div className="customer-card-header-text">CUSTOMER CARD</div>
-                        </Card.Header>
-                        <Card.Body>
-                                <Form onSubmit={(e) => this.submitCard(e)}>
-                                    <fieldset id="customer-card-form" disabled>
-                                        <Form.Group controlId="customer-id">
-                                            <Form.Control type="text" placeholder="Customer ID" disabled></Form.Control>
-                                        </Form.Group>
-                                        <Form.Group controlId="customer-card-number">
-                                            <Form.Control type="text" placeholder="Card Number"></Form.Control>
-                                        </Form.Group>
-                                        <Button variant="success" type="submit">SUBMIT</Button>
-                                    </fieldset>
-                                </Form>
-                        </Card.Body>
-                        <Card.Footer>
-                        </Card.Footer>
-                    </Card>
-                    </Col>
+                    
                 
             </Container>
         )
@@ -178,30 +157,7 @@ export class CustomerMember extends Component {
             document.getElementById('customer-address-country').value = ""
 
             document.getElementById('customer-address-form').disabled = true
-            document.getElementById('customer-card-form').disabled = false
-
-        })
-
-    }
-
-    submitCard = (e) =>{
-
-        e.preventDefault()
-        if(!this.state.cid){
-            alert("Cheatttt!!!!")
-            window.location.reload(false)
-            return;
-        }
-        let req = {
-            cid: this.state.cid,
-            cardnumber: document.getElementById('customer-card-number').value
-        }
-
-        axios.post('/customerMember/submitCard',req).then(res => {
-            
-            document.getElementById('customer-card-form').disabled = true;
             window.location.href = "/products"
-
         })
 
     }

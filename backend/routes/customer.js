@@ -40,49 +40,73 @@ router.get('/editAddress',(req,res) => {
 })
 
 router.post('/editAddress', (req,res) => {
+    let sql = `
+    update customer_addr
+    set ${req.body.name} = '${req.body.value}'
+    where caddrid = ${req.body.caddrid}
+    `
+    
+    pool.query(sql,(err,result) => {
+        // if(err) console.log(err)
+        return res.send("SUCCESS")
+    })
 
 })
 
 router.post('/editAddress/addAddress', (req,res) => {
     let cid = req.body.cid;
-    let sql = `SELECT AUTO_INCREMENT
-    FROM information_schema.TABLES
-    WHERE TABLE_SCHEMA = "plasticshop"
-    AND TABLE_NAME = "customer_addr"`
-    pool.query(sql, (err,result) => {
-        let AUTO_INCREMENT = result[0].AUTO_INCREMENT
-        let sql = `
-        start transaction;
-        insert into customer_addr(cid, address, city, province, postalcode, country) values (${cid}, '', '', '', '', '');
-        select caddrid from customer_addr where cid = ${cid} and address = '' and city = '' and province = '' and postalcode = '' and country = ''
-        `
-        pool.query(sql,(err,result) => {
-            if(err){
-                let sql = `
-                rollback;
-                alter table customer_addr auto_increment = ${AUTO_INCREMENT};
-                commit;
-                `
-                pool.query(sql,(err,result) => {
-                    if(err){
-                        console.log(err)
-                    }
-                })
-                return res.send(err.message)
-            }
-            let response = {
-                message: "SUCCESS",
-                CAddrID: result[0].caddrid
-            }
-            let sql = `commit`
-            pool.query(sql, (err,result) => {
-                if(err) return console.log(err)
-                return res.send(response)
+    
+    pool.getConnection((err, connection) => {
+
+        connection.beginTransaction()
+
+        try {
+            
+            let sql = `insert into customer_addr(cid,address,city,province,postalcode,country) values (${cid},'','','','','')`
+
+            connection.execute(sql,(err,result) => {
+                if(err){
+                    return connection.rollback()
+                }
             })
-        })
-        
+
+            sql = `select * from customer_addr where cid = ${cid} and address = '' and city = '' and province = ''`
+
+            let data
+            
+            connection.execute(sql, (err, result) => {
+                if (err)
+                    return connection.rollback()
+                data = result[0]
+            })
+
+            connection.commit()
+
+            return res.send(data)
+
+        } catch {
+            
+            return connection.rollback()
+            
+        }  
     })
     
+})
+
+router.post('/editAddress/deleteAddress', (req, res) => {
+    
+    let CAddrID = req.body.CAddrID
+
+    let sql = `delete from customer_addr where CAddrID = ${CAddrID}`
+
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.log(err)
+            return res.send(err.message)
+        }
+        return res.send("success")
+    })
+
 })
 
 module.exports = router

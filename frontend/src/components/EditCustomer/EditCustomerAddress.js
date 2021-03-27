@@ -11,16 +11,24 @@ export class EditCustomerAddress extends Component {
         this.state = {
             cid: null,
             addressInfo: null,
-            
+            currentAddress: null,
         }
     }
     
     setAddress(){
         let cid = this.props.cid
         axios.get('/customer/EditAddress',{params: {cid}}).then(res => {
+            let min = Infinity
+            res.data.addressInfo.map(el => {
+                if(el.CAddrID < min){
+                    min = el.CAddrID
+                }
+            })
+            this.renderAddress(min,res.data.addressInfo)
             this.setState({addressInfo: res.data.addressInfo})
         })
         this.state.cid = cid
+        
     }
     
     renderButton(){
@@ -30,7 +38,7 @@ export class EditCustomerAddress extends Component {
                     <ButtonGroup>
                         {this.state.addressInfo.map((el,i) => {
                             return (
-                                <Button key={el.CAddrID} onClick={() => this.renderAddress(el.CAddrID, el.CID)}>{i+1}</Button>
+                                <Button key={el.CAddrID} onClick={() => this.renderAddress(el.CAddrID)}>{i+1}</Button>
                             )
                         })}
                     </ButtonGroup>
@@ -42,8 +50,18 @@ export class EditCustomerAddress extends Component {
         )
     }
 
-    renderAddress(CAddrID, CID){
-        console.log(CAddrID, CID)
+    renderAddress(CAddrID,addressInfo){
+        addressInfo = addressInfo || this.state.addressInfo
+        addressInfo.map(el => {
+                if(el.CAddrID == CAddrID){
+                    this.state.currentAddress = CAddrID
+                    document.getElementById('Address').value = el.Address
+                    document.getElementById('City').value = el.City
+                    document.getElementById('Province').value = el.Province
+                    document.getElementById('PostalCode').value = el.PostalCode
+                    document.getElementById('Country').value = el.Country
+                }
+        })
     }
 
     addAddress(){
@@ -52,9 +70,28 @@ export class EditCustomerAddress extends Component {
             cid: this.state.cid,
         }
         axios.post('/customer/editAddress/addAddress', req).then(res => {
-            
+            this.setAddress()
         })
 
+    }
+
+    deleteAddress() {
+        let req = {
+            CAddrID: this.state.currentAddress
+        }
+        axios.post('/customer/editAddress/deleteAddress', req).then(res => {
+            this.setAddress()
+        })
+    }
+
+    async submit(e) {
+        const msg = await EditInfo(e, '', this.state.currentAddress)
+        
+        if (msg != "EDIT" && msg == "SAVE") {
+            axios.get('/customer/editAddress', { params: { cid: this.props.cid } }).then(res => {
+                this.setState({ addressInfo: res.data.addressInfo })
+            })
+        }
     }
 
     render() {
@@ -72,7 +109,7 @@ export class EditCustomerAddress extends Component {
                             </InputGroup.Prepend>
                             <FormControl id="Address" disabled autoComplete="off"/>
                             <InputGroup.Append> 
-                                <Button variant="outline-danger" onClick={(e) => EditInfo(e,this.props.cid)} id="Address-edit">EDIT</Button>
+                                <Button variant="outline-danger" onClick={(e) => this.submit(e)} id="Address-edit">EDIT</Button>
                             </InputGroup.Append>
                         </InputGroup>
                         <InputGroup className="mb-3">
@@ -81,7 +118,7 @@ export class EditCustomerAddress extends Component {
                             </InputGroup.Prepend>
                             <FormControl id="City" disabled autoComplete="off"/>
                             <InputGroup.Append> 
-                                <Button variant="outline-danger" onClick={(e) => EditInfo(e,this.props.cid)} id="City-edit">EDIT</Button>
+                                <Button variant="outline-danger" onClick={(e) => this.submit(e)} id="City-edit">EDIT</Button>
                             </InputGroup.Append>
                         </InputGroup>
                         <InputGroup className="mb-3">
@@ -90,7 +127,7 @@ export class EditCustomerAddress extends Component {
                             </InputGroup.Prepend>
                             <FormControl id="Province" disabled autoComplete="off"/>
                             <InputGroup.Append> 
-                                <Button variant="outline-danger" onClick={(e) => EditInfo(e,this.props.cid)} id="Province-edit">EDIT</Button>
+                                <Button variant="outline-danger" onClick={(e) => this.submit(e)} id="Province-edit">EDIT</Button>
                             </InputGroup.Append>
                         </InputGroup>
                         <InputGroup className="mb-3">
@@ -99,7 +136,7 @@ export class EditCustomerAddress extends Component {
                             </InputGroup.Prepend>
                             <FormControl id="PostalCode" disabled autoComplete="off"/>
                             <InputGroup.Append> 
-                                <Button variant="outline-danger" onClick={(e) => EditInfo(e,this.props.cid)} id="PostalCode-edit">EDIT</Button>
+                                <Button variant="outline-danger" onClick={(e) => this.submit(e)} id="PostalCode-edit">EDIT</Button>
                             </InputGroup.Append>
                         </InputGroup>
                         <InputGroup className="mb-3">
@@ -108,9 +145,10 @@ export class EditCustomerAddress extends Component {
                             </InputGroup.Prepend>
                             <FormControl id="Country" disabled autoComplete="off"/>
                             <InputGroup.Append> 
-                                <Button variant="outline-danger" onClick={(e) => EditInfo(e,this.props.cid)} id="Country-edit">EDIT</Button>
+                                <Button variant="outline-danger" onClick={(e) => this.submit(e)} id="Country-edit">EDIT</Button>
                             </InputGroup.Append>
                         </InputGroup>
+                        <Button variant="danger" onClick={() => this.deleteAddress()}>DELETE</Button>
                     </Card.Body>
                     <Card.Footer>
                         {this.state.addressInfo?.length > 0 ? this.renderButton() : null}

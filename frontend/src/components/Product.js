@@ -100,7 +100,9 @@ export default class Product extends Component {
                                     <Card.Text>Made by {item.SName}</Card.Text>
                                     <Card.Text>Size: {item.Size}</Card.Text>
                                     <h2>${item.UnitPrice}</h2>
-                                    <Button varient="primary" value={item.PID} onClick={(e) => this.AddToCart(e)}>Add to Cart</Button>
+                                    {item.Stocks === 0 ? <Button variant="secondary">SOLD OUT</Button> : 
+                                    <Button variant="primary" value={item.PID} onClick={(e) => this.AddToCart(e)}>Add to Cart</Button>
+                                    }
                                 </Card.Body>
                             </Card>
                         )
@@ -121,7 +123,9 @@ export default class Product extends Component {
                                     <Card.Text>Made by {item.SName}</Card.Text>
                                     <Card.Text>Size: {item.Size}</Card.Text>
                                     <h1>${item.UnitPrice}</h1>
-                                    <Button varient="primary" value={item.PID} onClick={(e) => this.AddToCart(e)}>Add to Cart</Button>
+                                    {item.Stocks === 0 ? <Button variant="secondary">SOLD OUT</Button> :
+                                    <Button variant="primary" value={item.PID} onClick={(e) => this.AddToCart(e)}>Add to Cart</Button>
+                                    }
                                 </Card.Body>
                             </Card>
                         )
@@ -203,7 +207,7 @@ export default class Product extends Component {
 
     renderCartLength = () => {
         this.setState({
-            cartNum: this._cart.GetCartSize()
+            cartNum: this._cart?.GetCartSize()
         })
     }
 
@@ -248,8 +252,8 @@ export default class Product extends Component {
                 </Form.Group>
                 
 
-                <ShoppingCart ref={(cart) => this._cart = cart} changeBadge={this.renderCartLength}/>
-                <Button varient="primary" onClick={this.DisplayCart}>Cart
+                <ShoppingCart ref={(cart) => this._cart = cart} changeBadge={this.renderCartLength} GetAllProducts={this.GetAllProducts}/>
+                <Button variant="primary" onClick={this.DisplayCart}>Cart
                 <Badge variant="danger" id="badge" style={{marginLeft:"4px"}}>{this.state.cartNum}</Badge>
 
                 </Button>

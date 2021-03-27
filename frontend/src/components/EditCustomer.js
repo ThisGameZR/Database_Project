@@ -6,7 +6,6 @@ import SelectSearch, {fuzzySearch } from 'react-select-search'
 import './CSS/EditCustomer.css'
 import EditCustomerProfile from './EditCustomer/EditCustomerProfile'
 import EditCustomerAddress from './EditCustomer/EditCustomerAddress'
-import EditCustomerCard from './EditCustomer/EditCustomerCard'
 
 export class EditCustomer extends Component {
 
@@ -41,7 +40,7 @@ export class EditCustomer extends Component {
         if(this.state?.loginYet === true){
             return (
                 <Container fluid style={{margin:"20px"}}>
-                   <Tab.Container id="tab" defaultActiveKey="profile">
+                    <Tab.Container id="tab" defaultActiveKey="profile">
                         <Row>
                             <Col sm={3} style={{}}>
                                 <SelectSearch search
@@ -59,9 +58,6 @@ export class EditCustomer extends Component {
                                     <Nav.Item>
                                         <Nav.Link eventKey="address">Edit Address</Nav.Link>
                                     </Nav.Item>
-                                    <Nav.Item>
-                                        <Nav.Link eventKey="card">Edit Card</Nav.Link>
-                                    </Nav.Item>
                                 </Nav>
                             </Col>
                             <Col sm={9}>
@@ -71,9 +67,6 @@ export class EditCustomer extends Component {
                                     </Tab.Pane>
                                     <Tab.Pane eventKey="address">
                                         <EditCustomerAddress cid={this.state.customerValue}/>
-                                    </Tab.Pane>
-                                    <Tab.Pane eventKey="card">
-                                        <EditCustomerCard cid={this.state.customerValue}/>
                                     </Tab.Pane>
                                 </Tab.Content>
                             </Col>

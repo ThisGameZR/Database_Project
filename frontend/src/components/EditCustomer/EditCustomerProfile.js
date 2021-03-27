@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { Component } from 'react'
-import { Button,Card, InputGroup, FormControl} from 'react-bootstrap'
+import { Button,Card, InputGroup, FormControl, Badge} from 'react-bootstrap'
 import EditInfo from './EditInfo'
 
 export class EditCustomerProfile extends Component {
@@ -8,7 +8,7 @@ export class EditCustomerProfile extends Component {
         super(props)
     
         this.state = {
-             customerInfo: null,
+            customerInfo: null,
         }
         
     }
@@ -21,6 +21,7 @@ export class EditCustomerProfile extends Component {
             document.getElementById('MiddleName').value = res.data.customerInfo.MiddleName
             document.getElementById('LastName').value = res.data.customerInfo.LastName
             document.getElementById('contact').value = res.data.customerInfo.Contact
+            document.getElementById('point').innerHTML = res.data.customerInfo.Points
         })
     }
 
@@ -69,6 +70,7 @@ export class EditCustomerProfile extends Component {
                                 <Button variant="outline-danger" onClick={(e) => EditInfo(e,this.props.cid)} id="contact-edit">EDIT</Button>
                             </InputGroup.Append>
                         </InputGroup>
+                        <Button variant="outline-success">POINTS <span style={{fontSize:"26", fontWeight:"600"}} id="point"></span></Button>
                     </Card.Body>
                     <Card.Footer>
                     </Card.Footer>

@@ -21,4 +21,11 @@ router.get('/getsize', (req, res) => {
     });
 })
 
+router.get('/getstock', (req, res) => {
+    pool.query(`select stocks from product where pid = ${req.query.pid}`, (err, result) => {
+        if (err) console.log(err)
+        return res.send(result)
+    })
+})
+
 module.exports = router;

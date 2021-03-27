@@ -1,9 +1,8 @@
 import React from 'react'
 import axios from 'axios'
 
-export default function EditInfo(e,cid,caddrid,cardid) {
+export default function EditInfo(e,cid,caddrid) {
     caddrid = caddrid || "nothing";
-    cardid = cardid || "nothing";
     let parentId = e.target.id.replaceAll("-edit","");
     if(e.target.innerHTML == "EDIT"){
         e.preventDefault()
@@ -11,6 +10,9 @@ export default function EditInfo(e,cid,caddrid,cardid) {
         e.target.innerHTML = "SAVE"
         e.target.classList.remove('btn-outline-danger')
         e.target.classList.add('btn-outline-success')
+        return new Promise((resolve, reject) => {
+                resolve("")
+        })
     }else{
         e.preventDefault()
         document.getElementById(parentId).disabled = true
@@ -21,15 +23,21 @@ export default function EditInfo(e,cid,caddrid,cardid) {
         let value = document.getElementById(parentId).value
         let name = parentId
         
-        if(caddrid == "nothing" && cardid == "nothing"){
+        if(caddrid == "nothing"){
             let data = {value,name,cid}
             axios.post('/customer/editProfile', data).then(res => {
-
             })
-        }else if(cardid == "nothing"){
-            
-        }else if(caddrid == "nothing"){
-
+            return new Promise((resolve, reject) => {
+                resolve("SAVE")
+            })
         }
+        //// Address
+        let data = {value,name,caddrid}
+        axios.post('/customer/editAddress', data).then(res => {
+        })
+        return new Promise((resolve, reject) => {
+                resolve("SAVE")
+        })
+        
     }
 }
