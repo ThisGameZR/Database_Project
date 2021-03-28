@@ -117,9 +117,13 @@ export class PlaceOrder extends Component {
         const tax = 0.07
         return ((this.SubTotal() - this.Discount()) * tax)
     }
-
+    
     Total = () => {
         return (this.Tax() + this.SubTotal() - this.Discount())
+    }
+    
+    Point = () => {
+        return parseInt( this.Total() / 100 * 3 )
     }
 
     setCoupon = () => {
@@ -143,6 +147,7 @@ export class PlaceOrder extends Component {
         box.innerHTML = `${price} ฿`
         document.getElementById('coupon-code').value = ""
     }
+
 
     render() {
 
@@ -180,38 +185,54 @@ export class PlaceOrder extends Component {
                                 </Table>
                             </Card.Body>
                             <Card.Footer>
-                                <Table>
+                                <Table style={{justifyContent:"center",alignItems:"center",textAlign:"center"}}>
                                     <thead>
                                         <tr>
                                             <th><Button variant="info">SUBTOTAL</Button></th>
                                             <th><Button variant="warning" style={{ color: "#fff", background: "#d1b02e" }}>DISCOUNTED</Button></th>
                                             <th><Button variant="danger">TAX</Button></th>
                                             <th><Button variant="success">TOTAL</Button></th>
+                                            <th><Button variant="primary">POINTS</Button></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        <tr style={{fontWeight:"bold"}}>
                                             <td>{parseFloat(this.SubTotal()).toFixed(2)}</td>
                                             <td>{parseFloat(this.Discount()).toFixed(2)}</td>
                                             <td>{parseFloat(this.Tax()).toFixed(2)}</td>
                                             <td>{parseFloat(this.Total()).toFixed(2)}</td>
+                                            <td>{this.Point()}</td>
                                         </tr>
                                     </tbody>
                                 </Table>
                             </Card.Footer>
                         </Card>
                     </Col>
-                    <Col sm={3}>
-                        <InputGroup>
-                            <InputGroup.Prepend>
-                                <InputGroup.Text>COUPON</InputGroup.Text>
-                            </InputGroup.Prepend>
-                                <FormControl id="coupon-code"></FormControl>
-                                <Button onClick={() => this.setCoupon()}>CHECK</Button>
-                                <Button onClick={() => this.clearCoupon()} variant="danger">X</Button>
-                        </InputGroup>
+                    <Col sm={6}>
+                            <Card>
+                                <Card.Header>
+
+                                </Card.Header>
+                                <Card.Body>
+                                    <Row sm={8}>
+                                        <InputGroup>
+                                            <InputGroup.Prepend>
+                                                <InputGroup.Text>COUPON</InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                                <FormControl id="coupon-code"></FormControl>
+                                                <Button onClick={() => this.setCoupon()}>CHECK</Button>
+                                                <Button onClick={() => this.clearCoupon()} variant="danger">X</Button>
+                                        </InputGroup>
+                                    </Row>
+                                    <Row>
+                                        
+                                    </Row>
+                                </Card.Body>
+                                <Card.Footer>
+
+                                </Card.Footer>
+                            </Card>
                     </Col>
-                    <Col sm={3}></Col>
                     </Row>
                 </Container>
             )
