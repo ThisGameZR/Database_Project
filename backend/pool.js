@@ -6,7 +6,11 @@ const pool = mysql2.createPool({
     user: 'root',
     password: 'root',
     database: 'plasticShop',
-    port: '3306'
+    port: '3306',
+    connectionLimit: 1000,
+    getConnection: 0,
+    waitForConnections: true,
+    queueLimit: 1000,
 });
 
 pool.getConnection((err,con) => {

@@ -44,16 +44,12 @@ export default class ShoppingCart extends Component {
         })
     }
 
-    componentDidUpdate() {
-        this.TotalPrice()
-    }
-
     TotalPrice() {
         let totalprice = 0
         this.state.cart.map(el => {
             totalprice += el.price
         })
-        this.state.TotalPrice = totalprice
+        this.state.TotalPrice = parseFloat(totalprice).toFixed(2)
     }
 
     AddItem = (item) => {
@@ -141,7 +137,8 @@ export default class ShoppingCart extends Component {
 
             this.props.changeBadge();
         } else {
-            alert("amount exceed")
+            await this.setState({ showAlert: true })
+            document.getElementById('error-msg').innerHTML = "Not enough item in stock"
         }
     }
 
@@ -204,6 +201,7 @@ export default class ShoppingCart extends Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <div style={{ position: "absolute", left: "0" }}>
+                        {this.TotalPrice()}
                         <Button variant="outline-info">TOTAL PRICE: <Badge>{this.state.TotalPrice}</Badge></Button>
                     </div>
                     <Button variant="primary" onClick={this.placeOrder}>Place Order</Button>
@@ -217,8 +215,6 @@ export default class ShoppingCart extends Component {
             </Modal>
         )
     }
-
-
 
     placeOrder = async () => {
         if (this.state.cart.length == 0) {
