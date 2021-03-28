@@ -1,6 +1,7 @@
 import React, {Component} from "react";
-import {Modal, Button, Table, Form, FormGroup, ButtonGroup, Badge} from 'react-bootstrap'
-import {BsFillXCircleFill} from 'react-icons/bs'
+import {Modal, Button, Table, Form, FormGroup, ButtonGroup, Badge, Alert} from 'react-bootstrap'
+import { BsFillXCircleFill } from 'react-icons/bs'
+import SelectSearch, {fuzzySearch } from 'react-select-search'
 import axios from "axios";
 import Product from "./Product";
 export default class ShoppingCart extends Component {
@@ -12,12 +13,28 @@ export default class ShoppingCart extends Component {
             cartReady: false,
             cart: [],
             TotalPrice: 0,
+            showAlert: false,
+            customer: [],
+            customerValue: null,
         }
+    }
+
+    componentDidMount() {
+        axios.get('/customer').then(res => {
+            res.data.customer.map((el,i) => {
+                this.state.customer[i] = {
+                    name: el.name,
+                    value: el.cid
+                }    
+            })
+        })
     }
 
     CartHide = () => {
         this.setState({
-            showCart: false
+            showCart: false,
+            customerValue: null,
+            showAlert: false,
         })
     }
 
@@ -133,7 +150,7 @@ export default class ShoppingCart extends Component {
 
         tempCart[e.target.value].amount -= 1;
 
-        if (tempCart[e.target.value].amount < 0)
+        if (tempCart[e.target.value].amount <= 0)
         {
             this.DeleteItem(e)
         }
@@ -166,12 +183,18 @@ export default class ShoppingCart extends Component {
                 <Modal.Header closeButton>
                     <Form>
                         <FormGroup controlId="customerId">
-                            <Form.Control type="text" placeholder="Customer ID"/>
+                            <SelectSearch search
+                                                
+                                                    onChange={(e) => this.setState({customerValue: e})} 
+                                                    emptyMessage="Result not found"
+                                                    placeholder="Select Customer" 
+                                                    options={this.state.customer}
+                                                    filterOptions={fuzzySearch}
+                        />
                         </FormGroup>
                     </Form>
                 </Modal.Header>
                 <Modal.Body>
-
                     <Table striped bordered hover responsive>
                         {this.CartHeaderRender()}
                         <tbody>
@@ -184,31 +207,39 @@ export default class ShoppingCart extends Component {
                         <Button variant="outline-info">TOTAL PRICE: <Badge>{this.state.TotalPrice}</Badge></Button>
                     </div>
                     <Button variant="primary" onClick={this.placeOrder}>Place Order</Button>
-
                 </Modal.Footer>
+                {this.state.showAlert === true ? 
+                    <Alert variant="danger" onClose={() => this.setState({showAlert: false})} dismissible>
+                        <Alert.Heading>AN ERROR!</Alert.Heading>
+                        <p id="error-msg"></p>
+                    </Alert>
+                : null} 
             </Modal>
         )
     }
 
 
 
-    placeOrder = () => {
-        this.CartHide();
-        let customerId = document.getElementById('customerId').value;
-        document.getElementById('customerId').value = "";
-        if(customerId == ""){
-            alert("Please enter customer id")
-            return;
+    placeOrder = async () => {
+        if (this.state.cart.length == 0) {
+            await this.setState({ showAlert: true })
+            document.getElementById('error-msg').innerHTML = "At least one item need to be in the cart"
+            return
         }
-        axios.get('/login').then(res => {
+        if(this.state.customerValue == null){
+            await this.setState({ showAlert: true })
+            document.getElementById('error-msg').innerHTML = "You need to select customer"
+            return
+        }
+        axios.get('/login').then(async res => {
             if(res.data.session?.user){
                 localStorage.setItem("itemInCart", JSON.stringify(this.state.cart))
-                localStorage.setItem("customerId", JSON.stringify(customerId))
+                localStorage.setItem("customerId", JSON.stringify(this.state.customerValue))
                 window.location.href = "/PlaceOrder"
             }else{
-                alert("You need to login to place the order")
+                await this.setState({ showAlert: true })
+                document.getElementById('error-msg').innerHTML = "You need to login to place order"
             }
         })
     }
-
 }
