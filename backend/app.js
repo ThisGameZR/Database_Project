@@ -34,5 +34,6 @@ app.use('/sqlInjection',require('./routes/sqlInjection'));
 app.use('/insertProduct',require('./routes/insertProduct'));
 app.use('/customerMember',require('./routes/customerMember'));
 app.use('/customer', require('./routes/customer'))
+app.use('/placeOrder', require('./routes/placeOrder'))
 
 app.listen(port,() => {console.log(`Successfully start server on port ${port}`)});

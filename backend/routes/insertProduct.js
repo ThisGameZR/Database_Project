@@ -8,7 +8,7 @@ router.post('/supplier',(req,res) => {
     )`
     pool.query(sql,(err,result) => {
         if(err != null)
-           return console.log(err);
+            return console.log(err);
         let sql = `select sid from supplier where sname = '${req.body.sname}' and 
         contact = '${req.body.contact}' and address = '${req.body.address}'`
 

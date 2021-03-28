@@ -367,8 +367,9 @@ DROP TABLE IF EXISTS `promocode`;
 CREATE TABLE `promocode` (
   `Code` varchar(20) NOT NULL,
   `PID` int DEFAULT NULL,
-  `Discount` int NOT NULL,
-  `ExpiredDate` datetime NOT NULL,
+  `Discount` int DEFAULT NULL,
+  `ExpiredDate` datetime DEFAULT NULL,
+  `Available_number` int DEFAULT NULL,
   PRIMARY KEY (`Code`),
   KEY `fk_PROMOCODE_PRODUCT1_idx` (`PID`),
   CONSTRAINT `fk_PROMOCODE_PRODUCT1` FOREIGN KEY (`PID`) REFERENCES `product` (`PID`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -381,6 +382,7 @@ CREATE TABLE `promocode` (
 
 LOCK TABLES `promocode` WRITE;
 /*!40000 ALTER TABLE `promocode` DISABLE KEYS */;
+INSERT INTO `promocode` VALUES ('2FB6RmGf',4,50,'2021-04-12 00:00:00',2),('749cVBnO',2,3,'2021-12-18 13:17:17',4),('dbcxpjUN',9,8,'2021-07-11 00:00:00',2),('gjhh5N4j',12,12,'2021-07-11 00:00:00',13),('kTdLM27K',1,5,'2021-04-12 00:00:00',10),('Oo4m8eq5',5,20,'2021-04-12 00:00:00',3),('r3mwaqwu',5,10,'2021-05-12 00:00:00',30),('SpOxYUGY',19,10,'2021-12-01 00:00:00',5),('UgpG4RxS',3,10,'2021-04-12 00:00:00',5);
 /*!40000 ALTER TABLE `promocode` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -444,4 +446,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-28  0:19:06
+-- Dump completed on 2021-03-29  0:22:20

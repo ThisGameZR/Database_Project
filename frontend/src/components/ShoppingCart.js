@@ -64,8 +64,7 @@ export default class ShoppingCart extends Component {
             this.state.cart.forEach((elem, i) => {
                 if (elem.pid === item.pid)
                 {
-                    this.state.cart[i].amount += 1;
-                    this.state.cart[i].price = this.state.cart[i].baseprice * this.state.cart[i].amount;
+                    this.IncreaseAmount(null,i)
                     pushstate = true;
                 }
             })
@@ -82,7 +81,7 @@ export default class ShoppingCart extends Component {
         return this.state.cart.map((item,i) => {
             return (
 
-                    <tr>
+                    <tr key={i}>
                         <td>{i+1}</td>
                         <td>{item.name}</td>
                         <td>{parseFloat(item.price).toFixed(2)} ฿</td>
@@ -124,21 +123,24 @@ export default class ShoppingCart extends Component {
         )
     }
 
-    IncreaseAmount = async (e) => {
+    IncreaseAmount = async (e,ind) => {
+        let index = e?.target.value || ind
         let tempCart = this.state.cart
         let stockAmount
-        await axios.get('/products/getstock', { params: { pid: this.state.cart[e.target.value].pid } }).then(res => {
+        await axios.get('/products/getstock', { params: { pid: this.state.cart[index].pid } }).then(res => {
             stockAmount = res.data[0].stocks || 0
         })
 
-        if (tempCart[e.target.value].amount + 1 <= stockAmount) {
-            tempCart[e.target.value].amount += 1;
-            tempCart[e.target.value].price = tempCart[e.target.value].baseprice * tempCart[e.target.value].amount
+        if (tempCart[index].amount + 1 <= stockAmount) {
+            tempCart[index].amount += 1;
+            tempCart[index].price = tempCart[index].baseprice * tempCart[index].amount
 
             this.props.changeBadge();
         } else {
-            await this.setState({ showAlert: true })
-            document.getElementById('error-msg').innerHTML = "Not enough item in stock"
+            if (e) {
+                await this.setState({ showAlert: true })
+                document.getElementById('error-msg').innerHTML = "Not enough item in stock"   
+            }
         }
     }
 
@@ -228,10 +230,14 @@ export default class ShoppingCart extends Component {
             return
         }
         axios.get('/login').then(async res => {
-            if(res.data.session?.user){
-                localStorage.setItem("itemInCart", JSON.stringify(this.state.cart))
-                localStorage.setItem("customerId", JSON.stringify(this.state.customerValue))
-                window.location.href = "/PlaceOrder"
+            if (res.data.session?.user) {
+                axios.post('/placeOrder', {
+                    cart: this.state.cart,
+                    cid: this.state.customerValue,
+                    eid: res.data.session.user.eid
+                }).then(res => {
+                    window.location.href = "/PlaceOrder"
+                })
             }else{
                 await this.setState({ showAlert: true })
                 document.getElementById('error-msg').innerHTML = "You need to login to place order"

@@ -12,7 +12,8 @@ router.get('/', (req,res) => {
 router.get('/editProfile',(req,res) => {
     let cid = req.query.cid
     let sql = `select * from customer where cid = ${cid}`
-    pool.query(sql,(err,result) => {
+    pool.query(sql, (err, result) => {
+        if(err) console.log(err)
         return res.send({customerInfo:result[0]})
     })
 })
@@ -22,10 +23,14 @@ router.post('/editProfile', (req,res) => {
                 set ${req.body.name} = '${req.body.value}'
                 where cid = ${req.body.cid}
     `
-    pool.query(sql,(err,result) => {
-        if(err) console.log(err)
-        return res.send("success")
-    })
+    try {
+        pool.query(sql,(err,result) => {
+            if(err) console.log(err)
+            return res.send("success")
+        })
+    } catch {
+        return res.status(400).send("err")
+    }
 })
 
 
