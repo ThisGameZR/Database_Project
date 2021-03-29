@@ -85,7 +85,7 @@ CREATE TABLE `customer_addr` (
   PRIMARY KEY (`CAddrID`),
   KEY `fk_CUSTOMER_ADDR_CUSTOMER1_idx` (`CID`),
   CONSTRAINT `fk_CUSTOMER_ADDR_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,7 +94,7 @@ CREATE TABLE `customer_addr` (
 
 LOCK TABLES `customer_addr` WRITE;
 /*!40000 ALTER TABLE `customer_addr` DISABLE KEYS */;
-INSERT INTO `customer_addr` VALUES (1,1,'2156 Cook Hill Road , Hartford','Hartford','Connecticut','06103','United States'),(2,2,'367  Emeral Dreams Drive','Streator','Illinois','61364','United States'),(3,3,'588  Spring Haven Trail','Montclair','New Jersey','07042','United States'),(4,4,'3242  Jarvisville Road','Freeport','New York','11520','United States'),(5,5,'586  Spring Haven Trail','Montclair','New Jersey','07042','United States');
+INSERT INTO `customer_addr` VALUES (1,1,'2156 Cook Hill Road , Hartford','Hartford','Connecticut','06103','United States'),(2,2,'367  Emeral Dreams Drive','Streator','Illinois','61364','United States'),(3,3,'588  Spring Haven Trail','Montclair','New Jersey','07042','United States'),(4,4,'3242  Jarvisville Road','Freeport','New York','11520','United States'),(5,5,'586  Spring Haven Trail','Montclair','New Jersey','07042','United States'),(16,1,'3456  Straford Park','Harlan','Kentucky','40831','United States');
 /*!40000 ALTER TABLE `customer_addr` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -224,7 +224,7 @@ CREATE TABLE `invoice` (
   CONSTRAINT `fk_INVOICE_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_INVOICE_INVOICE_STATUS1` FOREIGN KEY (`StatusID`) REFERENCES `invoice_status` (`StatusID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_INVOICE_ORDER1` FOREIGN KEY (`OrderID`) REFERENCES `order` (`OrderID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -233,6 +233,7 @@ CREATE TABLE `invoice` (
 
 LOCK TABLES `invoice` WRITE;
 /*!40000 ALTER TABLE `invoice` DISABLE KEYS */;
+INSERT INTO `invoice` VALUES (4,2,6,1),(5,1,7,1),(7,3,9,1),(8,1,10,1);
 /*!40000 ALTER TABLE `invoice` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -247,7 +248,7 @@ CREATE TABLE `invoice_status` (
   `StatusID` int NOT NULL AUTO_INCREMENT,
   `Description` varchar(255) NOT NULL,
   PRIMARY KEY (`StatusID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -256,6 +257,7 @@ CREATE TABLE `invoice_status` (
 
 LOCK TABLES `invoice_status` WRITE;
 /*!40000 ALTER TABLE `invoice_status` DISABLE KEYS */;
+INSERT INTO `invoice_status` VALUES (1,'In progress'),(2,'Cancel'),(3,'Disputed'),(4,'On hold'),(5,'Resolved'),(6,'Shipped');
 /*!40000 ALTER TABLE `invoice_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -271,12 +273,12 @@ CREATE TABLE `order` (
   `EID` int DEFAULT NULL,
   `CID` int DEFAULT NULL,
   `CAddrID` int DEFAULT NULL,
-  `TotalPrice` float NOT NULL,
+  `TotalPrice` decimal(8,2) NOT NULL,
   `TotalPoints` int NOT NULL,
   `PromoCode` varchar(20) DEFAULT NULL,
   `OrderDate` datetime NOT NULL,
   `RequiredDate` datetime DEFAULT NULL,
-  `PaymentDate` datetime NOT NULL,
+  `PaymentDate` datetime DEFAULT NULL,
   `Comment` text,
   PRIMARY KEY (`OrderID`),
   KEY `fk_ORDER_EMPLOYEE1_idx` (`EID`),
@@ -285,7 +287,7 @@ CREATE TABLE `order` (
   CONSTRAINT `fk_ORDER_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_ORDER_CUSTOMER_ADDR1` FOREIGN KEY (`CAddrID`) REFERENCES `customer_addr` (`CAddrID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_ORDER_EMPLOYEE1` FOREIGN KEY (`EID`) REFERENCES `employee` (`EID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -294,6 +296,7 @@ CREATE TABLE `order` (
 
 LOCK TABLES `order` WRITE;
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
+INSERT INTO `order` VALUES (6,1000001,2,2,459.33,13,NULL,'2021-03-29 16:57:44','2021-03-08 17:00:00',NULL,NULL),(7,1000001,1,1,21.40,0,NULL,'2021-03-29 16:59:51','2021-03-31 17:00:00',NULL,NULL),(9,1000001,3,3,89.25,2,'UgpG4RxS','2021-03-29 17:01:49',NULL,NULL,NULL),(10,1000001,1,16,90.15,2,'UgpG4RxS','2021-03-29 17:40:12','2021-03-01 01:45:20',NULL,NULL);
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -308,9 +311,7 @@ CREATE TABLE `order_detail` (
   `OrderID` int DEFAULT NULL,
   `PID` int DEFAULT NULL,
   `Quantity` int NOT NULL,
-  `TotalPrice` float NOT NULL,
-  `SubtotalPrice` float NOT NULL,
-  `Points` int NOT NULL,
+  `TotalPrice` decimal(8,2) NOT NULL,
   KEY `fk_ORDER_DETAIL_ORDER1_idx` (`OrderID`),
   KEY `fk_ORDER_DETAIL_PRODUCT1_idx` (`PID`),
   CONSTRAINT `fk_ORDER_DETAIL_ORDER1` FOREIGN KEY (`OrderID`) REFERENCES `order` (`OrderID`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -324,6 +325,7 @@ CREATE TABLE `order_detail` (
 
 LOCK TABLES `order_detail` WRITE;
 /*!40000 ALTER TABLE `order_detail` DISABLE KEYS */;
+INSERT INTO `order_detail` VALUES (6,3,2,60.28),(6,17,2,340),(6,9,1,29),(7,1,2,20),(9,9,1,29),(9,8,1,30),(9,3,1,24.4134),(10,3,2,54.252),(10,8,1,30);
 /*!40000 ALTER TABLE `order_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -338,7 +340,7 @@ CREATE TABLE `product` (
   `PID` int NOT NULL AUTO_INCREMENT,
   `SID` int DEFAULT NULL,
   `ProductName` varchar(100) NOT NULL,
-  `UnitPrice` float(8,2) DEFAULT NULL,
+  `UnitPrice` decimal(8,2) DEFAULT NULL,
   `Size` varchar(5) DEFAULT NULL,
   `Stocks` int NOT NULL,
   PRIMARY KEY (`PID`),
@@ -353,7 +355,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,2,'Soft-Sensu Fork (1 x 12)',10.00,'s',300),(2,3,'Ionic Fork (1 x 24)',20.00,'m',42),(3,3,'Ionic Cake Shovel',30.14,'m',12),(4,1,'Fusion Butter Knife',35.00,'m',52),(5,2,'Soft-Sensu ToothPick ( 1 x 50 )',50.00,'s',100),(6,2,'Soft-Sensu Cutting Board',48.00,'m',8),(7,5,'Corona Plastic Bottle ( 1 x 5 )',86.00,'l',84),(8,6,'Plastivo Chopstick ( 1 x 24 )',30.00,'m',67),(9,7,'Tineric Chopstick ( 1 x 24 )',29.00,'m',108),(10,9,'Acrylicc Chopstick ( 1 x 24 )',50.00,'m',0),(11,8,'Plastific Cutting board ',275.00,'xl',131),(12,10,'Kitta Cutting board ',98.00,'l',16),(13,2,'Soft-Sensu Spatula',61.00,'m',134),(14,1,'Fusion Spatula',30.00,'m',258),(15,5,'Corona Butter Knife ( 1 x 4 )',250.00,'s',55),(16,9,'Acrylicc Butter Knife ( 1 x 3 )',160.00,'s',229),(17,4,'Cutler Butter Knife ( 1 x 3 )',170.00,'s',2),(18,4,'Cutler Scoop',145.00,'l',39),(19,4,'Cutler Broom',133.00,'xl',189),(20,4,'Cutler Spatula',90.00,'l',149);
+INSERT INTO `product` VALUES (1,2,'Soft-Sensu Fork (1 x 12)',10.00,'s',297),(2,3,'Ionic Fork (1 x 24)',20.00,'m',42),(3,3,'Ionic Cake Shovel',30.14,'m',7),(4,1,'Fusion Butter Knife',35.00,'m',52),(5,2,'Soft-Sensu ToothPick ( 1 x 50 )',50.00,'s',100),(6,2,'Soft-Sensu Cutting Board',48.00,'m',8),(7,5,'Corona Plastic Bottle ( 1 x 5 )',86.00,'l',84),(8,6,'Plastivo Chopstick ( 1 x 24 )',30.00,'m',65),(9,7,'Tineric Chopstick ( 1 x 24 )',29.00,'m',106),(10,9,'Acrylicc Chopstick ( 1 x 24 )',50.00,'m',0),(11,8,'Plastific Cutting board ',275.00,'xl',131),(12,10,'Kitta Cutting board ',98.00,'l',16),(13,2,'Soft-Sensu Spatula',61.00,'m',134),(14,1,'Fusion Spatula',30.00,'m',258),(15,5,'Corona Butter Knife ( 1 x 4 )',250.00,'s',55),(16,9,'Acrylicc Butter Knife ( 1 x 3 )',160.00,'s',229),(17,4,'Cutler Butter Knife ( 1 x 3 )',170.00,'s',0),(18,4,'Cutler Scoop',145.00,'l',39),(19,4,'Cutler Broom',133.00,'xl',189),(20,4,'Cutler Spatula',90.00,'l',149);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -382,33 +384,8 @@ CREATE TABLE `promocode` (
 
 LOCK TABLES `promocode` WRITE;
 /*!40000 ALTER TABLE `promocode` DISABLE KEYS */;
-INSERT INTO `promocode` VALUES ('2FB6RmGf',4,50,'2021-04-12 00:00:00',2),('749cVBnO',2,3,'2021-12-18 13:17:17',4),('dbcxpjUN',9,8,'2021-07-11 00:00:00',2),('gjhh5N4j',12,12,'2021-07-11 00:00:00',13),('kTdLM27K',1,5,'2021-04-12 00:00:00',10),('Oo4m8eq5',5,20,'2021-04-12 00:00:00',3),('r3mwaqwu',5,10,'2021-05-12 00:00:00',30),('SpOxYUGY',19,10,'2021-12-01 00:00:00',5),('UgpG4RxS',3,10,'2021-04-12 00:00:00',5);
+INSERT INTO `promocode` VALUES ('2FB6RmGf',4,50,'2021-04-12 00:00:00',2),('749cVBnO',2,3,'2021-12-18 13:17:17',4),('dbcxpjUN',9,8,'2021-07-11 00:00:00',2),('gjhh5N4j',12,12,'2021-07-11 00:00:00',13),('kTdLM27K',1,5,'2021-04-12 00:00:00',10),('Oo4m8eq5',5,20,'2021-04-12 00:00:00',3),('r3mwaqwu',5,10,'2021-05-12 00:00:00',30),('SpOxYUGY',19,10,'2021-12-01 00:00:00',5),('UgpG4RxS',3,10,'2021-04-12 00:00:00',3);
 /*!40000 ALTER TABLE `promocode` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `shipment`
---
-
-DROP TABLE IF EXISTS `shipment`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `shipment` (
-  `OrderID` int DEFAULT NULL,
-  `ShippingDate` datetime NOT NULL,
-  `Status` varchar(45) NOT NULL,
-  KEY `fk_SHIPMENT_ORDER1_idx` (`OrderID`),
-  CONSTRAINT `fk_SHIPMENT_ORDER1` FOREIGN KEY (`OrderID`) REFERENCES `order` (`OrderID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `shipment`
---
-
-LOCK TABLES `shipment` WRITE;
-/*!40000 ALTER TABLE `shipment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `shipment` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -446,4 +423,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-29  0:22:20
+-- Dump completed on 2021-03-30  0:41:58

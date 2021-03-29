@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import SelectSearch, { fuzzySearch } from 'react-select-search'
 import DateTimePicker from 'react-datetime-picker'
+import Swal from 'sweetalert2'
 
 export class PlaceOrder extends Component {
 
@@ -16,7 +17,6 @@ export class PlaceOrder extends Component {
             cid: null,
             eid: null,
             cname: null,
-            tempcart: [],
             coupon: null,
             shiptime: null,
             address: [],
@@ -37,7 +37,6 @@ export class PlaceOrder extends Component {
                 if (res.data.session?.order) {
                     const order = res.data.session.order
                     this.state.cart = order.cart
-                    this.state.tempcart = order.cart
                     this.state.eid = order.eid
                     await this.setState({ cid: order.cid })
                     this.customerName()
@@ -73,10 +72,20 @@ export class PlaceOrder extends Component {
                     name: el.Address,
                     value: el.CAddrID,
                 }
+                if (i == 0) {
+                    this.state.addressValue = el.CAddrID
+                }
             })
             this.state.addressInfo = addressInfo
         })
         this.setState({ address })
+        address = this.state.addressInfo[0]
+        document.getElementById('Address').value = address.Address
+        document.getElementById('City').value = address.City
+        document.getElementById('Province').value = address.Province
+        document.getElementById('PostalCode').value = address.PostalCode
+        document.getElementById('Country').value = address.Country
+
     }
 
     customerName = async () => {
@@ -155,6 +164,13 @@ export class PlaceOrder extends Component {
         axios.post('/placeOrder/checkCoupon', {
             code: document.getElementById('coupon-code').value
         }).then(res => {
+            if (res.data.coupon == null) {
+                Swal.fire(
+                    'Coupon not found',
+                    'Please try again...',
+                    'error'
+                )
+            }
             this.setState({ coupon: res.data.coupon })
         })
     }
@@ -186,6 +202,42 @@ export class PlaceOrder extends Component {
         document.getElementById('Province').value = address.Province
         document.getElementById('PostalCode').value = address.PostalCode
         document.getElementById('Country').value = address.Country
+    }
+
+    Submit = () => {
+
+        let eid = this.state.eid
+        let cid = this.state.cid
+        let address = this.state.addressValue
+
+        const subtotal = this.SubTotal()
+        const discount = this.Discount()
+        const tax = this.Tax()
+        const total = this.Total()
+        const points = this.Point()
+
+        let cart = this.state.cart
+
+        if (this.Discount() != 0) {
+            const box = document.getElementById('discount-price')
+
+            cart.map((el, i) => {
+                if (el.pid == box?.getAttribute('name')) {
+                    cart[i].price -= this.Discount()
+                }
+            })
+        }
+
+        const shiptime = this.state.shiptime
+
+        const coupon = this.state.coupon
+
+        axios.post('/placeOrder/submitOrder', {
+            eid, cid, address, subtotal, discount, tax, total, points, shiptime, coupon, cart
+        }).then(res => {
+
+        })
+
     }
 
     render() {
@@ -253,98 +305,86 @@ export class PlaceOrder extends Component {
 
                                 </Card.Header>
                                 <Card.Body>
-                                    <Row>
-                                        <Col sm={7}>
-                                            <InputGroup>
-                                                <InputGroup.Prepend>
-                                                    <InputGroup.Text>COUPON</InputGroup.Text>
-                                                </InputGroup.Prepend>
-                                                <div style={{ width: "53%" }}><FormControl id="coupon-code"></FormControl></div>
-                                                <Button onClick={() => this.setCoupon()} variant="success">✓</Button>
-                                                <Button onClick={() => this.clearCoupon()} variant="danger">X</Button>
-                                            </InputGroup>
-                                        </Col>
-                                        <Col sm={5}>
 
-                                        </Col>
-                                    </Row>
-                                    <Row style={{ marginTop: "10px" }}>
-                                        <Col sm={7}>
-                                            <InputGroup>
-                                                <InputGroup.Prepend>
-                                                    <InputGroup.Text>SHIP TIME</InputGroup.Text>
-                                                </InputGroup.Prepend>
-                                                <div style={{ marginRight: "10px" }}></div>
-                                                <DateTimePicker
-                                                    dayPlaceholder="dd"
-                                                    monthPlaceholder="mm"
-                                                    yearPlaceholder="yyyy"
-                                                    format="dd/MM/y h:mm:ss a"
-                                                    onChange={(e) => this.setState({ shiptime: e })}
-                                                    value={this.state.shiptime}
-                                                />
-                                            </InputGroup>
-                                        </Col>
-                                        <Col sm={5}>
+                                    <Col sm={7}>
+                                        <InputGroup>
+                                            <InputGroup.Prepend>
+                                                <InputGroup.Text>COUPON</InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                            <div style={{ width: "53%" }}><FormControl autoComplete="off" id="coupon-code"></FormControl></div>
+                                            <Button onClick={() => this.setCoupon()} variant="success">✓</Button>
+                                            <Button onClick={() => this.clearCoupon()} variant="danger">X</Button>
+                                        </InputGroup>
+                                    </Col>
 
-                                        </Col>
-                                    </Row>
-                                    <Row style={{ marginTop: "10px" }}>
-                                        <Col sm={7}>
+                                    <Col sm={7} style={{ marginTop: "10px" }}>
 
-                                            <div style={{ marginBottom: "10px" }}>
+                                        <div style={{ marginBottom: "10px" }}>
 
-                                                <SelectSearch search
-                                                    onChange={(e) => this.updateAddress(e)}
-                                                    emptyMessage="Result not found"
-                                                    placeholder="Select Address"
-                                                    options={this.state.address}
-                                                    filterOptions={fuzzySearch}
-                                                />
-                                            </div>
-                                            <InputGroup className="mb-3">
-                                                <InputGroup.Prepend>
-                                                    <InputGroup.Text>Address</InputGroup.Text>
-                                                </InputGroup.Prepend>
-                                                <div style={{ width: "72%" }}><FormControl id="Address" disabled autoComplete="off" /></div>
-                                            </InputGroup>
-                                            <InputGroup className="mb-3">
-                                                <InputGroup.Prepend>
-                                                    <InputGroup.Text>City</InputGroup.Text>
-                                                </InputGroup.Prepend>
-                                                <div style={{ width: "72%" }}><FormControl id="City" disabled autoComplete="off" /></div>
-                                            </InputGroup>
-                                            <InputGroup className="mb-3">
-                                                <InputGroup.Prepend>
-                                                    <InputGroup.Text>Province</InputGroup.Text>
-                                                </InputGroup.Prepend>
-                                                <div style={{ width: "72%" }}><FormControl id="Province" disabled autoComplete="off" /></div>
-                                            </InputGroup>
-                                            <InputGroup className="mb-3">
-                                                <InputGroup.Prepend>
-                                                    <InputGroup.Text>Postal</InputGroup.Text>
-                                                </InputGroup.Prepend>
-                                                <div style={{ width: "72%" }}><FormControl id="PostalCode" disabled autoComplete="off" /></div>
-                                            </InputGroup>
-                                            <InputGroup className="mb-3">
-                                                <InputGroup.Prepend>
-                                                    <InputGroup.Text>Country</InputGroup.Text>
-                                                </InputGroup.Prepend>
-                                                <div style={{ width: "72%" }}><FormControl id="Country" disabled autoComplete="off" /></div>
-                                            </InputGroup>
-                                        </Col>
-                                        <Col sm={6}>
+                                            <SelectSearch search
+                                                onChange={(e) => this.updateAddress(e)}
+                                                emptyMessage="Result not found"
+                                                defaultValue={0}
+                                                options={this.state.address}
+                                                filterOptions={fuzzySearch}
+                                            />
+                                        </div>
+                                        <InputGroup className="mb-3">
+                                            <InputGroup.Prepend>
+                                                <InputGroup.Text>Address</InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                            <div style={{ width: "72%" }}><FormControl id="Address" disabled autoComplete="off" /></div>
+                                        </InputGroup>
+                                        <InputGroup className="mb-3">
+                                            <InputGroup.Prepend>
+                                                <InputGroup.Text>City</InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                            <div style={{ width: "72%" }}><FormControl id="City" disabled autoComplete="off" /></div>
+                                        </InputGroup>
+                                        <InputGroup className="mb-3">
+                                            <InputGroup.Prepend>
+                                                <InputGroup.Text>Province</InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                            <div style={{ width: "72%" }}><FormControl id="Province" disabled autoComplete="off" /></div>
+                                        </InputGroup>
+                                        <InputGroup className="mb-3">
+                                            <InputGroup.Prepend>
+                                                <InputGroup.Text>Postal</InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                            <div style={{ width: "72%" }}><FormControl id="PostalCode" disabled autoComplete="off" /></div>
+                                        </InputGroup>
+                                        <InputGroup className="mb-3">
+                                            <InputGroup.Prepend>
+                                                <InputGroup.Text>Country</InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                            <div style={{ width: "72%" }}><FormControl id="Country" disabled autoComplete="off" /></div>
+                                        </InputGroup>
+                                    </Col>
 
-                                        </Col>
-                                    </Row>
+                                    <Col sm={7} style={{ marginTop: "10px" }}>
+                                        <InputGroup>
+                                            <InputGroup.Prepend>
+                                                <InputGroup.Text>SHIP TIME</InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                            <div style={{ marginRight: "10px" }}></div>
+                                            <DateTimePicker
+                                                dayPlaceholder="dd"
+                                                monthPlaceholder="mm"
+                                                yearPlaceholder="yyyy"
+                                                format="dd/MM/y h:mm:ss a"
+                                                onChange={(e) => this.setState({ shiptime: e })}
+                                                value={this.state.shiptime}
+                                            />
+                                        </InputGroup>
+                                    </Col>
                                 </Card.Body>
                                 <Card.Footer>
-
+                                    <Button variant="success" onClick={() => this.Submit()}>SUBMIT</Button>
                                 </Card.Footer>
                             </Card>
                         </Col>
                     </Row>
-                </Container >
+                </Container>
             )
         } else {
             return (
