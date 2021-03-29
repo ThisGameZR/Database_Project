@@ -1,31 +1,37 @@
 import React, { Component } from 'react'
-import {Button, Card, Container, Table,Row,Col, InputGroup, FormControl} from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+import { Button, Card, Container, Table, Row, Col, InputGroup, FormControl } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
+import SelectSearch, { fuzzySearch } from 'react-select-search'
+import DateTimePicker from 'react-datetime-picker'
 
 export class PlaceOrder extends Component {
 
     constructor(props) {
         super(props)
-    
+
         this.state = {
-            loginYet:false,
-            cart:[],
+            loginYet: false,
+            cart: [],
             cid: null,
             eid: null,
             cname: null,
             tempcart: [],
             coupon: null,
+            shiptime: null,
+            address: [],
+            addressInfo: [],
+            addressValue: null,
         }
         axios.get('/login').then(res => {
-            if(res.data.session?.user){
-                this.setState({loginYet : true})
+            if (res.data.session?.user) {
+                this.setState({ loginYet: true })
             }
         })
-        
+
     }
 
-    componentDidMount(){
+    componentDidMount() {
         axios.get('/login').then(async res => {
             if (res.data.session?.user) {
                 if (res.data.session?.order) {
@@ -36,6 +42,7 @@ export class PlaceOrder extends Component {
                     await this.setState({ cid: order.cid })
                     this.customerName()
                     this.employeeName()
+                    this.setAddress()
                 }
             }
         })
@@ -45,13 +52,31 @@ export class PlaceOrder extends Component {
         return this.state.cart.map((item, i) => {
             return (
                 <tr key={i}>
-                        <td>{i+1}</td>
-                        <td>{item.name}</td>
-                        <td id={`price-${item.pid}`}>{parseFloat(item.price).toFixed(2)} ฿</td>
-                        <td>{item.amount}</td>
-                </tr> 
+                    <td>{i + 1}</td>
+                    <td>{item.name}</td>
+                    <td id={`price-${item.pid}`}>{parseFloat(item.price).toFixed(2)} ฿</td>
+                    <td>{item.amount}</td>
+                </tr>
             )
-        })  
+        })
+    }
+
+    setAddress = async () => {
+        if (this.state.cid == null) {
+            return
+        }
+        let address = []
+        await axios.get('/customer/editAddress', { params: { cid: this.state.cid } }).then(res => {
+            const addressInfo = res.data.addressInfo
+            addressInfo.map((el, i) => {
+                address[i] = {
+                    name: el.Address,
+                    value: el.CAddrID,
+                }
+            })
+            this.state.addressInfo = addressInfo
+        })
+        this.setState({ address })
     }
 
     customerName = async () => {
@@ -67,15 +92,15 @@ export class PlaceOrder extends Component {
             }
             name = customer.FirstName + ' ' + customer.MiddleName + ' ' + customer.LastName
         })
-        
-        this.setState({cname: name})
+
+        this.setState({ cname: name })
     }
 
     employeeName = async () => {
         if (this.state.eid == null) {
             return
         }
-        let name 
+        let name
         await axios.get('/login').then(res => {
             const session = res.data.session.user
             if (!session.middlename) {
@@ -84,13 +109,13 @@ export class PlaceOrder extends Component {
             }
             name = session.firstname + ' ' + session.middlename + ' ' + session.lastname
         })
-        
-        this.setState({ename: name})
+
+        this.setState({ ename: name })
     }
 
     SubTotal = () => {
         let subtotal = 0
-        this.state.cart.map( el => {
+        this.state.cart.map(el => {
             subtotal += el.price
         })
         return subtotal
@@ -100,7 +125,7 @@ export class PlaceOrder extends Component {
         const coupon = this.state.coupon || null
         let discount = 0
         if (coupon != null) {
-            this.state.cart.map((el,i) => {
+            this.state.cart.map((el, i) => {
                 if (coupon.PID == el.pid) {
                     discount = (el.price * coupon.Discount / 100)
                     document.getElementById(`price-${el.pid}`).innerHTML = `<span id='discount-price' name='${el.pid}'
@@ -117,20 +142,20 @@ export class PlaceOrder extends Component {
         const tax = 0.07
         return ((this.SubTotal() - this.Discount()) * tax)
     }
-    
+
     Total = () => {
         return (this.Tax() + this.SubTotal() - this.Discount())
     }
-    
+
     Point = () => {
-        return parseInt( this.Total() / 100 * 3 )
+        return parseInt(this.Total() / 100 * 3)
     }
 
     setCoupon = () => {
         axios.post('/placeOrder/checkCoupon', {
             code: document.getElementById('coupon-code').value
         }).then(res => {
-            this.setState({coupon: res.data.coupon})
+            this.setState({ coupon: res.data.coupon })
         })
     }
 
@@ -148,97 +173,182 @@ export class PlaceOrder extends Component {
         document.getElementById('coupon-code').value = ""
     }
 
+    updateAddress = (e) => {
+        this.setState({ addressValue: e })
+        let address
+        this.state.addressInfo.map(el => {
+            if (el.CAddrID == e) {
+                address = el
+            }
+        })
+        document.getElementById('Address').value = address.Address
+        document.getElementById('City').value = address.City
+        document.getElementById('Province').value = address.Province
+        document.getElementById('PostalCode').value = address.PostalCode
+        document.getElementById('Country').value = address.Country
+    }
 
     render() {
 
-        if(this.state?.loginYet === true){
+        if (this.state?.loginYet === true) {
             return (
                 <Container fluid>
                     <Row>
-                    <Col sm={6}>
-                        <Card>
-                            <Card.Header>
-                                <Row>    
-                                    <Col sm={6}>
-                                        <Button variant="outline-dark">CUSTOMER : </Button>
-                                        <Button variant="dark">{this.state?.cname}</Button>
-                                    </Col>
-                                    <Col sm={6}>
-                                        <Button variant="outline-dark">EMPLOYEE : </Button>
-                                        <Button variant="dark">{this.state?.ename}</Button>
-                                    </Col>
-                                </Row>
-                            </Card.Header>
-                            <Card.Body>    
-                                <Table striped bordered hover responsive>
-                                    <thead>
+                        <Col sm={6}>
+                            <Card>
+                                <Card.Header>
+                                    <Row>
+                                        <Col sm={6}>
+                                            <Button variant="outline-dark">CUSTOMER : </Button>
+                                            <Button variant="dark">{this.state?.cname}</Button>
+                                        </Col>
+                                        <Col sm={6}>
+                                            <Button variant="outline-dark">EMPLOYEE : </Button>
+                                            <Button variant="dark">{this.state?.ename}</Button>
+                                        </Col>
+                                    </Row>
+                                </Card.Header>
+                                <Card.Body>
+                                    <Table striped bordered hover responsive>
+                                        <thead>
                                             <tr>
                                                 <th>No.</th>
                                                 <th>Product</th>
                                                 <th>Price</th>
                                                 <th>Amount</th>
                                             </tr>
-                                    </thead>
-                                    <tbody>
-                                        {this.itemDisplay()}
-                                    </tbody>
-                                </Table>
-                            </Card.Body>
-                            <Card.Footer>
-                                <Table style={{justifyContent:"center",alignItems:"center",textAlign:"center"}}>
-                                    <thead>
-                                        <tr>
-                                            <th><Button variant="info">SUBTOTAL</Button></th>
-                                            <th><Button variant="warning" style={{ color: "#fff", background: "#d1b02e" }}>DISCOUNTED</Button></th>
-                                            <th><Button variant="danger">TAX</Button></th>
-                                            <th><Button variant="success">TOTAL</Button></th>
-                                            <th><Button variant="primary">POINTS</Button></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr style={{fontWeight:"bold"}}>
-                                            <td>{parseFloat(this.SubTotal()).toFixed(2)}</td>
-                                            <td>{parseFloat(this.Discount()).toFixed(2)}</td>
-                                            <td>{parseFloat(this.Tax()).toFixed(2)}</td>
-                                            <td>{parseFloat(this.Total()).toFixed(2)}</td>
-                                            <td>{this.Point()}</td>
-                                        </tr>
-                                    </tbody>
-                                </Table>
-                            </Card.Footer>
-                        </Card>
-                    </Col>
-                    <Col sm={6}>
+                                        </thead>
+                                        <tbody>
+                                            {this.itemDisplay()}
+                                        </tbody>
+                                    </Table>
+                                </Card.Body>
+                                <Card.Footer>
+                                    <Table style={{ justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+                                        <thead>
+                                            <tr>
+                                                <th><Button variant="info">SUBTOTAL</Button></th>
+                                                <th><Button variant="warning" style={{ color: "#fff", background: "#d1b02e" }}>DISCOUNTED</Button></th>
+                                                <th><Button variant="danger">TAX</Button></th>
+                                                <th><Button variant="success">TOTAL</Button></th>
+                                                <th><Button variant="primary">POINTS</Button></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style={{ fontWeight: "bold" }}>
+                                                <td>{parseFloat(this.SubTotal()).toFixed(2)}</td>
+                                                <td>{parseFloat(this.Discount()).toFixed(2)}</td>
+                                                <td>{parseFloat(this.Tax()).toFixed(2)}</td>
+                                                <td>{parseFloat(this.Total()).toFixed(2)}</td>
+                                                <td>{this.Point()}</td>
+                                            </tr>
+                                        </tbody>
+                                    </Table>
+                                </Card.Footer>
+                            </Card>
+                        </Col>
+                        <Col sm={6}>
                             <Card>
                                 <Card.Header>
 
                                 </Card.Header>
                                 <Card.Body>
-                                    <Row sm={8}>
-                                        <InputGroup>
-                                            <InputGroup.Prepend>
-                                                <InputGroup.Text>COUPON</InputGroup.Text>
-                                            </InputGroup.Prepend>
-                                                <FormControl id="coupon-code"></FormControl>
-                                                <Button onClick={() => this.setCoupon()}>CHECK</Button>
-                                                <Button onClick={() => this.clearCoupon()} variant="danger">X</Button>
-                                        </InputGroup>
-                                    </Row>
                                     <Row>
-                                        
+                                        <Col sm={7}>
+                                            <InputGroup>
+                                                <InputGroup.Prepend>
+                                                    <InputGroup.Text>COUPON</InputGroup.Text>
+                                                </InputGroup.Prepend>
+                                                <div style={{ width: "53%" }}><FormControl id="coupon-code"></FormControl></div>
+                                                <Button onClick={() => this.setCoupon()} variant="success">✓</Button>
+                                                <Button onClick={() => this.clearCoupon()} variant="danger">X</Button>
+                                            </InputGroup>
+                                        </Col>
+                                        <Col sm={5}>
+
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ marginTop: "10px" }}>
+                                        <Col sm={7}>
+                                            <InputGroup>
+                                                <InputGroup.Prepend>
+                                                    <InputGroup.Text>SHIP TIME</InputGroup.Text>
+                                                </InputGroup.Prepend>
+                                                <div style={{ marginRight: "10px" }}></div>
+                                                <DateTimePicker
+                                                    dayPlaceholder="dd"
+                                                    monthPlaceholder="mm"
+                                                    yearPlaceholder="yyyy"
+                                                    format="dd/MM/y h:mm:ss a"
+                                                    onChange={(e) => this.setState({ shiptime: e })}
+                                                    value={this.state.shiptime}
+                                                />
+                                            </InputGroup>
+                                        </Col>
+                                        <Col sm={5}>
+
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ marginTop: "10px" }}>
+                                        <Col sm={7}>
+
+                                            <div style={{ marginBottom: "10px" }}>
+
+                                                <SelectSearch search
+                                                    onChange={(e) => this.updateAddress(e)}
+                                                    emptyMessage="Result not found"
+                                                    placeholder="Select Address"
+                                                    options={this.state.address}
+                                                    filterOptions={fuzzySearch}
+                                                />
+                                            </div>
+                                            <InputGroup className="mb-3">
+                                                <InputGroup.Prepend>
+                                                    <InputGroup.Text>Address</InputGroup.Text>
+                                                </InputGroup.Prepend>
+                                                <div style={{ width: "72%" }}><FormControl id="Address" disabled autoComplete="off" /></div>
+                                            </InputGroup>
+                                            <InputGroup className="mb-3">
+                                                <InputGroup.Prepend>
+                                                    <InputGroup.Text>City</InputGroup.Text>
+                                                </InputGroup.Prepend>
+                                                <div style={{ width: "72%" }}><FormControl id="City" disabled autoComplete="off" /></div>
+                                            </InputGroup>
+                                            <InputGroup className="mb-3">
+                                                <InputGroup.Prepend>
+                                                    <InputGroup.Text>Province</InputGroup.Text>
+                                                </InputGroup.Prepend>
+                                                <div style={{ width: "72%" }}><FormControl id="Province" disabled autoComplete="off" /></div>
+                                            </InputGroup>
+                                            <InputGroup className="mb-3">
+                                                <InputGroup.Prepend>
+                                                    <InputGroup.Text>Postal</InputGroup.Text>
+                                                </InputGroup.Prepend>
+                                                <div style={{ width: "72%" }}><FormControl id="PostalCode" disabled autoComplete="off" /></div>
+                                            </InputGroup>
+                                            <InputGroup className="mb-3">
+                                                <InputGroup.Prepend>
+                                                    <InputGroup.Text>Country</InputGroup.Text>
+                                                </InputGroup.Prepend>
+                                                <div style={{ width: "72%" }}><FormControl id="Country" disabled autoComplete="off" /></div>
+                                            </InputGroup>
+                                        </Col>
+                                        <Col sm={6}>
+
+                                        </Col>
                                     </Row>
                                 </Card.Body>
                                 <Card.Footer>
 
                                 </Card.Footer>
                             </Card>
-                    </Col>
+                        </Col>
                     </Row>
-                </Container>
+                </Container >
             )
-        }else{
-            return(
-                <div style={{margin:"20px"}}>
+        } else {
+            return (
+                <div style={{ margin: "20px" }}>
                     <h2>Sorry.. This page is only for our employee!</h2>
                     <Link to="/"><Button>GO BACK</Button></Link>
                 </div>
