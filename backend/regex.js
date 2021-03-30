@@ -1,3 +1,3 @@
-const regex = new RegExp( "/[-!$%^&*()+|~=`{}[]:/;<>?,@#]/" )
+const regex = new RegExp("/[!$%^&*()+|~=`{}[]:;<>?,@#]/")
 
 module.exports = regex;

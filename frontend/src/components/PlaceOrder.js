@@ -111,14 +111,9 @@ export class PlaceOrder extends Component {
         }
         let name
         await axios.get('/login').then(res => {
-            const session = res.data.session.user
-            if (!session.middlename) {
-                name = session.firstname + ' ' + session.lastname
-                return
-            }
-            name = session.firstname + ' ' + session.middlename + ' ' + session.lastname
+            name = res.data.session.user.name
+            console.log(res.data.session)
         })
-
         this.setState({ ename: name })
     }
 

@@ -1,6 +1,7 @@
 const express = require('express')
 const pool = require('../pool')
 const router = express.Router()
+const regex = require('../regex');
 
 router.get('/', (req, res) => {
     let sql = "select cid ,concat( firstname,' ', middlename, ' ', lastname) as name from customer"
@@ -19,6 +20,9 @@ router.get('/editProfile', (req, res) => {
 })
 
 router.post('/editProfile', (req, res) => {
+    if (regex.test(req.body.value)) {
+        return res.status(400).send("Err")
+    }
     let sql = `update customer
                 set ${req.body.name} = '${req.body.value}'
                 where cid = ${req.body.cid}
@@ -46,7 +50,7 @@ router.get('/editAddress', (req, res) => {
 
 router.post('/editAddress', (req, res) => {
 
-    if (req.body.value == "") {
+    if (req.body.value == "" || regex.test(req.body.value)) {
         return res.status(400).send("Please fill in the blanks")
     }
 
