@@ -31,7 +31,7 @@ router.post('/checkCoupon', (req, res) => {
     }
 })
 
-router.post('/submitOrder', (req, res) => {
+router.post('/submitOrder', async (req, res) => {
 
 
     let data = req.body
@@ -49,7 +49,7 @@ router.post('/submitOrder', (req, res) => {
     if (date == '1970-01-01 00:00:00') {
         if (coupon == null) {
             sql = `insert into \`order\` (eid,cid,caddrid,totalprice,totalpoints,promocode,orderdate,requireddate,paymentdate) values (
-            ${data.eid},${data.cid},${data.address},${total},${data.points},null,'${newdate}','${date}',null
+            ${data.eid},${data.cid},${data.address},${total},${data.points},null,'${newdate}',null,null
             )`
         } else {
             sql = `insert into \`order\` (eid,cid,caddrid,totalprice,totalpoints,promocode,orderdate,requireddate,paymentdate) values (
@@ -71,7 +71,6 @@ router.post('/submitOrder', (req, res) => {
     pool.getConnection((err, connection) => {
 
         connection.beginTransaction()
-
         try {
 
             connection.execute(sql, (err, result) => {
@@ -125,20 +124,44 @@ router.post('/submitOrder', (req, res) => {
                             if (err) {
                                 throw err
                             }
+                            sql = `select available_number from promocode where Code = '${coupon}'`
+                            connection.execute(sql, (err, result) => {
+                                if (err) {
+                                    throw err
+                                }
+                                if (result[0].available_number <= 0) {
+                                    sql = `delete from promocode where Code = '${coupon}'`
+                                    connection.execute(sql, (err, result) => {
+                                        if (err) {
+                                            throw err
+                                        }
+                                    })
+                                }
+                            })
                         })
                     }
                 })
             })
-            connection.commit()
 
+            sql = `select orderid from \`order\` where cid = ${data.cid} and eid = ${data.eid} and caddrid = ${data.address}
+                    and totalprice = ${total} and totalpoints = ${data.points}`
+
+            connection.execute(sql, (err, result) => {
+                if (err) throw err
+                return res.send({ message: `Order complete with orderid: ${result[0].orderid}`, status: 'success' })
+            })
+
+            connection.commit((err) => {
+                if (err) throw err
+            })
         } catch (err) {
             console.log(err)
             connection.rollback()
+            return res.send({ message: err.message, status: 'error' })
         }
 
-
-
     })
+
 })
 
 module.exports = router

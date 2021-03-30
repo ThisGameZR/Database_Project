@@ -3,7 +3,7 @@ import { Button, Navbar, Form } from 'react-bootstrap';
 import axios from "axios";
 import Swal from 'sweetalert2';
 
-export default function LoginForm() {
+export default function LoginForm(props) {
     const [loginyet, setLoginyet] = useState(false);
     const [user, setUser] = useState("");
 
@@ -12,6 +12,7 @@ export default function LoginForm() {
             if (res.data.session?.user) {
                 setLoginyet(true)
                 setUser(res.data.session.user.name)
+                props.setLoginYet(true)
             } else {
                 setLoginyet(false)
             }
@@ -35,7 +36,6 @@ export default function LoginForm() {
 
         return (
             <>
-                <div style={{ width: "280px" }}></div>
                 <Navbar.Brand id="welcomeMessage">{user}</Navbar.Brand>
                 <Button variant="success" onClick={(e) => logout(e)}>LOG OUT</Button>
             </>
@@ -74,8 +74,8 @@ export default function LoginForm() {
                 'success',
             )
         })
-
         setLoginyet(false);
+        window.location.href = "/"
     }
 }
 

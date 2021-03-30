@@ -106,13 +106,15 @@ export class PlaceOrder extends Component {
     }
 
     employeeName = async () => {
+
         if (this.state.eid == null) {
             return
         }
         let name
         await axios.get('/login').then(res => {
+
             name = res.data.session.user.name
-            console.log(res.data.session)
+
         })
         this.setState({ ename: name })
     }
@@ -120,9 +122,9 @@ export class PlaceOrder extends Component {
     SubTotal = () => {
         let subtotal = 0
         this.state.cart.map(el => {
-            subtotal += el.price
+            subtotal += parseFloat(el.price)
         })
-        return subtotal
+        return parseFloat(subtotal.toFixed(2))
     }
 
     Discount = () => {
@@ -139,16 +141,16 @@ export class PlaceOrder extends Component {
                 }
             })
         }
-        return discount
+        return parseFloat(parseFloat(discount).toFixed(2))
     }
 
     Tax = () => {
         const tax = 0.07
-        return ((this.SubTotal() - this.Discount()) * tax)
+        return parseFloat(parseFloat(((this.SubTotal() - this.Discount()) * tax)).toFixed(2))
     }
 
     Total = () => {
-        return (this.Tax() + this.SubTotal() - this.Discount())
+        return parseFloat(parseFloat((this.Tax() + this.SubTotal() - this.Discount())).toFixed(2))
     }
 
     Point = () => {
@@ -201,6 +203,26 @@ export class PlaceOrder extends Component {
 
     Submit = () => {
 
+        const inputOptions = new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    '#ff0000': 'Red',
+                    '#00ff00': 'Green',
+                    '#0000ff': 'Blue'
+                })
+            }, 1000)
+        })
+
+        Swal.fire({
+            title: `IN PROGRESS`,
+            text: `Please wait`,
+            icon: 'info',
+            inputOptions: inputOptions,
+            showCloseButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+        })
+
         let eid = this.state.eid
         let cid = this.state.cid
         let address = this.state.addressValue
@@ -230,6 +252,17 @@ export class PlaceOrder extends Component {
         axios.post('/placeOrder/submitOrder', {
             eid, cid, address, subtotal, discount, tax, total, points, shiptime, coupon, cart
         }).then(res => {
+            Swal.close()
+            Swal.fire({
+                title: 'ORDER STATUS',
+                text: `${res.data.message}`,
+                icon: `${res.data.status}`,
+                showConfirmButton: true,
+                timer: 10000,
+                didClose: () => {
+                    window.location.href = "/products"
+                }
+            })
 
         })
 

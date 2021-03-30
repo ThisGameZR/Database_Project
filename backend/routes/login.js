@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
                         name = `${row[0].firstname} ${row[0].middlename} ${row[0].lastname}`
 
                         req.session.user = {
-                            eid: row[0].EID,
+                            eid: result[0].EID,
                             name: name,
                             position: row[0].position,
                             dno: row[0].dno,

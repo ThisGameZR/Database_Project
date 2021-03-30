@@ -224,7 +224,7 @@ CREATE TABLE `invoice` (
   CONSTRAINT `fk_INVOICE_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_INVOICE_INVOICE_STATUS1` FOREIGN KEY (`StatusID`) REFERENCES `invoice_status` (`StatusID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_INVOICE_ORDER1` FOREIGN KEY (`OrderID`) REFERENCES `order` (`OrderID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -233,7 +233,7 @@ CREATE TABLE `invoice` (
 
 LOCK TABLES `invoice` WRITE;
 /*!40000 ALTER TABLE `invoice` DISABLE KEYS */;
-INSERT INTO `invoice` VALUES (4,2,6,1),(5,1,7,1),(7,3,9,1),(8,1,10,1);
+INSERT INTO `invoice` VALUES (4,2,6,1),(5,1,7,1),(7,3,9,1),(8,1,10,1),(9,3,11,1),(10,4,12,1),(11,5,13,1),(12,4,14,1),(13,2,15,1);
 /*!40000 ALTER TABLE `invoice` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,7 +287,7 @@ CREATE TABLE `order` (
   CONSTRAINT `fk_ORDER_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_ORDER_CUSTOMER_ADDR1` FOREIGN KEY (`CAddrID`) REFERENCES `customer_addr` (`CAddrID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_ORDER_EMPLOYEE1` FOREIGN KEY (`EID`) REFERENCES `employee` (`EID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -296,7 +296,7 @@ CREATE TABLE `order` (
 
 LOCK TABLES `order` WRITE;
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
-INSERT INTO `order` VALUES (6,1000001,2,2,459.33,13,NULL,'2021-03-29 16:57:44','2021-03-08 17:00:00',NULL,NULL),(7,1000001,1,1,21.40,0,NULL,'2021-03-29 16:59:51','2021-03-31 17:00:00',NULL,NULL),(9,1000001,3,3,89.25,2,'UgpG4RxS','2021-03-29 17:01:49',NULL,NULL,NULL),(10,1000001,1,16,90.15,2,'UgpG4RxS','2021-03-29 17:40:12','2021-03-01 01:45:20',NULL,NULL);
+INSERT INTO `order` VALUES (6,1000001,2,2,459.33,13,NULL,'2021-03-29 16:57:44','2021-03-08 17:00:00',NULL,NULL),(7,1000001,1,1,21.40,0,NULL,'2021-03-29 16:59:51','2021-03-31 17:00:00',NULL,NULL),(9,1000001,3,3,89.25,2,'UgpG4RxS','2021-03-29 17:01:49',NULL,NULL,NULL),(10,1000001,1,16,90.15,2,'UgpG4RxS','2021-03-29 17:40:12','2021-03-01 01:45:20',NULL,NULL),(11,1000001,3,3,28.55,0,'dbcxpjUN','2021-03-30 16:43:47','2021-03-01 17:00:00',NULL,NULL),(12,1000002,4,4,28.55,0,'dbcxpjUN','2021-03-30 16:47:22',NULL,NULL,NULL),(13,1000002,5,5,74.90,2,NULL,'2021-03-30 16:48:39',NULL,NULL,NULL),(14,1000002,4,4,334.91,10,NULL,'2021-03-30 16:52:53',NULL,NULL,NULL),(15,1000002,2,2,354.62,10,NULL,'2021-03-30 16:56:18','2021-03-17 17:00:00',NULL,NULL);
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -325,7 +325,7 @@ CREATE TABLE `order_detail` (
 
 LOCK TABLES `order_detail` WRITE;
 /*!40000 ALTER TABLE `order_detail` DISABLE KEYS */;
-INSERT INTO `order_detail` VALUES (6,3,2,60.28),(6,17,2,340),(6,9,1,29),(7,1,2,20),(9,9,1,29),(9,8,1,30),(9,3,1,24.4134),(10,3,2,54.252),(10,8,1,30);
+INSERT INTO `order_detail` VALUES (6,3,2,60.28),(6,17,2,340.00),(6,9,1,29.00),(7,1,2,20.00),(9,9,1,29.00),(9,8,1,30.00),(9,3,1,24.41),(10,3,2,54.25),(10,8,1,30.00),(11,9,1,26.68),(12,9,1,26.68),(13,5,1,50.00),(13,2,1,20.00),(14,4,1,35.00),(14,5,4,200.00),(14,6,1,48.00),(14,14,1,30.00),(15,4,3,105.00),(15,3,3,90.42),(15,6,2,96.00),(15,2,2,40.00);
 /*!40000 ALTER TABLE `order_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -355,7 +355,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,2,'Soft-Sensu Fork (1 x 12)',10.00,'s',297),(2,3,'Ionic Fork (1 x 24)',20.00,'m',42),(3,3,'Ionic Cake Shovel',30.14,'m',7),(4,1,'Fusion Butter Knife',35.00,'m',52),(5,2,'Soft-Sensu ToothPick ( 1 x 50 )',50.00,'s',100),(6,2,'Soft-Sensu Cutting Board',48.00,'m',8),(7,5,'Corona Plastic Bottle ( 1 x 5 )',86.00,'l',84),(8,6,'Plastivo Chopstick ( 1 x 24 )',30.00,'m',65),(9,7,'Tineric Chopstick ( 1 x 24 )',29.00,'m',106),(10,9,'Acrylicc Chopstick ( 1 x 24 )',50.00,'m',0),(11,8,'Plastific Cutting board ',275.00,'xl',131),(12,10,'Kitta Cutting board ',98.00,'l',16),(13,2,'Soft-Sensu Spatula',61.00,'m',134),(14,1,'Fusion Spatula',30.00,'m',258),(15,5,'Corona Butter Knife ( 1 x 4 )',250.00,'s',55),(16,9,'Acrylicc Butter Knife ( 1 x 3 )',160.00,'s',229),(17,4,'Cutler Butter Knife ( 1 x 3 )',170.00,'s',0),(18,4,'Cutler Scoop',145.00,'l',39),(19,4,'Cutler Broom',133.00,'xl',189),(20,4,'Cutler Spatula',90.00,'l',149);
+INSERT INTO `product` VALUES (1,2,'Soft-Sensu Fork (1 x 12)',10.00,'s',297),(2,3,'Ionic Fork (1 x 24)',20.00,'m',25),(3,3,'Ionic Cake Shovel',30.14,'m',27),(4,1,'Fusion Butter Knife',35.00,'m',48),(5,2,'Soft-Sensu ToothPick ( 1 x 50 )',50.00,'s',81),(6,2,'Soft-Sensu Cutting Board',48.00,'m',5),(7,5,'Corona Plastic Bottle ( 1 x 5 )',86.00,'l',84),(8,6,'Plastivo Chopstick ( 1 x 24 )',30.00,'m',65),(9,7,'Tineric Chopstick ( 1 x 24 )',29.00,'m',38),(10,9,'Acrylicc Chopstick ( 1 x 24 )',50.00,'m',24),(11,8,'Plastific Cutting board ',275.00,'xl',131),(12,10,'Kitta Cutting board ',98.00,'l',16),(13,2,'Soft-Sensu Spatula',61.00,'m',134),(14,1,'Fusion Spatula',30.00,'m',257),(15,5,'Corona Butter Knife ( 1 x 4 )',250.00,'s',55),(16,9,'Acrylicc Butter Knife ( 1 x 3 )',160.00,'s',229),(17,4,'Cutler Butter Knife ( 1 x 3 )',170.00,'s',0),(18,4,'Cutler Scoop',145.00,'l',39),(19,4,'Cutler Broom',133.00,'xl',189),(20,4,'Cutler Spatula',90.00,'l',149);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -384,7 +384,7 @@ CREATE TABLE `promocode` (
 
 LOCK TABLES `promocode` WRITE;
 /*!40000 ALTER TABLE `promocode` DISABLE KEYS */;
-INSERT INTO `promocode` VALUES ('2FB6RmGf',4,50,'2021-04-12 00:00:00',2),('749cVBnO',2,3,'2021-12-18 13:17:17',4),('dbcxpjUN',9,8,'2021-07-11 00:00:00',2),('gjhh5N4j',12,12,'2021-07-11 00:00:00',13),('kTdLM27K',1,5,'2021-04-12 00:00:00',10),('Oo4m8eq5',5,20,'2021-04-12 00:00:00',3),('r3mwaqwu',5,10,'2021-05-12 00:00:00',30),('SpOxYUGY',19,10,'2021-12-01 00:00:00',5),('UgpG4RxS',3,10,'2021-04-12 00:00:00',3);
+INSERT INTO `promocode` VALUES ('2FB6RmGf',4,50,'2021-04-12 00:00:00',2),('749cVBnO',2,3,'2021-12-18 13:17:17',4),('gjhh5N4j',12,12,'2021-07-11 00:00:00',13),('kTdLM27K',1,5,'2021-04-12 00:00:00',10),('Oo4m8eq5',5,20,'2021-04-12 00:00:00',3),('r3mwaqwu',5,10,'2021-05-12 00:00:00',30),('SpOxYUGY',19,10,'2021-12-01 00:00:00',5),('UgpG4RxS',3,10,'2021-04-12 00:00:00',10);
 /*!40000 ALTER TABLE `promocode` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -423,4 +423,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-30  0:41:58
+-- Dump completed on 2021-03-31  2:17:05

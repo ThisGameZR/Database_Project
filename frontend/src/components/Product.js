@@ -15,8 +15,8 @@ export default class Product extends Component {
         this.state = {
             search: "",
             loading: false,
-            products: [],
             filter: [],
+            products: [],
             filterReady: false,
             productReady: false,
             supplierOptions: [],
@@ -26,12 +26,13 @@ export default class Product extends Component {
             cartNum: 0,
             some: [],
             pagenumber: 1,
-            limit: null,
+            allProducts: [],
         }
 
-        axios.get('/products/getLimit').then(res => {
-            this.state.limit = res.data.number
+        axios.get('/products').then(res => {
+            this.state.products = res.data
         })
+
         this.GetAllProducts();
         this.GetFilter();
 
@@ -43,25 +44,26 @@ export default class Product extends Component {
             this.GetAllProducts()
             this.GetFilter()
         }
+
     }
 
     GetAllProducts = () => {
 
-        axios.get('/products', { params: { limit: this.state.pagenumber } }).then(res => {
+        axios.get('/products').then(res => {
+            this.state.allProducts = res.data
             this.setState({
-                products: res.data,
                 productReady: true
             })
         })
     };
 
-    GetFilter = () => {
+    GetFilter = async () => {
 
-        axios.get('/products/getsupplier').then(res => {
-            this.state.filter.push(res.data)
+        await axios.get('/products/getsupplier').then(async res => {
+            this.state.filter[0] = res.data
 
-            axios.get('/products/getsize').then(res2 => {
-                this.state.filter.push(res2.data)
+            await axios.get('/products/getsize').then(res2 => {
+                this.state.filter[1] = res2.data
 
                 this.setState({ filterReady: true })
             })
@@ -70,7 +72,7 @@ export default class Product extends Component {
 
     ProductSearch = (e) => {
         this.setState({ productReady: false })
-        axios.get('/products', { params: { limit: this.state.pagenumber } }).then(res => {
+        axios.get('/products').then(res => {
             let keyword = e.target.value;
 
             this.setState({
@@ -91,7 +93,14 @@ export default class Product extends Component {
                 products: productspecified,
                 productReady: true
             })
+
         })
+        if (e.target.value == "") {
+            axios.get('/products').then(res => {
+                this.setState({ products: res.data })
+            })
+            this.GetAllProducts()
+        }
     };
 
     ProductRender = () => {
@@ -101,9 +110,9 @@ export default class Product extends Component {
             )
         }
         else {
-            return this.state.products.map((item) => {
-                if (this.state.sizeValue.length == 0) {
-                    if (this.state.supplierValue == item.SID || this.state.supplierValue == 0) {
+            if (this.state.supplierValue == 0 && this.state.sizeValue.length == 0 && this.state.search == "") {
+                return this.state.allProducts.map((item, i) => {
+                    if (i < this.state.pagenumber * 9 && i >= (this.state.pagenumber - 1) * 9) {
                         { this.state.some[item.PID] = item }
                         return (
                             <Card key={item.PID}>
@@ -119,13 +128,24 @@ export default class Product extends Component {
                             </Card>
                         )
                     }
-                }
-                else {
-                    let sizeFilter = []
-                    this.state.sizeValue.forEach(item => {
-                        sizeFilter.push(item.name)
+                })
+            } else {
+                let data = []
+                let sizeFilter = []
+                this.state.sizeValue.forEach(item => {
+                    sizeFilter.push(item.name)
+                })
+                this.state.allProducts.map(el1 => {
+                    this.state.products.map(el2 => {
+                        if (el1.PID == el2.PID || el1.SID == this.state.supplierValue || sizeFilter.includes(el1.Size))
+                            data.push(el2)
                     })
-                    if ((this.state.supplierValue == item.SID || this.state.supplierValue == 0) && sizeFilter.includes(item.Size)) {
+                })
+                const set = new Set(data)
+                const array = [...set]
+
+                return array.map((item, i) => {
+                    if (i < this.state.pagenumber * 9 && i >= (this.state.pagenumber - 1) * 9) {
                         { this.state.some[item.PID] = item }
                         return (
                             <Card key={item.PID}>
@@ -133,7 +153,7 @@ export default class Product extends Component {
                                     <Card.Title>{item.ProductName}</Card.Title>
                                     <Card.Text>Made by {item.SName}</Card.Text>
                                     <Card.Text>Size: {item.Size}</Card.Text>
-                                    <h1>${item.UnitPrice}</h1>
+                                    <h2>${item.UnitPrice}</h2>
                                     {item.Stocks === 0 ? <Button variant="secondary">SOLD OUT</Button> :
                                         <Button variant="primary" value={item.PID} onClick={(e) => this.AddToCart(e)}>Add to Cart</Button>
                                     }
@@ -141,13 +161,12 @@ export default class Product extends Component {
                             </Card>
                         )
                     }
-                }
-            })
+                })
+            }
         }
     }
 
     Supplier_FilterRender = () => {
-
         if (!this.state.filterReady) {
             return (
                 <Spinner animation="border" role="status" />
@@ -157,6 +176,12 @@ export default class Product extends Component {
         else return this.state.filter[0].map((filter, i) => {
             this.state.supplierOptions[i] =
                 { name: `${filter.SName}`, value: filter.SID }
+
+            if (this.state.filter[0].length - 1 == i) {
+                this.state.supplierOptions[i + 1] = {
+                    name: "ALL SUPPLIER", value: 0
+                }
+            }
         })
     }
 
@@ -178,8 +203,6 @@ export default class Product extends Component {
 
     updateSupplierValue(e) {
         this.setState({ supplierValue: e })
-        if (this.state.supplierOptions[this.state.supplierOptions.length - 1].value != 0)
-            this.setState({ supplierOptions: this.state.supplierOptions.concat([{ name: "All", value: 0 }]) })
     }
 
     updateSizeValue(e) {
@@ -221,13 +244,13 @@ export default class Product extends Component {
     }
 
     renderPage = () => {
-        let pages = Math.ceil(this.state.limit / 9)
+        let pages = Math.ceil(this.state.products.length / 9)
         let page = []
         page.push(
-            <Pagination.First onClick={() => this.setState({ pagenumber: 1 })}></Pagination.First>
+            <Pagination.First key="first" onClick={() => this.setState({ pagenumber: 1 })}></Pagination.First>
         )
         page.push(
-            <Pagination.Prev onClick={() => {
+            <Pagination.Prev key="prev" onClick={() => {
                 if (this.state.pagenumber != 1)
                     this.setState({ pagenumber: this.state.pagenumber - 1 })
             }}></Pagination.Prev>
@@ -240,13 +263,13 @@ export default class Product extends Component {
             )
         }
         page.push(
-            <Pagination.Next onClick={() => {
+            <Pagination.Next key="next" onClick={() => {
                 if (this.state.pagenumber + 1 <= pages)
                     this.setState({ pagenumber: this.state.pagenumber + 1 })
             }}></Pagination.Next>
         )
         page.push(
-            <Pagination.Last onClick={() => this.setState({ pagenumber: pages })}></Pagination.Last>
+            <Pagination.Last key="last" onClick={() => this.setState({ pagenumber: pages })}></Pagination.Last>
         )
         return page
     }
@@ -300,7 +323,7 @@ export default class Product extends Component {
                 </Button>
 
                 { this.state.search == "" ? <></> : <h2>Search for: {this.state.search}</h2>}
-                { this.state.products.length == 0 ? <h2>No result</h2> : <></>}
+                { this.state.allProducts.length == 0 ? <h2>No result</h2> : <></>}
 
                 {/*Product Cards*/}
                 <CardColumns>

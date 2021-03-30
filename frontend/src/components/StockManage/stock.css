@@ -1,0 +1,8 @@
+#search{
+    background-color: slategray;
+    color:#fff
+}
+
+#search::placeholder{
+    color:#fff
+}
