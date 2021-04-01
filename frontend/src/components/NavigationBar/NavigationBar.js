@@ -1,31 +1,34 @@
 import React, { useState, Component } from 'react';
 import { Container, Image, Navbar, Nav, NavDropdown, DropdownButton, Dropdown } from 'react-bootstrap';
 import axios from "axios";
-import shoppingCart from './Images/shoppingCart.png';
+import shoppingCart from '../Images/shoppingCart.png';
 import LoginForm from './LoginForm';
-import './CSS/Navigation.css';
+import '../CSS/Navigation.css';
 import { connect } from 'react-redux';
 
 export class NavigationBar extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             loginYet: false,
             position: null,
         }
-        axios.get('/login').then(res => {
-            if (res.data.session?.user) {
-                this.setState({
-                    loginYet: true,
-                    position: res.data.session.user.position
-                })
-            }
-        })
+
     }
 
     setLoginYet = (bool) => {
-        this.setState({ loginYet: bool })
+        if (bool) {
+
+            axios.get('/login').then(res => {
+                if (res.data.session?.user) {
+                    this.setState({
+                        loginYet: true,
+                        position: res.data.session.user.position
+                    })
+                }
+            })
+        }
     }
 
     render() {
@@ -57,8 +60,7 @@ export class NavigationBar extends Component {
                             </NavDropdown>
                             {this.state.loginYet == true ? <Nav.Link href="/customerMember">Customer Registor</Nav.Link> : null}
                             {this.state.loginYet == true ? <Nav.Link href="/EditCustomer">Edit Customer</Nav.Link> : null}
-                            {this.state.loginYet == true ? <Nav.Link href="/StockManagement">Stock & Coupon</Nav.Link> : null}
-                            {this.state.loginYet == true ? <Nav.Link href="/OrderManagement">Order & Invoice</Nav.Link> : null}
+                            {this.state.loginYet == true ? <Nav.Link href="/SaleManagement">Sale Management</Nav.Link> : null}
                             {this.state.position == "Manager" ? <Nav.Link href="/EmployeeManagement">Employee Management</Nav.Link> : null}
                         </Nav>
                         <LoginForm setLoginYet={(bool) => this.setLoginYet(bool)} />

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Container, Table, FormControl, InputGroup, Button } from 'react-bootstrap'
 import axios from 'axios'
-import './stock.css'
+import './CSS/stock.css'
 import Swal from 'sweetalert2'
 
 export class Stock extends Component {

@@ -3,8 +3,8 @@ import axios from "axios";
 import { Container, InputGroup, FormControl, Card, Button, CardColumns, Spinner, Form, Modal, Badge, Pagination } from "react-bootstrap";
 import SelectSearch, { fuzzySearch } from 'react-select-search'
 import Select from 'react-select'
-import './CSS/SelectSearch.css'
-import images from './Images/images'
+import '../CSS/SelectSearch.css'
+import images from '../Images/images'
 import ShoppingCart from './ShoppingCart'
 
 export default class Product extends Component {

@@ -1,23 +1,24 @@
 import React, { Component } from 'react'
 import { Container, Tab, Nav, Col, Row, Button } from 'react-bootstrap'
-import Coupon from './StockManage/Coupon'
 import { Link } from 'react-router-dom'
-import Stock from './StockManage/Stock'
 import axios from 'axios'
+import { Stock, Coupon, Order, Invoice } from './SaleManage/SaleExport'
 
-export class StockManagement extends Component {
+export class SaleManagement extends Component {
 
     constructor(props) {
         super(props)
 
         this.state = {
-
+            loginYet: false,
         }
+
         axios.get('/login').then(res => {
             if (res.data.session?.user) {
                 this.setState({ loginYet: true })
             }
         })
+
     }
 
 
@@ -29,11 +30,17 @@ export class StockManagement extends Component {
                         <Row>
                             <Col sm={3}>
                                 <Nav className="flex-column" variant="pills">>
-                                <Nav.Item>
+                                    <Nav.Item>
                                         <Nav.Link eventKey="stock">Edit Stock</Nav.Link>
                                     </Nav.Item>
                                     <Nav.Item>
                                         <Nav.Link eventKey="coupon">Edit Coupon</Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item>
+                                        <Nav.Link eventKey="order">Edit Order</Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item>
+                                        <Nav.Link eventKey="invoice">Edit Invoice</Nav.Link>
                                     </Nav.Item>
                                 </Nav>
                             </Col>
@@ -44,6 +51,12 @@ export class StockManagement extends Component {
                                     </Tab.Pane>
                                     <Tab.Pane eventKey="coupon">
                                         <Coupon></Coupon>
+                                    </Tab.Pane>
+                                    <Tab.Pane eventKey="stock">
+                                        <Order></Order>
+                                    </Tab.Pane>
+                                    <Tab.Pane eventKey="coupon">
+                                        <Invoice></Invoice>
                                     </Tab.Pane>
                                 </Tab.Content>
                             </Col>
@@ -62,5 +75,5 @@ export class StockManagement extends Component {
     }
 }
 
-export default StockManagement
+export default SaleManagement
 

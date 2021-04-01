@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export class OrderManagement extends Component {
+export class Order extends Component {
 
     constructor(props) {
         super(props)
@@ -20,6 +20,4 @@ export class OrderManagement extends Component {
     }
 }
 
-export default OrderManagement
-
-
+export default Order
