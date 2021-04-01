@@ -11,7 +11,6 @@ export default class Product extends Component {
     constructor(props) {
         super(props);
 
-
         this.state = {
             search: "",
             loading: false,
@@ -135,12 +134,36 @@ export default class Product extends Component {
                 this.state.sizeValue.forEach(item => {
                     sizeFilter.push(item.name)
                 })
-                this.state.allProducts.map(el1 => {
-                    this.state.products.map(el2 => {
-                        if (el1.PID == el2.PID || el1.SID == this.state.supplierValue || sizeFilter.includes(el1.Size))
-                            data.push(el2)
+
+                if (this.state.supplierValue == 0 && sizeFilter?.length != 0) {
+                    this.state.allProducts.map(el1 => {
+                        this.state.products.map(el2 => {
+                            if (el1.PID == el2.PID && sizeFilter.includes(el2.Size))
+                                data.push(el2)
+                        })
                     })
-                })
+                } else if (sizeFilter?.length == 0 && this.state.supplierValue != 0) {
+                    this.state.allProducts.map(el1 => {
+                        this.state.products.map(el2 => {
+                            if (el1.PID == el2.PID && el2.SID == this.state.supplierValue)
+                                data.push(el2)
+                        })
+                    })
+                } else if (this.state.supplierValue == 0 && sizeFilter?.length == 0) {
+                    this.state.allProducts.map(el1 => {
+                        this.state.products.map(el2 => {
+                            if (el1.PID == el2.PID)
+                                data.push(el2)
+                        })
+                    })
+                } else {
+                    this.state.allProducts.map(el1 => {
+                        this.state.products.map(el2 => {
+                            if (el1.PID == el2.PID && el2.SID == this.state.supplierValue && sizeFilter.includes(el2.Size))
+                                data.push(el2)
+                        })
+                    })
+                }
                 const set = new Set(data)
                 const array = [...set]
 
