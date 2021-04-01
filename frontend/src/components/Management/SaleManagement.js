@@ -29,7 +29,7 @@ export class SaleManagement extends Component {
                     <Tab.Container id="tab" defaultActiveKey="stock">
                         <Row>
                             <Col sm={3}>
-                                <Nav className="flex-column" variant="pills">>
+                                <Nav className="flex-column" variant="pills">
                                     <Nav.Item>
                                         <Nav.Link eventKey="stock">Edit Stock</Nav.Link>
                                     </Nav.Item>
