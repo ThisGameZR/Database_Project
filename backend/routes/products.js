@@ -82,4 +82,14 @@ router.post('/editStock', (req, res) => {
     })
 })
 
+router.get('/coupon', (req, res) => {
+    pool.query(`select * from promocode natural join product`, (err, result) => {
+        return res.send(JSON.stringify(result))
+    })
+})
+
+router.post('/editCoupon', (req, res) => {
+
+})
+
 module.exports = router;
