@@ -20,6 +20,12 @@ export class Coupon extends Component {
         this.setCoupon()
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.onChange != prevProps.onChange) {
+            this.setCoupon()
+        }
+    }
+
     setCoupon() {
         axios.get('/products/coupon').then(res => {
             this.setState({ coupon: res.data })

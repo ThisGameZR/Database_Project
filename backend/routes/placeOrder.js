@@ -54,22 +54,22 @@ router.post('/submitOrder', async (req, res) => {
     let sql
     if (date == '1970-01-01 07:00:00') {
         if (coupon == null) {
-            sql = `insert into \`order\` (eid,cid,caddrid,totalprice,totalpoints,promocode,orderdate,requireddate,paymentdate) values (
-            ${data.eid},${data.cid},${data.address},${total},${data.points},null,'${newdate}',null,null
+            sql = `insert into \`order\` (eid,cid,caddrid,totalprice,totalpoints,promocode,orderdate,requireddate,paymentdate,statusid) values (
+            ${data.eid},${data.cid},${data.address},${total},${data.points},null,'${newdate}',null,null,1
             )`
         } else {
-            sql = `insert into \`order\` (eid,cid,caddrid,totalprice,totalpoints,promocode,orderdate,requireddate,paymentdate) values (
-                ${data.eid},${data.cid},${data.address},${total},${data.points},'${coupon}','${newdate}',null,null
+            sql = `insert into \`order\` (eid,cid,caddrid,totalprice,totalpoints,promocode,orderdate,requireddate,paymentdate,statusid) values (
+                ${data.eid},${data.cid},${data.address},${total},${data.points},'${coupon}','${newdate}',null,null,1
             )`
         }
     } else {
         if (coupon == null) {
-            sql = `insert into \`order\` (eid,cid,caddrid,totalprice,totalpoints,promocode,orderdate,requireddate,paymentdate) values (
-            ${data.eid},${data.cid},${data.address},${total},${data.points},null,'${newdate}','${date}',null
+            sql = `insert into \`order\` (eid,cid,caddrid,totalprice,totalpoints,promocode,orderdate,requireddate,paymentdate,statusid) values (
+            ${data.eid},${data.cid},${data.address},${total},${data.points},null,'${newdate}','${date}',null,1
             )`
         } else {
-            sql = `insert into \`order\` (eid,cid,caddrid,totalprice,totalpoints,promocode,orderdate,requireddate,paymentdate) values (
-            ${data.eid},${data.cid},${data.address},${total},${data.points},'${coupon}','${newdate}','${date}',null
+            sql = `insert into \`order\` (eid,cid,caddrid,totalprice,totalpoints,promocode,orderdate,requireddate,paymentdate,statusid) values (
+            ${data.eid},${data.cid},${data.address},${total},${data.points},'${coupon}','${newdate}','${date}',null,1
         )`
         }
     }
@@ -116,14 +116,6 @@ router.post('/submitOrder', async (req, res) => {
                         })
                     })
 
-                    sql = `insert into invoice (cid,orderid,statusid) values(${data.cid},${orderid},1)`
-
-                    connection.execute(sql, (err, result) => {
-                        if (err) {
-                            throw err
-                        }
-                    })
-
                     if (coupon != null) {
                         sql = `update promocode set Available_number = Available_number - 1 where Code = '${coupon}'`
                         connection.execute(sql, (err, result) => {
@@ -168,6 +160,20 @@ router.post('/submitOrder', async (req, res) => {
 
     })
 
+})
+
+router.get('/getOrder', (req, res) => {
+    let sql = `select * from ((\`order\` natural join customer) natural join customer_addr) natural join order_status where eid = ${req.query.eid} order by orderid`
+    pool.query(sql, (err, result) => {
+        return res.send(JSON.stringify(result))
+    })
+})
+
+router.get('/getOrderStatus', (req, res) => {
+    let sql = `select * from order_status`
+    pool.query(sql, (err, result) => {
+        return res.send(JSON.stringify(result))
+    })
 })
 
 module.exports = router

@@ -29,7 +29,7 @@ export class SaleManagement extends Component {
                 <Container fluid>
                     <Tab.Container id="tab" defaultActiveKey="addproduct">
                         <Row>
-                            <Col sm={3}>
+                            <Col sm={2}>
                                 <Nav className="flex-column" variant="pills">
                                     <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })}>
                                         <Nav.Link eventKey="addproduct">Add Product</Nav.Link>
@@ -51,7 +51,7 @@ export class SaleManagement extends Component {
                                     </Nav.Item>
                                 </Nav>
                             </Col>
-                            <Col sm={9}>
+                            <Col sm={10}>
                                 <Tab.Content>
                                     <Tab.Pane eventKey="addproduct">
                                         <AddProduct></AddProduct>
@@ -63,7 +63,7 @@ export class SaleManagement extends Component {
                                         <Stock onChange={this.state.onChange}></Stock>
                                     </Tab.Pane>
                                     <Tab.Pane eventKey="coupon">
-                                        <Coupon></Coupon>
+                                        <Coupon onChange={this.state.onChange}></Coupon>
                                     </Tab.Pane>
                                     <Tab.Pane eventKey="order">
                                         <Order></Order>
