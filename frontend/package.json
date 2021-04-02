@@ -24,6 +24,7 @@
     "react-select-search": "^3.0.2",
     "redux": "^4.0.5",
     "sweetalert2": "^10.15.7",
+    "sweetalert2-react-content": "^3.3.1",
     "web-vitals": "^1.1.0"
   },
   "proxy": "http://localhost:3030",
