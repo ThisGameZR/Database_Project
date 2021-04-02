@@ -3,6 +3,7 @@ import { Container, Table, FormControl, InputGroup, Button } from 'react-bootstr
 import axios from 'axios'
 import './CSS/stock.css'
 import Swal from 'sweetalert2'
+import { FaTrashAlt } from 'react-icons/fa'
 
 export class Stock extends Component {
 
@@ -13,6 +14,12 @@ export class Stock extends Component {
             products: []
         }
         this.setProduct()
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.onChange != prevProps.onChange) {
+            this.setProduct()
+        }
     }
 
     setProduct() {
@@ -35,7 +42,7 @@ export class Stock extends Component {
                     </td>
                     <td>{el.SName}</td>
                     <td>
-                        <Button variant="success" style={{ width: "100%" }}
+                        <Button variant="warning" style={{ width: "100%", fontWeight: "bold" }}
                             onClick={() => this.editProduct(el.PID, "unitprice")}>
                             {el.UnitPrice}
                         </Button>
@@ -47,15 +54,38 @@ export class Stock extends Component {
                         </Button>
                     </td>
                     <td>
-                        <Button variant="danger" style={{ width: "100%" }}
+                        <Button variant="success" style={{ width: "100%" }}
                             onClick={() => this.editProduct(el.PID, "stocks")}>
                             {el.Stocks}
                         </Button>
                     </td>
+                    <td><Button variant="danger" style={{ width: "100%" }}
+                        onClick={() => this.deleteProduct(el.PID)}><FaTrashAlt /></Button></td>
                 </tr >
             )
         })
 
+    }
+
+    deleteProduct(pid) {
+        Swal.fire({
+            title: 'Are you sure?',
+            icon: 'question',
+            showCancelButton: true,
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                axios.post('/products/deleteProduct', {
+                    pid
+                }).then(res => {
+                    Swal.fire({
+                        title: `${res.data.status.toUpperCase()}`,
+                        text: `${res.data.message}`,
+                        icon: res.data.status,
+                    })
+                    this.setProduct()
+                })
+            }
+        })
     }
 
     editProduct = (pid, type) => {
@@ -134,6 +164,7 @@ export class Stock extends Component {
                             <th>UnitPrice</th>
                             <th>Size</th>
                             <th>Stocks</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>

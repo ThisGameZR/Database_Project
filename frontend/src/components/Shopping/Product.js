@@ -117,8 +117,8 @@ export default class Product extends Component {
                             <Card key={item.PID}>
                                 <Card.Body>
                                     <Card.Title>{item.ProductName}</Card.Title>
-                                    <Card.Text>Made by {item.SName}</Card.Text>
-                                    <Card.Text>Size: {item.Size}</Card.Text>
+                                    <Card.Text style={{ fontSize: "20px" }}><Badge variant="info">{item.SName}</Badge>
+                                        <Badge variant="dark">Size: {item.Size}</Badge></Card.Text>
                                     <h2>${item.UnitPrice}</h2>
                                     {item.Stocks === 0 ? <Button variant="secondary">SOLD OUT</Button> :
                                         <Button variant="primary" value={item.PID} onClick={(e) => this.AddToCart(e)}>Add to Cart</Button>

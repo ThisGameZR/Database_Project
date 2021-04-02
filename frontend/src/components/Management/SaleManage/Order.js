@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Container, Table } from 'react-bootstrap'
 
 export class Order extends Component {
 
@@ -13,9 +14,9 @@ export class Order extends Component {
 
     render() {
         return (
-            <div>
-
-            </div>
+            <Container>
+                <Table></Table>
+            </Container>
         )
     }
 }

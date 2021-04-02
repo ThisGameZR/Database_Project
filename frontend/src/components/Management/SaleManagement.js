@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Container, Tab, Nav, Col, Row, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import { Stock, Coupon, Order, Invoice } from './SaleManage/SaleExport'
+import { Stock, Coupon, Order, Invoice, AddProduct, AddCoupon } from './SaleManage/SaleExport'
 
 export class SaleManagement extends Component {
 
@@ -11,6 +11,7 @@ export class SaleManagement extends Component {
 
         this.state = {
             loginYet: false,
+            onChange: false,
         }
 
         axios.get('/login').then(res => {
@@ -26,36 +27,48 @@ export class SaleManagement extends Component {
         if (this.state?.loginYet === true) {
             return (
                 <Container fluid>
-                    <Tab.Container id="tab" defaultActiveKey="stock">
+                    <Tab.Container id="tab" defaultActiveKey="addproduct">
                         <Row>
                             <Col sm={3}>
                                 <Nav className="flex-column" variant="pills">
-                                    <Nav.Item>
+                                    <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })}>
+                                        <Nav.Link eventKey="addproduct">Add Product</Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })}>
+                                        <Nav.Link eventKey="addcoupon">Add Coupon</Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })} >
                                         <Nav.Link eventKey="stock">Edit Stock</Nav.Link>
                                     </Nav.Item>
-                                    <Nav.Item>
+                                    <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })} >
                                         <Nav.Link eventKey="coupon">Edit Coupon</Nav.Link>
                                     </Nav.Item>
-                                    <Nav.Item>
+                                    <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })} >
                                         <Nav.Link eventKey="order">Edit Order</Nav.Link>
                                     </Nav.Item>
-                                    <Nav.Item>
+                                    <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })} >
                                         <Nav.Link eventKey="invoice">Edit Invoice</Nav.Link>
                                     </Nav.Item>
                                 </Nav>
                             </Col>
                             <Col sm={9}>
                                 <Tab.Content>
+                                    <Tab.Pane eventKey="addproduct">
+                                        <AddProduct></AddProduct>
+                                    </Tab.Pane>
+                                    <Tab.Pane eventKey="addcoupon">
+                                        <AddCoupon></AddCoupon>
+                                    </Tab.Pane>
                                     <Tab.Pane eventKey="stock">
-                                        <Stock></Stock>
+                                        <Stock onChange={this.state.onChange}></Stock>
                                     </Tab.Pane>
                                     <Tab.Pane eventKey="coupon">
                                         <Coupon></Coupon>
                                     </Tab.Pane>
-                                    <Tab.Pane eventKey="stock">
+                                    <Tab.Pane eventKey="order">
                                         <Order></Order>
                                     </Tab.Pane>
-                                    <Tab.Pane eventKey="coupon">
+                                    <Tab.Pane eventKey="invoice">
                                         <Invoice></Invoice>
                                     </Tab.Pane>
                                 </Tab.Content>

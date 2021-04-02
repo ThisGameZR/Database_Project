@@ -4,6 +4,7 @@ import { Button, Container, Table } from 'react-bootstrap'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import DatePicker from './DatePicker'
+import { FaTrashAlt } from 'react-icons/fa'
 
 const ReactSwal = withReactContent(Swal)
 
@@ -61,6 +62,7 @@ export class Coupon extends Component {
                             {el.Available_number}
                         </Button>
                     </td>
+                    <td><Button variant="danger" style={{ width: "100%" }}><FaTrashAlt /></Button></td>
                 </tr>
             )
         })
@@ -122,31 +124,6 @@ export class Coupon extends Component {
         }
     }
 
-    addCoupon = () => {
-        Swal.fire({
-            title: 'Enter Coupon Code',
-            icon: 'info',
-            input: 'text',
-            showCancelButton: true,
-            showLoaderOnConfirm: true,
-            preConfirm: (value) => {
-                axios.post('/products/addCoupon', {
-                    value
-                }).then(res => {
-
-                    Swal.fire({
-                        title: `${res.data.status.toUpperCase()}`,
-                        text: `${res.data.message}`,
-                        icon: res.data.status,
-                    })
-
-                    this.setCoupon()
-
-                })
-            }
-        })
-    }
-
     render() {
         return (
             <Container>
@@ -159,15 +136,11 @@ export class Coupon extends Component {
                             <th>Discount</th>
                             <th>Expired Date</th>
                             <th>Available Number</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {this.renderCoupon()}
-                        <tr>
-                            <td>
-                                <Button onClick={() => this.addCoupon()}>ADD COUPON</Button>
-                            </td>
-                        </tr>
                     </tbody>
                 </Table>
             </Container>

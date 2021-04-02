@@ -42,11 +42,17 @@ router.post('/submitOrder', async (req, res) => {
         coupon = null
     }
 
-    let date = new Date(req.body.shiptime).toISOString().slice(0, 19).replace('T', ' ')
-    let newdate = new Date().toISOString().slice(0, 19).replace('T', ' ')
+    let date = new Date(req.body.shiptime)
+    date.setHours(date.getHours() + 7)
+    date = new Date(date).toISOString().slice(0, 19).replace('T', ' ')
+
+    let newdate = new Date()
+    newdate.setHours(newdate.getHours() + 7)
+    newdate = new Date(newdate).toISOString().slice(0, 19).replace('T', ' ')
+
     let total = parseFloat(data.total.toFixed(2))
     let sql
-    if (date == '1970-01-01 00:00:00') {
+    if (date == '1970-01-01 07:00:00') {
         if (coupon == null) {
             sql = `insert into \`order\` (eid,cid,caddrid,totalprice,totalpoints,promocode,orderdate,requireddate,paymentdate) values (
             ${data.eid},${data.cid},${data.address},${total},${data.points},null,'${newdate}',null,null
