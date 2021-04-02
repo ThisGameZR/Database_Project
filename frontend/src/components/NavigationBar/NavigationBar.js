@@ -4,7 +4,6 @@ import axios from "axios";
 import shoppingCart from '../Images/shoppingCart.png';
 import LoginForm from './LoginForm';
 import '../CSS/Navigation.css';
-import { connect } from 'react-redux';
 
 export class NavigationBar extends Component {
 

@@ -2,6 +2,10 @@ import axios from 'axios'
 import React, { Component } from 'react'
 import { Button, Container, Table } from 'react-bootstrap'
 import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import DatePicker from './DatePicker'
+
+const ReactSwal = withReactContent(Swal)
 
 export class Coupon extends Component {
 
@@ -10,6 +14,7 @@ export class Coupon extends Component {
 
         this.state = {
             coupon: [],
+            expiretime: null,
         }
         this.setCoupon()
     }
@@ -31,7 +36,12 @@ export class Coupon extends Component {
                             {el.Code}
                         </Button>
                     </td>
-                    <td>{el.PID}</td>
+                    <td>
+                        <Button variant="primary" style={{ width: "100%" }}
+                            onClick={() => this.editCoupon(el.Code, "PID")}>
+                            {el.PID}
+                        </Button>
+                    </td>
                     <td>{el.ProductName}</td>
                     <td>
                         <Button variant="success" style={{ width: "100%" }}
@@ -58,17 +68,70 @@ export class Coupon extends Component {
 
     editCoupon = (code, type) => {
 
-        Swal.fire({
+        if (type != "ExpiredDate") {
+            Swal.fire({
 
-            title: 'Enter new value',
+                title: 'Enter new value',
+                icon: 'info',
+                input: 'text',
+                showCancelButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (value) => {
+
+                    axios.post('/products/editCoupon', {
+                        value, code, type
+                    }).then(res => {
+
+                        Swal.fire({
+                            title: `${res.data.status.toUpperCase()}`,
+                            text: `${res.data.message}`,
+                            icon: res.data.status,
+                        })
+
+                        this.setCoupon()
+                    })
+                }
+            })
+        } else {
+
+            ReactSwal.fire({
+
+                title: 'Select Date',
+                html: (<DatePicker onChangeValue={(value) => this.setState({ expiretime: new Date(value) })} />),
+                icon: 'info',
+                showCancelButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+
+                    axios.post('/products/editCoupon', {
+                        value: this.state.expiretime, code, type
+                    }).then(res => {
+
+                        Swal.fire({
+                            title: `${res.data.status.toUpperCase()}`,
+                            text: `${res.data.message}`,
+                            icon: res.data.status,
+                        })
+
+                        this.setCoupon()
+                    })
+                }
+
+            })
+
+        }
+    }
+
+    addCoupon = () => {
+        Swal.fire({
+            title: 'Enter Coupon Code',
             icon: 'info',
             input: 'text',
             showCancelButton: true,
             showLoaderOnConfirm: true,
             preConfirm: (value) => {
-
-                axios.post('/products/editCoupon', {
-                    value, code, type
+                axios.post('/products/addCoupon', {
+                    value
                 }).then(res => {
 
                     Swal.fire({
@@ -78,10 +141,10 @@ export class Coupon extends Component {
                     })
 
                     this.setCoupon()
+
                 })
             }
         })
-
     }
 
     render() {
@@ -100,6 +163,11 @@ export class Coupon extends Component {
                     </thead>
                     <tbody>
                         {this.renderCoupon()}
+                        <tr>
+                            <td>
+                                <Button onClick={() => this.addCoupon()}>ADD COUPON</Button>
+                            </td>
+                        </tr>
                     </tbody>
                 </Table>
             </Container>
