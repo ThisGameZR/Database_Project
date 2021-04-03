@@ -12,7 +12,7 @@ export class AddCoupon extends Component {
         this.state = {
             pid: null,
             expiredtime: null,
-            ProductName: null,
+            ProductName: "",
         }
 
     }
@@ -27,6 +27,10 @@ export class AddCoupon extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (this.state.pid != prevState.pid) {
+            if (this.state.pid == "") {
+                this.setState({ ProductName: "" })
+                return
+            }
             this.setProductName()
         }
     }
@@ -70,7 +74,7 @@ export class AddCoupon extends Component {
                                 <InputGroup.Prepend>
                                     <InputGroup.Text>PRODUCT NAME</InputGroup.Text>
                                 </InputGroup.Prepend>
-                                <FormControl value={this.state.ProductName} disabled></FormControl>
+                                <FormControl value={this.state.ProductName} disabled style={{ background: "pink" }}></FormControl>
                             </InputGroup>
                             <InputGroup>
                                 <InputGroup.Prepend>

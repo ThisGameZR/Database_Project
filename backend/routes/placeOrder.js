@@ -170,9 +170,27 @@ router.get('/getOrder', (req, res) => {
 })
 
 router.get('/getOrderStatus', (req, res) => {
-    let sql = `select * from order_status`
+    let sql = `select row_number()	over(order by statusid asc) as id , StatusID, Description from order_status`
     pool.query(sql, (err, result) => {
         return res.send(JSON.stringify(result))
+    })
+})
+
+router.post('/updateOrderStatus', (req, res) => {
+    let sql = `update \`order\` set statusid = ${req.body.StatusID} where orderid = ${req.body.OrderID}`
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.log(err)
+            return res.send({ status: 'error', message: err.message })
+        }
+        sql = `select Description from order_status where statusid = ${req.body.StatusID}`
+        pool.query(sql, (err, result) => {
+            if (err) {
+                console.log(err)
+                return res.send({ status: 'error', message: err.message })
+            }
+            return res.send({ status: 'success', message: `Update order no. ${req.body.OrderID} status to ${result[0].Description}` })
+        })
     })
 })
 

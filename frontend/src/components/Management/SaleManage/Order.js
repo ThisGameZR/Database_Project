@@ -25,19 +25,31 @@ export class Order extends Component {
             this.setOrderInfo()
         })
 
-        this.setOrderStatus()
+    }
+
+    componentDidUpdate(prevProps) {
+
+        if (this.props.onChange1 != prevProps.onChange1) {
+            this.setOrderStatus()
+        }
+    }
+
+    componentWillUnmount() {
+        this.setState({ orderStatus: [] })
     }
 
     async setOrderStatus() {
         axios.get('/placeOrder/getOrderStatus').then(async res => {
             this.state.orderStatus = await res.data
-            this.state.orderStatus[this.state.orderStatus.length] = await {
-                StatusID: 7,
-                Description: "ALL STATUS"
+            this.state.orderStatus[this.state.orderStatus.length] = {
+                "id": 7,
+                "StatusID": 7,
+                "Description": "ALL STATUS"
             }
-            await this.setState({
+            this.setState({
                 orderStatus: this.state.orderStatus,
             })
+
         })
     }
 
@@ -63,7 +75,7 @@ export class Order extends Component {
                             {el.PaymentDate ? new Date(el.PaymentDate).toLocaleString() : <VscClose></VscClose>}
                         </td>
                         <td><Button variant="success" style={{ width: "100%" }}
-                            onClick={() => this.updateOrderStatus()}>
+                            onClick={() => this.updateOrderStatus(el.OrderID)}>
                             {el.Description}
                         </Button>
                         </td>
@@ -72,7 +84,7 @@ export class Order extends Component {
         })
     }
 
-    updateOrderStatus() {
+    updateOrderStatus(orderid) {
         Swal.fire({
             title: 'Update Status',
             input: 'select',
@@ -88,8 +100,18 @@ export class Order extends Component {
             },
             showCancelButton: true,
             showLoaderOnConfirm: true,
-            preConfirm: () => {
-
+            preConfirm: (input) => {
+                axios.post('/placeOrder/updateOrderStatus', {
+                    StatusID: input,
+                    OrderID: orderid,
+                }).then(res => {
+                    Swal.fire({
+                        title: `${res.data.status.toUpperCase()}`,
+                        text: `${res.data.message}`,
+                        icon: res.data.status,
+                    })
+                    this.setOrderInfo()
+                })
             }
         })
     }
@@ -103,6 +125,11 @@ export class Order extends Component {
                 labelField="Description"
                 valueField="StatusID"
                 color="#ff6984"
+                clearOnBlur={true}
+                clearOnSelect={true}
+                sortBy="Description"
+                searchBy="Description"
+                closeOnSelect={true}
             ></Select>
         )
     }
@@ -113,15 +140,17 @@ export class Order extends Component {
                 {this.state.orderStatus.length != 0 ? this.renderSelect() : null}
                 <Table>
                     <thead>
-                        <th>OID</th>
-                        <th>CID</th>
-                        <th>Customer</th>
-                        <th>Address</th>
-                        <th>TotalPrice</th>
-                        <th>OrderDate</th>
-                        <th>RequiredDate</th>
-                        <th>PaymentDate</th>
-                        <th>Status</th>
+                        <tr>
+                            <th>OID</th>
+                            <th>CID</th>
+                            <th>Customer</th>
+                            <th>Address</th>
+                            <th>TotalPrice</th>
+                            <th>OrderDate</th>
+                            <th>RequiredDate</th>
+                            <th>PaymentDate</th>
+                            <th>Status</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {this.state.orderInfo.length != 0 ? this.renderOrderInfo() : null}

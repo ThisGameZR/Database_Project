@@ -231,6 +231,10 @@ router.get('/getProductName', (req, res) => {
         return res.send({ status: 'error' })
     }
 
+    if (isNaN(req.query.pid)) {
+        return res.send({ status: 'success', name: 'Please enter number' })
+    }
+
     let sql = `select productname from product where pid = ${req.query.pid}`
 
     pool.query(sql, (err, result) => {

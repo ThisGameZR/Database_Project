@@ -20,6 +20,16 @@ export class AddProduct extends Component {
         this.declareOptions()
     }
 
+    // componentDidUpdate(prevProps) {
+    //     if (this.props.onChange != prevProps.onChange) {
+    //         this.declareOptions()
+    //     }
+    // }
+
+    componentWillUnmount() {
+        this.setState({ sizeOptions: [] })
+    }
+
     async declareOptions() {
         let sizeOptions = await [
             {
@@ -148,6 +158,7 @@ export class AddProduct extends Component {
                                             : null}
                                         <Form.Control id="productname" placeholder="Product Name"></Form.Control>
                                         <Form.Control id="unitprice" placeholder="Unit Price"></Form.Control>
+
                                         {this.state.sizeOptions.length != 0 ?
                                             <Select
                                                 options={this.state.sizeOptions}

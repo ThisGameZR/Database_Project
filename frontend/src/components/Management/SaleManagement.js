@@ -12,6 +12,7 @@ export class SaleManagement extends Component {
         this.state = {
             loginYet: false,
             onChange: false,
+            onChange1: false,
         }
 
         axios.get('/login').then(res => {
@@ -31,10 +32,10 @@ export class SaleManagement extends Component {
                         <Row>
                             <Col sm={2}>
                                 <Nav className="flex-column" variant="pills">
-                                    <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })}>
+                                    <Nav.Item >
                                         <Nav.Link eventKey="addproduct">Add Product</Nav.Link>
                                     </Nav.Item>
-                                    <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })}>
+                                    <Nav.Item>
                                         <Nav.Link eventKey="addcoupon">Add Coupon</Nav.Link>
                                     </Nav.Item>
                                     <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })} >
@@ -43,7 +44,7 @@ export class SaleManagement extends Component {
                                     <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })} >
                                         <Nav.Link eventKey="coupon">Edit Coupon</Nav.Link>
                                     </Nav.Item>
-                                    <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })} >
+                                    <Nav.Item onClick={() => this.setState({ onChange1: !this.state.onChange1 })} >
                                         <Nav.Link eventKey="order">Edit Order</Nav.Link>
                                     </Nav.Item>
                                     <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })} >
@@ -54,10 +55,10 @@ export class SaleManagement extends Component {
                             <Col sm={10}>
                                 <Tab.Content>
                                     <Tab.Pane eventKey="addproduct">
-                                        <AddProduct></AddProduct>
+                                        <AddProduct ></AddProduct>
                                     </Tab.Pane>
                                     <Tab.Pane eventKey="addcoupon">
-                                        <AddCoupon></AddCoupon>
+                                        <AddCoupon onChange={this.state.onChange}></AddCoupon>
                                     </Tab.Pane>
                                     <Tab.Pane eventKey="stock">
                                         <Stock onChange={this.state.onChange}></Stock>
@@ -66,10 +67,10 @@ export class SaleManagement extends Component {
                                         <Coupon onChange={this.state.onChange}></Coupon>
                                     </Tab.Pane>
                                     <Tab.Pane eventKey="order">
-                                        <Order></Order>
+                                        <Order onChange1={this.state.onChange1}></Order>
                                     </Tab.Pane>
                                     <Tab.Pane eventKey="invoice">
-                                        <Invoice></Invoice>
+                                        <Invoice onChange={this.state.onChange}></Invoice>
                                     </Tab.Pane>
                                 </Tab.Content>
                             </Col>
