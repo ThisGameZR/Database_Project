@@ -18,7 +18,9 @@ export class SaleManagement extends Component {
 
         axios.get('/login').then(res => {
             if (res.data.session?.user) {
-                this.setState({ loginYet: true })
+                if (res.data.session.user.dno == "100") {
+                    this.setState({ loginYet: true })
+                }
             }
         })
 
@@ -82,7 +84,7 @@ export class SaleManagement extends Component {
         } else {
             return (
                 <div style={{ margin: "20px" }}>
-                    <h2>Sorry.. This page is only for our employee!</h2>
+                    <h2>Sorry.. This page is only for employee in Sale Department!</h2>
                     <Link to="/"><Button>GO BACK</Button></Link>
                 </div>
             );

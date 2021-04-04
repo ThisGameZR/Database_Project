@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { Component } from 'react'
-import { Button, Container, Table } from 'react-bootstrap'
+import { Button, Container, Table, InputGroup, FormControl } from 'react-bootstrap'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import DatePicker from './DatePicker'
@@ -130,9 +130,44 @@ export class Coupon extends Component {
         }
     }
 
+    Search = (e) => {
+        this.setState({ productReady: false })
+        axios.get('/products/coupon').then(res => {
+            let keyword = e.target.value;
+
+            this.setState({
+                search: keyword,
+                coupon: res.data
+            });
+
+            let regx = new RegExp(keyword, 'i')
+            let productspecified = [];
+
+            this.state.coupon.map((item) => {
+                if (regx.test(item.ProductName)) {
+                    productspecified.push(item)
+                }
+            })
+
+            this.setState({
+                coupon: productspecified,
+            })
+
+        })
+        if (e.target.value == "") {
+            this.setCoupon()
+        }
+    }
+
     render() {
         return (
             <Container>
+                <InputGroup>
+                    <InputGroup.Prepend>
+                        <InputGroup.Text>SEARCH FOR</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl autoComplete="off" onChange={(e) => this.Search(e)} id="search" placeholder="Type Product Name here"></FormControl>
+                </InputGroup>
                 <Table striped bordered hover responsive variant="dark">
                     <thead>
                         <tr>

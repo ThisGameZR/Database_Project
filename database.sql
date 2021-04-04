@@ -58,6 +58,7 @@ CREATE TABLE `customer_addr` (
   `Province` varchar(45) NOT NULL,
   `PostalCode` varchar(45) NOT NULL,
   `Country` varchar(45) NOT NULL,
+  `CONDITION` BIT DEFAULT 1,
   PRIMARY KEY (`CAddrID`),
   KEY `fk_CUSTOMER_ADDR_CUSTOMER1_idx` (`CID`),
   CONSTRAINT `fk_CUSTOMER_ADDR_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -70,7 +71,7 @@ CREATE TABLE `customer_addr` (
 
 LOCK TABLES `customer_addr` WRITE;
 /*!40000 ALTER TABLE `customer_addr` DISABLE KEYS */;
-INSERT INTO `customer_addr` VALUES (1,1,'2156 Cook Hill Road , Hartford','Hartford','Connecticut','06103','United States'),(2,2,'367  Emeral Dreams Drive','Streator','Illinois','61364','United States'),(3,3,'588  Spring Haven Trail','Montclair','New Jersey','07042','United States'),(4,4,'3242  Jarvisville Road','Freeport','New York','11520','United States'),(5,5,'586  Spring Haven Trail','Montclair','New Jersey','07042','United States'),(16,1,'3456  Straford Park','Harlan','Kentucky','40831','United States');
+INSERT INTO `customer_addr` VALUES (1,1,'2156 Cook Hill Road , Hartford','Hartford','Connecticut','06103','United States',1),(2,2,'367  Emeral Dreams Drive','Streator','Illinois','61364','United States',1),(3,3,'588  Spring Haven Trail','Montclair','New Jersey','07042','United States',1),(4,4,'3242  Jarvisville Road','Freeport','New York','11520','United States',1),(5,5,'586  Spring Haven Trail','Montclair','New Jersey','07042','United States',1),(16,1,'3456  Straford Park','Harlan','Kentucky','40831','United States',1);
 /*!40000 ALTER TABLE `customer_addr` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -140,6 +141,7 @@ CREATE TABLE `employee` (
   `Position` varchar(45) NOT NULL,
   `Salary` int NOT NULL,
   `Dno` int DEFAULT NULL,
+  `CONDITION` BIT DEFAULT 1, 
   PRIMARY KEY (`EID`),
   KEY `fk_EMPLOYEE_DEPARTMENT1_idx` (`Dno`),
   CONSTRAINT `fk_EMPLOYEE_DEPARTMENT1` FOREIGN KEY (`Dno`) REFERENCES `department` (`Dno`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -152,7 +154,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1000001,'John','','Smith','General',20000,100),(1000002,'Berry','','Barton','General',20000,100),(1000003,'Albert','','Wesker','Manager',50000,100);
+INSERT INTO `employee` VALUES (1000001,'John','','Smith','General',20000,100,1),(1000002,'Berry','','Barton','General',20000,100,1),(1000003,'Albert','','Wesker','Manager',50000,100,1);
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
