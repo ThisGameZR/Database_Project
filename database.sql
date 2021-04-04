@@ -16,30 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `cheque`
---
-
-DROP TABLE IF EXISTS `cheque`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `cheque` (
-  `ChequeID` int NOT NULL,
-  `Amount` int DEFAULT NULL,
-  `Owner_name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`ChequeID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `cheque`
---
-
-LOCK TABLES `cheque` WRITE;
-/*!40000 ALTER TABLE `cheque` DISABLE KEYS */;
-/*!40000 ALTER TABLE `cheque` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `customer`
 --
 
@@ -205,32 +181,6 @@ INSERT INTO `employee_account` VALUES (1000001,'$2b$10$7QVsn26bkc59OAFGWrhQ3eQq0
 /*!40000 ALTER TABLE `employee_account` ENABLE KEYS */;
 UNLOCK TABLES;
 
-
-
---
--- Table structure for table `order_status`
---
-
-DROP TABLE IF EXISTS `order_status`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `order_status` (
-  `StatusID` int NOT NULL AUTO_INCREMENT,
-  `Description` varchar(255) NOT NULL,
-  PRIMARY KEY (`StatusID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `order_status`
---
-
-LOCK TABLES `order_status` WRITE;
-/*!40000 ALTER TABLE `order_status` DISABLE KEYS */;
-INSERT INTO `order_status` VALUES (1,'In progress'),(2,'Cancel'),(3,'Disputed'),(4,'On hold'),(5,'Resolved'),(6,'Shipped');
-/*!40000 ALTER TABLE `order_status` ENABLE KEYS */;
-UNLOCK TABLES;
-
 --
 -- Table structure for table `order`
 --
@@ -243,23 +193,26 @@ CREATE TABLE `order` (
   `EID` int DEFAULT NULL,
   `CID` int DEFAULT NULL,
   `CAddrID` int DEFAULT NULL,
+  `PaymentID` int DEFAULT NULL,
   `TotalPrice` decimal(8,2) NOT NULL,
   `TotalPoints` int NOT NULL,
   `PromoCode` varchar(20) DEFAULT NULL,
   `OrderDate` datetime NOT NULL,
   `RequiredDate` datetime DEFAULT NULL,
-  `PaymentDate` datetime DEFAULT NULL,
   `Comment` text,
-  `StatusID` INT DEFAULT NULL,
+  `StatusID` int DEFAULT NULL,
   PRIMARY KEY (`OrderID`),
   KEY `fk_ORDER_EMPLOYEE1_idx` (`EID`),
   KEY `fk_ORDER_CUSTOMER1_idx` (`CID`),
   KEY `fk_ORDER_CUSTOMER_ADDR1_idx` (`CAddrID`),
+  KEY `fk_ORDER_STATUS1` (`StatusID`),
+  KEY `fk_PAYMENT_ID1` (`PaymentID`),
   CONSTRAINT `fk_ORDER_CUSTOMER1` FOREIGN KEY (`CID`) REFERENCES `customer` (`CID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_ORDER_CUSTOMER_ADDR1` FOREIGN KEY (`CAddrID`) REFERENCES `customer_addr` (`CAddrID`) ON UPDATE CASCADE,
   CONSTRAINT `fk_ORDER_EMPLOYEE1` FOREIGN KEY (`EID`) REFERENCES `employee` (`EID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_ORDER_STATUS1` FOREIGN KEY (`StatusID`) REFERENCES `order_status` (`StatusID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+  CONSTRAINT `fk_ORDER_STATUS1` FOREIGN KEY (`StatusID`) REFERENCES `order_status` (`StatusID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_PAYMENT_ID1` FOREIGN KEY (`PaymentID`) REFERENCES `payment` (`PaymentID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -268,7 +221,7 @@ CREATE TABLE `order` (
 
 LOCK TABLES `order` WRITE;
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
-INSERT INTO `order` VALUES (6,1000001,2,2,459.33,13,NULL,'2021-03-29 16:57:44','2021-03-08 17:00:00',NULL,NULL,1),(7,1000001,1,1,21.40,0,NULL,'2021-03-29 16:59:51','2021-03-31 17:00:00',NULL,NULL,1),(9,1000001,3,3,89.25,2,'UgpG4RxS','2021-03-29 17:01:49',NULL,NULL,NULL,1),(10,1000001,1,16,90.15,2,'UgpG4RxS','2021-03-29 17:40:12','2021-03-01 01:45:20',NULL,NULL,1),(11,1000001,3,3,28.55,0,'dbcxpjUN','2021-03-30 16:43:47','2021-03-01 17:00:00',NULL,NULL,1),(12,1000002,4,4,28.55,0,'dbcxpjUN','2021-03-30 16:47:22',NULL,NULL,NULL,1),(13,1000002,5,5,74.90,2,NULL,'2021-03-30 16:48:39',NULL,NULL,NULL,1),(14,1000002,4,4,334.91,10,NULL,'2021-03-30 16:52:53',NULL,NULL,NULL,1),(15,1000002,2,2,354.62,10,NULL,'2021-03-30 16:56:18','2021-03-17 17:00:00',NULL,NULL,1),(16,1000003,3,3,149.80,4,NULL,'2021-04-02 14:08:03','2021-04-29 17:00:00',NULL,NULL,1),(18,1000003,1,1,244.11,7,NULL,'2021-04-02 14:11:59',NULL,NULL,NULL,1),(19,1000002,1,1,149.80,4,NULL,'2021-04-02 21:14:20','2021-04-15 00:00:00',NULL,NULL,1),(20,1000002,3,3,128.40,3,NULL,'2021-04-02 21:15:20','2021-04-12 00:00:00',NULL,NULL,1);
+INSERT INTO `order` VALUES (21,1000003,1,16,3,254.81,7,NULL,'2021-04-04 20:47:00','2021-04-06 00:00:00',NULL,1),(22,1000003,4,4,4,394.06,11,NULL,'2021-04-04 22:14:22',NULL,NULL,2),(23,1000003,1,16,5,210.02,6,NULL,'2021-04-04 22:27:47','2021-04-21 00:00:00',NULL,2),(24,1000002,3,3,6,137.11,4,NULL,'2021-04-04 22:30:16',NULL,NULL,2),(25,1000001,4,4,7,203.30,6,NULL,'2021-04-04 22:32:10',NULL,NULL,2),(26,1000001,5,5,8,239.95,7,'UgpG4RxS','2021-04-04 22:34:38',NULL,NULL,2),(27,1000001,1,1,9,74.90,2,NULL,'2021-04-04 22:35:25',NULL,NULL,2),(28,1000003,4,4,10,128.40,3,NULL,'2021-04-04 22:53:45',NULL,NULL,6);
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -297,8 +250,83 @@ CREATE TABLE `order_detail` (
 
 LOCK TABLES `order_detail` WRITE;
 /*!40000 ALTER TABLE `order_detail` DISABLE KEYS */;
-INSERT INTO `order_detail` VALUES (6,3,2,60.28),(6,17,2,340.00),(6,9,1,29.00),(7,1,2,20.00),(9,9,1,29.00),(9,8,1,30.00),(9,3,1,24.41),(10,3,2,54.25),(10,8,1,30.00),(11,9,1,26.68),(12,9,1,26.68),(13,5,1,50.00),(13,2,1,20.00),(14,4,1,35.00),(14,5,4,200.00),(14,6,1,48.00),(14,14,1,30.00),(15,4,3,105.00),(15,3,3,90.42),(15,6,2,96.00),(15,2,2,40.00),(16,5,2,100.00),(16,2,2,40.00),(18,5,3,150.00),(18,3,1,30.14),(18,6,1,48.00),(19,5,2,100.00),(19,2,2,40.00),(20,5,2,100.00),(20,2,1,20.00);
+INSERT INTO `order_detail` VALUES (21,4,4,140.00),(21,6,1,48.00),(21,3,1,30.14),(21,2,1,20.00),(22,5,1,50.00),(22,3,2,60.28),(22,13,2,122.00),(22,1,1,10.00),(22,14,1,30.00),(22,6,2,96.00),(23,2,2,40.00),(23,3,2,60.28),(23,6,2,96.00),(24,5,1,50.00),(24,6,1,48.00),(24,3,1,30.14),(25,4,4,140.00),(25,5,1,50.00),(26,5,3,150.00),(26,3,2,54.25),(26,2,1,20.00),(27,4,2,70.00),(28,4,2,70.00),(28,5,1,50.00);
 /*!40000 ALTER TABLE `order_detail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_status`
+--
+
+DROP TABLE IF EXISTS `order_status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order_status` (
+  `StatusID` int NOT NULL AUTO_INCREMENT,
+  `Description` varchar(255) NOT NULL,
+  PRIMARY KEY (`StatusID`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_status`
+--
+
+LOCK TABLES `order_status` WRITE;
+/*!40000 ALTER TABLE `order_status` DISABLE KEYS */;
+INSERT INTO `order_status` VALUES (1,'In progress'),(2,'Cancel'),(3,'Disputed'),(4,'On hold'),(5,'Resolved'),(6,'Shipped');
+/*!40000 ALTER TABLE `order_status` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `payment`
+--
+
+DROP TABLE IF EXISTS `payment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `payment` (
+  `PaymentID` int NOT NULL AUTO_INCREMENT,
+  `Payment_StatusID` int NOT NULL,
+  `PaymentDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`PaymentID`),
+  KEY `fk_payment_payment_status1_idx` (`Payment_StatusID`),
+  CONSTRAINT `fk_payment_payment_status1` FOREIGN KEY (`Payment_StatusID`) REFERENCES `payment_status` (`Payment_StatusID`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `payment`
+--
+
+LOCK TABLES `payment` WRITE;
+/*!40000 ALTER TABLE `payment` DISABLE KEYS */;
+INSERT INTO `payment` VALUES (3,3,'2021-04-27 00:00:00'),(4,2,NULL),(5,2,NULL),(6,2,NULL),(7,2,NULL),(8,2,NULL),(9,2,NULL),(10,3,'2021-04-21 07:00:00');
+/*!40000 ALTER TABLE `payment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `payment_status`
+--
+
+DROP TABLE IF EXISTS `payment_status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `payment_status` (
+  `Payment_StatusID` int NOT NULL,
+  `Payment_Description` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`Payment_StatusID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `payment_status`
+--
+
+LOCK TABLES `payment_status` WRITE;
+/*!40000 ALTER TABLE `payment_status` DISABLE KEYS */;
+INSERT INTO `payment_status` VALUES (1,'Waiting for payment'),(2,'Cancelled'),(3,'Confirm Payment');
+/*!40000 ALTER TABLE `payment_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -327,7 +355,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,2,'Soft-Sensu Fork (1 x 12)',10.00,'s',297),(2,3,'Ionic Fork (1 x 24)',20.00,'m',20),(3,3,'Ionic Cake Shovel',30.14,'m',23),(4,1,'Fusion Butter Knife',35.00,'m',47),(5,2,'Soft-Sensu ToothPick ( 1 x 50 )',50.00,'s',72),(6,2,'Soft-Sensu Cutting Board',48.00,'m',3),(7,5,'Corona Plastic Bottle ( 1 x 5 )',86.00,'l',84),(8,6,'Plastivo Chopstick ( 1 x 24 )',30.00,'m',65),(9,7,'Tineric Chopstick ( 1 x 24 )',29.00,'m',38),(10,9,'Acrylicc Chopstick ( 1 x 24 )',50.00,'m',24),(11,8,'Plastific Cutting board ',275.00,'xl',131),(12,10,'Kitta Cutting board ',98.00,'l',16),(13,2,'Soft-Sensu Spatula',61.00,'m',134),(14,1,'Fusion Spatula',30.00,'m',257),(15,5,'Corona Butter Knife ( 1 x 4 )',250.00,'s',55),(16,9,'Acrylicc Butter Knife ( 1 x 3 )',160.00,'s',229),(17,4,'Cutler Butter Knife ( 1 x 3 )',170.00,'s',0),(18,4,'Cutler Scoop',145.00,'l',39),(19,4,'Cutler Broom',133.00,'xl',189),(20,4,'Cutler Spatula',90.00,'l',149),(21,11,'Plastel Bottles ( 1 x 12 )',700.00,'l',477),(23,12,'Lamina Gloves ( 1 x 4 )',100.00,'m',131);
+INSERT INTO `product` VALUES (1,2,'Soft-Sensu Fork (1 x 12)',10.00,'s',297),(2,3,'Ionic Fork (1 x 24)',20.00,'m',19),(3,3,'Ionic Cake Shovel',30.14,'m',21),(4,1,'Fusion Butter Knife',35.00,'m',41),(5,2,'Soft-Sensu ToothPick ( 1 x 50 )',50.00,'s',71),(6,2,'Soft-Sensu Cutting Board',48.00,'m',2),(7,5,'Corona Plastic Bottle ( 1 x 5 )',86.00,'l',84),(8,6,'Plastivo Chopstick ( 1 x 24 )',30.00,'m',65),(9,7,'Tineric Chopstick ( 1 x 24 )',29.00,'m',38),(10,9,'Acrylicc Chopstick ( 1 x 24 )',50.00,'m',24),(11,8,'Plastific Cutting board ',275.00,'xl',131),(12,10,'Kitta Cutting board ',98.00,'l',16),(13,2,'Soft-Sensu Spatula',61.00,'m',134),(14,1,'Fusion Spatula',30.00,'m',257),(15,5,'Corona Butter Knife ( 1 x 4 )',250.00,'s',55),(16,9,'Acrylicc Butter Knife ( 1 x 3 )',160.00,'s',229),(17,4,'Cutler Butter Knife ( 1 x 3 )',170.00,'s',0),(18,4,'Cutler Scoop',145.00,'l',39),(19,4,'Cutler Broom',133.00,'xl',189),(20,4,'Cutler Spatula',90.00,'l',149),(21,11,'Plastel Bottles ( 1 x 12 )',700.00,'l',477),(23,12,'Lamina Gloves ( 1 x 4 )',100.00,'m',131);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -356,7 +384,7 @@ CREATE TABLE `promocode` (
 
 LOCK TABLES `promocode` WRITE;
 /*!40000 ALTER TABLE `promocode` DISABLE KEYS */;
-INSERT INTO `promocode` VALUES ('2FB6RmGf',4,50,'2021-04-29 00:00:00',2),('749cVBnO',2,3,'2021-12-18 13:17:17',4),('Abcef25',12,20,'2021-04-28 00:00:00',11),('Aspwe63',1,10,'2021-04-14 00:00:00',2),('gjhh5N4j',12,12,'2021-07-11 00:00:00',13),('kTdLM27K',1,5,'2021-04-12 00:00:00',10),('Oo4m8eq5',5,20,'2021-04-12 00:00:00',3),('Poreq21',21,10,'2021-04-23 00:00:00',50),('r3mwaqwu',5,10,'2021-05-12 00:00:00',30),('SpOxYUGY',19,10,'2021-12-01 00:00:00',5),('TopEraRSA12',10,40,'2021-04-20 00:00:00',5),('UgpG4RxS',3,10,'2021-04-12 00:00:00',10);
+INSERT INTO `promocode` VALUES ('2FB6RmGf',4,50,'2021-04-29 00:00:00',2),('749cVBnO',2,3,'2021-12-18 13:17:17',4),('Abcef25',12,20,'2021-04-28 00:00:00',11),('Aspwe63',1,10,'2021-04-14 00:00:00',2),('gjhh5N4j',12,12,'2021-07-11 00:00:00',13),('kTdLM27K',1,5,'2021-04-12 00:00:00',10),('Oo4m8eq5',5,20,'2021-04-12 00:00:00',3),('Poreq21',21,10,'2021-04-23 00:00:00',50),('r3mwaqwu',5,10,'2021-05-12 00:00:00',30),('SpOxYUGY',19,10,'2021-12-01 00:00:00',5),('TopEraRSA12',10,40,'2021-04-20 00:00:00',5),('UgpG4RxS',3,10,'2021-04-12 00:00:00',9);
 /*!40000 ALTER TABLE `promocode` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -395,4 +423,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-03  0:01:59
+-- Dump completed on 2021-04-04 22:56:44

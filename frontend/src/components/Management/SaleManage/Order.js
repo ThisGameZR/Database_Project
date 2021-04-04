@@ -31,6 +31,7 @@ export class Order extends Component {
 
         if (this.props.onChange1 != prevProps.onChange1) {
             this.setOrderStatus()
+            this.setOrderInfo()
         }
     }
 
@@ -74,10 +75,13 @@ export class Order extends Component {
                         <td>
                             {el.PaymentDate ? new Date(el.PaymentDate).toLocaleString() : <VscClose></VscClose>}
                         </td>
-                        <td><Button variant="success" style={{ width: "100%" }}
-                            onClick={() => this.updateOrderStatus(el.OrderID)}>
-                            {el.Description}
-                        </Button>
+                        <td>
+                            {el.Description != 'Cancel' ?
+                                <Button variant="info" style={{ width: "100%" }}
+                                    onClick={() => this.updateOrderStatus(el.OrderID)}>
+                                    {el.Description}
+                                </Button>
+                                : <Button variant="danger" style={{ width: "100%" }}>{el.Description}</Button>}
                         </td>
                     </tr>
                 )
@@ -101,17 +105,29 @@ export class Order extends Component {
             showCancelButton: true,
             showLoaderOnConfirm: true,
             preConfirm: (input) => {
-                axios.post('/placeOrder/updateOrderStatus', {
-                    StatusID: input,
-                    OrderID: orderid,
-                }).then(res => {
-                    Swal.fire({
-                        title: `${res.data.status.toUpperCase()}`,
-                        text: `${res.data.message}`,
-                        icon: res.data.status,
+
+                if (input == 2) {
+                    axios.post('/placeOrder/cancelPayment', { OrderID: orderid }).then(res => {
+                        Swal.fire({
+                            title: `${res.data.status.toUpperCase()}`,
+                            text: `${res.data.message}`,
+                            icon: res.data.status,
+                        })
+                        this.setOrderInfo()
                     })
-                    this.setOrderInfo()
-                })
+                } else {
+                    axios.post('/placeOrder/updateOrderStatus', {
+                        StatusID: input,
+                        OrderID: orderid,
+                    }).then(res => {
+                        Swal.fire({
+                            title: `${res.data.status.toUpperCase()}`,
+                            text: `${res.data.message}`,
+                            icon: res.data.status,
+                        })
+                        this.setOrderInfo()
+                    })
+                }
             }
         })
     }
@@ -138,7 +154,7 @@ export class Order extends Component {
         return (
             <Container fluid>
                 {this.state.orderStatus.length != 0 ? this.renderSelect() : null}
-                <Table>
+                <Table striped bordered hover responsive variant="dark">
                     <thead>
                         <tr>
                             <th>OID</th>

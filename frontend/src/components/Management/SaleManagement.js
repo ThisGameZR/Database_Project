@@ -13,6 +13,7 @@ export class SaleManagement extends Component {
             loginYet: false,
             onChange: false,
             onChange1: false,
+            onChange2: false,
         }
 
         axios.get('/login').then(res => {
@@ -47,8 +48,8 @@ export class SaleManagement extends Component {
                                     <Nav.Item onClick={() => this.setState({ onChange1: !this.state.onChange1 })} >
                                         <Nav.Link eventKey="order">Edit Order</Nav.Link>
                                     </Nav.Item>
-                                    <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })} >
-                                        <Nav.Link eventKey="invoice">Edit Invoice</Nav.Link>
+                                    <Nav.Item onClick={() => this.setState({ onChange2: !this.state.onChange2 })} >
+                                        <Nav.Link eventKey="invoice">Edit Payment</Nav.Link>
                                     </Nav.Item>
                                 </Nav>
                             </Col>
@@ -70,7 +71,7 @@ export class SaleManagement extends Component {
                                         <Order onChange1={this.state.onChange1}></Order>
                                     </Tab.Pane>
                                     <Tab.Pane eventKey="invoice">
-                                        <Invoice onChange={this.state.onChange}></Invoice>
+                                        <Invoice onChange2={this.state.onChange2}></Invoice>
                                     </Tab.Pane>
                                 </Tab.Content>
                             </Col>
