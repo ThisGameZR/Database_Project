@@ -40,7 +40,7 @@ router.post('/editProfile', (req, res) => {
 
 router.get('/editAddress', (req, res) => {
     let cid = req.query.cid;
-    let sql = `select * from customer_addr where cid = ${cid}`;
+    let sql = `select * from customer_addr where cid = ${cid} and \`condition\` = 1`;
     pool.query(sql, (err, result) => {
         return res.send({
             addressInfo: result,
@@ -112,14 +112,38 @@ router.post('/editAddress/deleteAddress', (req, res) => {
 
     let CAddrID = req.body.CAddrID
 
-    let sql = `delete from customer_addr where CAddrID = ${CAddrID}`
+    let sql = `select CAddrID from \`order\` where cid = ${req.body.cid}`
 
     pool.query(sql, (err, result) => {
         if (err) {
             console.log(err)
             return res.send(err.message)
         }
-        return res.send("success")
+        let retu = false
+        result.map(el => {
+            if (el.CAddrID == CAddrID) {
+                sql = `update customer_addr set \`condition\` = 0 where CAddrID = ${CAddrID}`
+
+                retu = true
+                pool.query(sql, (err, result) => {
+                    if (err) {
+                        console.log(err)
+                        return res.send(err.message)
+                    }
+                    return res.send("success")
+                })
+            }
+        })
+        if (retu == false) {
+            sql = `delete from customer_addr where CAddrID = ${req.body.CAddrID}`
+            pool.query(sql, (err, result) => {
+                if (err) {
+                    console.log(err)
+                    return res.send(err.message)
+                }
+                return res.send('success')
+            })
+        }
     })
 
 })

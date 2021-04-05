@@ -131,12 +131,11 @@ export class Coupon extends Component {
     }
 
     Search = (e) => {
-        this.setState({ productReady: false })
+
         axios.get('/products/coupon').then(res => {
             let keyword = e.target.value;
 
             this.setState({
-                search: keyword,
                 coupon: res.data
             });
 
@@ -166,7 +165,7 @@ export class Coupon extends Component {
                     <InputGroup.Prepend>
                         <InputGroup.Text>SEARCH FOR</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl autoComplete="off" onChange={(e) => this.Search(e)} id="search" placeholder="Type Product Name here"></FormControl>
+                    <FormControl autoComplete="off" onChange={(e) => this.Search(e)} placeholder="Type Product Name here"></FormControl>
                 </InputGroup>
                 <Table striped bordered hover responsive variant="dark">
                     <thead>

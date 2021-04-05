@@ -25,7 +25,10 @@ export class PlaceOrder extends Component {
         }
         axios.get('/login').then(res => {
             if (res.data.session?.user) {
-                this.setState({ loginYet: true })
+                if (res.data.session.user.dno == '100')
+                    if (res.data.session.user.condition == 1) {
+                        this.setState({ loginYet: true })
+                    }
             }
         })
 
@@ -34,15 +37,16 @@ export class PlaceOrder extends Component {
     componentDidMount() {
         axios.get('/login').then(async res => {
             if (res.data.session?.user) {
-                if (res.data.session?.order) {
-                    const order = res.data.session.order
-                    this.state.cart = order.cart
-                    this.state.eid = order.eid
-                    await this.setState({ cid: order.cid })
-                    this.customerName()
-                    this.employeeName()
-                    this.setAddress()
-                }
+                if (res.data.session.user.dno == 100)
+                    if (res.data.session?.order) {
+                        const order = res.data.session.order
+                        this.state.cart = order.cart
+                        this.state.eid = order.eid
+                        await this.setState({ cid: order.cid })
+                        this.customerName()
+                        this.employeeName()
+                        this.setAddress()
+                    }
             }
         })
     }
@@ -417,7 +421,7 @@ export class PlaceOrder extends Component {
         } else {
             return (
                 <div style={{ margin: "20px" }}>
-                    <h2>Sorry.. This page is only for our employee!</h2>
+                    <h2>Sorry.. This page is only for employee in Sale Department!</h2>
                     <Link to="/"><Button>GO BACK</Button></Link>
                 </div>
             );

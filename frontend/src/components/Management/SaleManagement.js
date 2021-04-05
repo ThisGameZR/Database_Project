@@ -18,9 +18,10 @@ export class SaleManagement extends Component {
 
         axios.get('/login').then(res => {
             if (res.data.session?.user) {
-                if (res.data.session.user.dno == "100") {
-                    this.setState({ loginYet: true })
-                }
+                if (res.data.session.user.condition == 1)
+                    if (res.data.session.user.dno == "100") {
+                        this.setState({ loginYet: true })
+                    }
             }
         })
 

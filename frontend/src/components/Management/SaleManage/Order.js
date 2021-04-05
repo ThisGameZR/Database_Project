@@ -18,10 +18,11 @@ export class Order extends Component {
                 Description: "ALL STATUS"
             }],
             orderStatus: [],
+            position: null,
         }
 
         axios.get('/login').then(res => {
-            this.setState({ eid: res.data.session.user.eid })
+            this.setState({ eid: res.data.session.user.eid, position: res.data.session.user.position })
             this.setOrderInfo()
         })
 
@@ -61,31 +62,103 @@ export class Order extends Component {
     }
 
     renderOrderInfo() {
-        return this.state.orderInfo?.map(el => {
-            if (this.state.orderSelect[0]?.Description == "ALL STATUS" || this.state.orderSelect[0].Description == el.Description)
-                return (
-                    <tr key={el.OrderID}>
-                        <td>{el.OrderID}</td>
-                        <td>{el.CID}</td>
-                        <td>{el.FirstName + ' ' + el.MiddleName + ' ' + el.LastName}</td>
-                        <td>{el.Address}</td>
-                        <td>{el.TotalPrice}</td>
-                        <td>{new Date(el.OrderDate).toLocaleString()}</td>
-                        <td>{el.RequiredDate ? new Date(el.RequiredDate).toLocaleString() : <VscClose></VscClose>}</td>
-                        <td>
-                            {el.PaymentDate ? new Date(el.PaymentDate).toLocaleString() : <VscClose></VscClose>}
-                        </td>
-                        <td>
-                            {el.Description != 'Cancel' ?
-                                <Button variant="info" style={{ width: "100%" }}
-                                    onClick={() => this.updateOrderStatus(el.OrderID)}>
-                                    {el.Description}
-                                </Button>
-                                : <Button variant="danger" style={{ width: "100%" }}>{el.Description}</Button>}
-                        </td>
-                    </tr>
-                )
-        })
+        if (!this.state.position?.includes('Manager')) {
+            return this.state.orderInfo?.map(el => {
+                if (this.state.orderSelect[0]?.Description == "ALL STATUS" || this.state.orderSelect[0].Description == el.Description)
+                    return (
+                        <tr key={el.OrderID}>
+                            <td>{el.OrderID}</td>
+                            <td>{el.CID}</td>
+                            <td>{el.FirstName + ' ' + el.MiddleName + ' ' + el.LastName}</td>
+                            <td>{el.Address}</td>
+                            <td>{el.TotalPrice}</td>
+                            <td>{new Date(el.OrderDate).toLocaleString()}</td>
+                            <td>{el.RequiredDate ? new Date(el.RequiredDate).toLocaleString() : <VscClose></VscClose>}</td>
+                            <td>
+                                {el.PaymentDate ? new Date(el.PaymentDate).toLocaleString() : <VscClose></VscClose>}
+                            </td>
+                            <td>
+                                {el.Description == 'In progress' ?
+                                    <Button variant="info" style={{ width: "100%" }}
+                                        onClick={() => this.updateOrderStatus(el.OrderID)}>
+                                        {el.Description}
+                                    </Button>
+                                    : null}
+                                {el.Description == 'Disputed' || el.Description == 'On hold' ?
+                                    <Button variant="warning" style={{ width: "100%" }}
+                                        onClick={() => this.updateOrderStatus(el.OrderID)}>
+                                        {el.Description}
+                                    </Button>
+                                    : null}
+                                {el.Description == 'Resolved' ?
+                                    <Button variant="success" style={{ width: "100%", background: "#5e008c" }}
+                                        onClick={() => this.updateOrderStatus(el.OrderID)}>
+                                        {el.Description}
+                                    </Button>
+                                    : null}
+                                {el.Description == 'Cancel' ?
+                                    <Button variant="danger" style={{ width: "100%" }}>
+                                        {el.Description}
+                                    </Button>
+                                    : null}
+                                {el.Description == 'Shipped' ?
+                                    <Button variant="success" style={{ width: "100%" }}>
+                                        {el.Description}
+                                    </Button>
+                                    : null}
+                            </td>
+                        </tr>
+                    )
+            })
+        } else {
+            return this.state.orderInfo?.map(el => {
+                if (this.state.orderSelect[0]?.Description == "ALL STATUS" || this.state.orderSelect[0].Description == el.Description)
+                    return (
+                        <tr key={el.OrderID}>
+                            <td>{el.OrderID}</td>
+                            <td>{el.EID}</td>
+                            <td>{el.CID}</td>
+                            <td>{el.FirstName + ' ' + el.MiddleName + ' ' + el.LastName}</td>
+                            <td>{el.TotalPrice}</td>
+                            <td>{new Date(el.OrderDate).toLocaleString()}</td>
+                            <td>{el.RequiredDate ? new Date(el.RequiredDate).toLocaleString() : <VscClose></VscClose>}</td>
+                            <td>
+                                {el.PaymentDate ? new Date(el.PaymentDate).toLocaleString() : <VscClose></VscClose>}
+                            </td>
+                            <td>
+                                {el.Description == 'In progress' ?
+                                    <Button variant="info" style={{ width: "100%" }}
+                                        onClick={() => this.updateOrderStatus(el.OrderID)}>
+                                        {el.Description}
+                                    </Button>
+                                    : null}
+                                {el.Description == 'Disputed' || el.Description == 'On hold' ?
+                                    <Button variant="warning" style={{ width: "100%" }}
+                                        onClick={() => this.updateOrderStatus(el.OrderID)}>
+                                        {el.Description}
+                                    </Button>
+                                    : null}
+                                {el.Description == 'Resolved' ?
+                                    <Button variant="success" style={{ width: "100%", background: "#5e008c" }}
+                                        onClick={() => this.updateOrderStatus(el.OrderID)}>
+                                        {el.Description}
+                                    </Button>
+                                    : null}
+                                {el.Description == 'Cancel' ?
+                                    <Button variant="danger" style={{ width: "100%" }}>
+                                        {el.Description}
+                                    </Button>
+                                    : null}
+                                {el.Description == 'Shipped' ?
+                                    <Button variant="success" style={{ width: "100%" }}>
+                                        {el.Description}
+                                    </Button>
+                                    : null}
+                            </td>
+                        </tr>
+                    )
+            })
+        }
     }
 
     updateOrderStatus(orderid) {
@@ -105,29 +178,46 @@ export class Order extends Component {
             showCancelButton: true,
             showLoaderOnConfirm: true,
             preConfirm: (input) => {
-
-                if (input == 2) {
-                    axios.post('/placeOrder/cancelPayment', { OrderID: orderid }).then(res => {
-                        Swal.fire({
-                            title: `${res.data.status.toUpperCase()}`,
-                            text: `${res.data.message}`,
-                            icon: res.data.status,
-                        })
-                        this.setOrderInfo()
-                    })
-                } else {
-                    axios.post('/placeOrder/updateOrderStatus', {
-                        StatusID: input,
-                        OrderID: orderid,
-                    }).then(res => {
-                        Swal.fire({
-                            title: `${res.data.status.toUpperCase()}`,
-                            text: `${res.data.message}`,
-                            icon: res.data.status,
-                        })
-                        this.setOrderInfo()
-                    })
+                let status = {
+                    1: 'In progress',
+                    2: 'Cancel',
+                    3: 'Disputed',
+                    4: 'On hold',
+                    5: 'Resolved',
+                    6: 'Shipped',
                 }
+
+                Swal.fire({
+                    title: `Are you sure?`,
+                    text: `Change status to ${status[input]}`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+                        if (input == 2) {
+                            axios.post('/placeOrder/cancelPayment', { OrderID: orderid }).then(res => {
+                                Swal.fire({
+                                    title: `${res.data.status.toUpperCase()}`,
+                                    text: `${res.data.message}`,
+                                    icon: res.data.status,
+                                })
+                                this.setOrderInfo()
+                            })
+                        } else {
+                            axios.post('/placeOrder/updateOrderStatus', {
+                                StatusID: input,
+                                OrderID: orderid,
+                            }).then(res => {
+                                Swal.fire({
+                                    title: `${res.data.status.toUpperCase()}`,
+                                    text: `${res.data.message}`,
+                                    icon: res.data.status,
+                                })
+                                this.setOrderInfo()
+                            })
+                        }
+                    }
+                })
             }
         })
     }
@@ -150,24 +240,48 @@ export class Order extends Component {
         )
     }
 
+    renderThead() {
+        if (!this.state.position?.includes('Manager')) {
+            return (
+                <thead>
+                    <tr>
+                        <th>OID</th>
+                        <th>CID</th>
+                        <th>Customer</th>
+                        <th>Address</th>
+                        <th>Total(฿)</th>
+                        <th>OrderDate</th>
+                        <th>RequiredDate</th>
+                        <th>PaymentDate</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+            )
+        } else {
+            return (
+                <thead>
+                    <tr>
+                        <th>OID</th>
+                        <th>EID</th>
+                        <th>CID</th>
+                        <th>Customer</th>
+                        <th>Total(฿)</th>
+                        <th>OrderDate</th>
+                        <th>RequiredDate</th>
+                        <th>PaymentDate</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+            )
+        }
+    }
+
     render() {
         return (
             <Container fluid>
                 {this.state.orderStatus.length != 0 ? this.renderSelect() : null}
                 <Table striped bordered hover responsive variant="dark">
-                    <thead>
-                        <tr>
-                            <th>OID</th>
-                            <th>CID</th>
-                            <th>Customer</th>
-                            <th>Address</th>
-                            <th>TotalPrice</th>
-                            <th>OrderDate</th>
-                            <th>RequiredDate</th>
-                            <th>PaymentDate</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
+                    {this.renderThead()}
                     <tbody>
                         {this.state.orderInfo.length != 0 ? this.renderOrderInfo() : null}
                     </tbody>

@@ -179,10 +179,17 @@ router.post('/submitOrder', async (req, res) => {
 })
 
 router.get('/getOrder', (req, res) => {
-    let sql = `select * from (((\`order\` natural join customer) natural join customer_addr) natural join order_status) natural join payment where eid = ${req.query.eid} order by orderid`
-    pool.query(sql, (err, result) => {
-        return res.send(JSON.stringify(result))
-    })
+    if (req.session.user.position != "Manager") {
+        let sql = `select * from (((\`order\` natural join customer) natural join customer_addr) natural join order_status) natural join payment where eid = ${req.query.eid} order by orderid`
+        pool.query(sql, (err, result) => {
+            return res.send(JSON.stringify(result))
+        })
+    } else {
+        let sql = `select * from (((\`order\` natural join customer) natural join customer_addr) natural join order_status) natural join payment order by orderid`
+        pool.query(sql, (err, result) => {
+            return res.send(JSON.stringify(result))
+        })
+    }
 })
 
 router.get('/getOrderStatus', (req, res) => {
@@ -211,11 +218,19 @@ router.post('/updateOrderStatus', (req, res) => {
 })
 
 router.get('/getPaymentInfo', (req, res) => {
-    let sql = `select * from (payment natural join \`order\`) natural join payment_status where eid = ${req.query.eid}`
-    pool.query(sql, (err, result) => {
+    if (req.session.user.position != "Manager") {
+        let sql = `select * from (payment natural join \`order\`) natural join payment_status where eid = ${req.query.eid}`
+        pool.query(sql, (err, result) => {
 
-        return res.send(JSON.stringify(result))
-    })
+            return res.send(JSON.stringify(result))
+        })
+    } else {
+        let sql = `select * from (payment natural join \`order\`) natural join payment_status`
+        pool.query(sql, (err, result) => {
+
+            return res.send(JSON.stringify(result))
+        })
+    }
 })
 
 router.post('/cancelPayment', (req, res) => {

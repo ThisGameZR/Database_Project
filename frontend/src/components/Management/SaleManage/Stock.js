@@ -117,12 +117,11 @@ export class Stock extends Component {
     }
 
     Search = (e) => {
-        this.setState({ productReady: false })
+
         axios.get('/products/orderbypid').then(res => {
             let keyword = e.target.value;
 
             this.setState({
-                search: keyword,
                 products: res.data
             });
 
@@ -137,7 +136,7 @@ export class Stock extends Component {
 
             this.setState({
                 products: productspecified,
-                productReady: true
+
             })
 
         })
@@ -153,7 +152,7 @@ export class Stock extends Component {
                     <InputGroup.Prepend>
                         <InputGroup.Text>SEARCH FOR</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl autoComplete="off" onChange={(e) => this.Search(e)} id="search" placeholder="Type Product Name here"></FormControl>
+                    <FormControl autoComplete="off" onChange={(e) => this.Search(e)} placeholder="Type Product Name here"></FormControl>
                 </InputGroup>
                 <Table striped bordered hover variant="dark" responsive>
                     <thead>

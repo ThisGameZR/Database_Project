@@ -91,7 +91,7 @@ export class AddProduct extends Component {
             this.getSupplier()
 
         }).catch(err => {
-            console.log(err);
+
         });
     }
     product(e) {
@@ -113,7 +113,7 @@ export class AddProduct extends Component {
             })
 
         }).catch(err => {
-            console.log(err);
+
         });
     }
 

@@ -4,6 +4,7 @@ import { BsFillXCircleFill } from 'react-icons/bs'
 import SelectSearch, { fuzzySearch } from 'react-select-search'
 import axios from "axios";
 import Product from "./Product";
+import Swal from "sweetalert2";
 export default class ShoppingCart extends Component {
     constructor(props) {
         super(props)
@@ -13,10 +14,14 @@ export default class ShoppingCart extends Component {
             cartReady: false,
             cart: [],
             TotalPrice: 0,
-            showAlert: false,
             customer: [],
             customerValue: null,
+            dno: null,
         }
+
+        axios.get('/login').then(res => {
+            this.setState({ dno: res.data.session.user.dno })
+        })
     }
 
     componentDidMount() {
@@ -202,25 +207,33 @@ export default class ShoppingCart extends Component {
                     </div>
                     <Button variant="primary" onClick={this.placeOrder}>Place Order</Button>
                 </Modal.Footer>
-                {this.state.showAlert === true ?
-                    <Alert variant="danger" onClose={() => this.setState({ showAlert: false })} dismissible>
-                        <Alert.Heading>AN ERROR!</Alert.Heading>
-                        <p id="error-msg"></p>
-                    </Alert>
-                    : null}
             </Modal>
         )
     }
 
     placeOrder = async () => {
+        if (this.state.dno != 100) {
+            Swal.fire({
+                title: 'ERROR',
+                text: 'Only employee in Sale Department can place order',
+                icon: 'error',
+            })
+            return
+        }
         if (this.state.cart.length == 0) {
-            await this.setState({ showAlert: true })
-            document.getElementById('error-msg').innerHTML = "At least one item need to be in the cart"
+            Swal.fire({
+                title: 'ERROR',
+                text: 'At least one item need to be in the cart',
+                icon: 'error',
+            })
             return
         }
         if (this.state.customerValue == null) {
-            await this.setState({ showAlert: true })
-            document.getElementById('error-msg').innerHTML = "You need to select customer"
+            Swal.fire({
+                title: 'ERROR',
+                text: 'You need to select customer',
+                icon: 'error',
+            })
             return
         }
         axios.get('/login').then(async res => {

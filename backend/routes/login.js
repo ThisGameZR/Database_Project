@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
             if (result.length != 0) {
                 if (await bcrypt.compare(password, result[0].Password)) {
                     success = true;
-                    let sql = `select firstname,middlename,lastname,position,dno from employee where eid = ${parseInt(result[0].EID)}`;
+                    let sql = `select firstname,middlename,lastname,position,dno,\`condition\` from employee where eid = ${parseInt(result[0].EID)}`;
                     pool.query(sql, (err, row) => {
                         let name
                         if (row[0].middlename == "")
@@ -38,6 +38,7 @@ router.post('/', async (req, res) => {
                             name: name,
                             position: row[0].position,
                             dno: row[0].dno,
+                            condition: row[0].condition,
                         }
                         return res.send({ message: name, success: success });
                     });

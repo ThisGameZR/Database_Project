@@ -19,6 +19,7 @@ export class EditCustomerAddress extends Component {
     setAddress() {
         let cid = this.props.cid
         axios.get('/customer/EditAddress', { params: { cid } }).then(res => {
+            console.log(res.data)
             let min = Infinity
             res.data.addressInfo.map(el => {
                 if (el.CAddrID < min) {
@@ -78,7 +79,8 @@ export class EditCustomerAddress extends Component {
 
     deleteAddress() {
         let req = {
-            CAddrID: this.state.currentAddress
+            CAddrID: this.state.currentAddress,
+            cid: this.state.cid
         }
         axios.post('/customer/editAddress/deleteAddress', req).then(res => {
             this.setAddress()

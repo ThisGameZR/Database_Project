@@ -10,9 +10,11 @@ export default function LoginForm(props) {
     useEffect(() => {
         axios.get('/login').then(res => {
             if (res.data.session?.user) {
-                setLoginyet(true)
-                setUser(res.data.session.user.name)
-                props.setLoginYet(true)
+                if (res.data.session.user.condition == 1) {
+                    setLoginyet(true)
+                    setUser(res.data.session.user.name)
+                    props.setLoginYet(true)
+                }
             } else {
                 setLoginyet(false)
             }
