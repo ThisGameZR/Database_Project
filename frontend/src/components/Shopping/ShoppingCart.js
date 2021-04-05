@@ -20,7 +20,7 @@ export default class ShoppingCart extends Component {
         }
 
         axios.get('/login').then(res => {
-            this.setState({ dno: res.data.session.user.dno })
+            this.setState({ dno: res.data.session?.user?.dno })
         })
     }
 
