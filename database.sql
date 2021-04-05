@@ -182,7 +182,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1000001,'John','','Smith','Sale Officer',20000,100,1),(1000002,'Berry','','Barton','Sale Officer',20000,100,1),(1000003,'Albert','','Wesker','Sale Manager',50000,100,1),(2000001,'Anthony','M','Smith','Financial Manager',50000,200,1),(2000002,'Melvin','M','Fitzgerald','Financial Secretary',35000,200,1);
+INSERT INTO `employee` VALUES (1000001,'John','','Smith','Sale Officer',20000,100,1),(1000002,'Berry','','Barton','Sale Officer',20000,100,1),(1000003,'Albert','','Wesker','Sale Manager',50000,100,1),(1000004,'Harry','J.','Potter','Warehouse Officer',20000,100,1),(2000001,'Anthony','M','Smith','Financial Manager',50000,200,1),(2000002,'Melvin','M','Fitzgerald','Financial Secretary',35000,200,1);
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -207,7 +207,7 @@ CREATE TABLE `employee_account` (
 
 LOCK TABLES `employee_account` WRITE;
 /*!40000 ALTER TABLE `employee_account` DISABLE KEYS */;
-INSERT INTO `employee_account` VALUES (1000001,'$2b$10$7QVsn26bkc59OAFGWrhQ3eQq0j5OSgj83.yQnVURIL7K0UJv4H0Q.'),(1000002,'$2b$10$IYd3SdG/Riw37L/EBWqTFefuzvRBrWK67/UIlBJD.ii6i4mIyqdQ.'),(1000003,'$2b$10$Bz/u.gbVdvyx/T9g4BSEse9kmjA59CX640Gbpf6PjWH72nOZp.pjy'),(2000001,'$2b$10$dsLoRVQWjxHP6hV2fjHEKuLhYYXI1ifpu7TUbmBDs3pc5A47yZVde'),(2000002,'$2b$10$.KrtJGVoLcea95bFI6D44ewtyXhXWntZJvNOdLLB4Q1cN8BXlFPiu');
+INSERT INTO `employee_account` VALUES (1000001,'$2b$10$7QVsn26bkc59OAFGWrhQ3eQq0j5OSgj83.yQnVURIL7K0UJv4H0Q.'),(1000002,'$2b$10$IYd3SdG/Riw37L/EBWqTFefuzvRBrWK67/UIlBJD.ii6i4mIyqdQ.'),(1000003,'$2b$10$Bz/u.gbVdvyx/T9g4BSEse9kmjA59CX640Gbpf6PjWH72nOZp.pjy'),(2000001,'$2b$10$dsLoRVQWjxHP6hV2fjHEKuLhYYXI1ifpu7TUbmBDs3pc5A47yZVde'),(2000002,'$2b$10$.KrtJGVoLcea95bFI6D44ewtyXhXWntZJvNOdLLB4Q1cN8BXlFPiu'),(1000004,'$2b$10$A45c16tDIfGUmJrS8RcRC.OS1s9hk6sIe0nOltpkKDPC7.anv0seO');
 /*!40000 ALTER TABLE `employee_account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -453,4 +453,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-05 17:26:49
+-- Dump completed on 2021-04-06  0:15:24

@@ -19,7 +19,7 @@ export class EmployeeManagement extends Component {
             visible: false,
             dno: null,
             eid: null,
-            addemployee: {},
+            addEmployee: [],
             positionInfo: [],
         }
 
@@ -42,6 +42,12 @@ export class EmployeeManagement extends Component {
                     }
             }
         })
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.addEmployee != prevState.addEmployee) {
+
+        }
     }
 
     setEmployee() {
@@ -176,14 +182,23 @@ export class EmployeeManagement extends Component {
     }
 
     addEmployee() {
-        React.Swal({
+        ReactSwal.fire({
             title: 'ADD EMPLOYEE',
-            text: <AddEmployee onChangeValue={(value) => this.setState({ addEmployee: value })}></AddEmployee>,
+            html: <AddEmployee onChangeValue={(value) => this.setState({ addEmployee: value })}></AddEmployee>,
             icon: 'info',
             showCancelButton: true,
             showLoaderOnConfirm: true,
             preConfirm: () => {
-
+                axios.post('/employee/addEmployee', {
+                    data: this.state.addEmployee
+                }).then(res => {
+                    Swal.fire({
+                        title: res.data.status.toUpperCase(),
+                        text: res.data.message,
+                        icon: res.data.status,
+                    })
+                    this.setEmployee()
+                })
             }
         })
     }
