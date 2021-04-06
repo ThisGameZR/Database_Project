@@ -15,6 +15,14 @@ Install all dependecies which the server needs
 
 Install all dependencies which the application needs
 
+# if command above does not work try below:
+
+### `cd ./frontend`
+
+### `npm install`
+
+
+
 ### `npm run client --prefix ./backend/`
 
 Runs the app(frontend) in the development mode.\

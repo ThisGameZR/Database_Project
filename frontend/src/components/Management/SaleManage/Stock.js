@@ -183,7 +183,6 @@ export class Stock extends Component {
             return (
                 <div style={{ margin: "20px" }}>
                     <h2>Sorry.. This page is only for Warehouse Officer!</h2>
-                    <Link to="/"><Button>GO BACK</Button></Link>
                 </div>
             )
         }

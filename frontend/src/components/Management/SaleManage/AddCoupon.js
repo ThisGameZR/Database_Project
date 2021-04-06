@@ -121,7 +121,6 @@ export class AddCoupon extends Component {
             return (
                 <div style={{ margin: "20px" }}>
                     <h2>Sorry.. This page is only for Sale Officer!</h2>
-                    <Link to="/"><Button>GO BACK</Button></Link>
                 </div>
             )
     }
