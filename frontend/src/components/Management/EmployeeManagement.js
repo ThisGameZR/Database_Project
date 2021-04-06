@@ -57,6 +57,26 @@ export class EmployeeManagement extends Component {
         })
     }
 
+    updatepassword(eid){
+        Swal.fire({
+            title: 'Please enter a new password',
+            input: 'password',
+            icon: 'info',
+            showCancelButton: true,
+            preConfirm: (value) => {
+                axios.post('/employee/updatepassword', {
+                    eid, value
+                }).then(res => {
+                    Swal.fire({
+                        title: res.data.status,
+                        text: res.data.message,
+                        icon: res.data.status
+                    })
+                })
+            }
+        })
+    }
+
     renderEmployee() {
 
         return this.state.employeeInfo.map(el => {
@@ -78,6 +98,9 @@ export class EmployeeManagement extends Component {
                             <Button variant="success" style={{ width: "100%" }} onClick={() => this.updateEmployeeInfo(el.EID, "Salary")}>
                                 {el.Salary}
                             </Button>
+                        </td>
+                        <td>
+                            <Button varaint="info" style={{width:"100%"}} onClick={() => this.updatepassword(el.EID)}>Edit</Button>
                         </td>
                         <td>
                             <Button variant="danger" style={{ width: "100%" }} onClick={() => this.fireEmployee(el.EID)}>
@@ -230,6 +253,7 @@ export class EmployeeManagement extends Component {
                                     <th>Name</th>
                                     <th>Position</th>
                                     <th>Salary</th>
+                                    <th>Account</th>
                                     <th></th>
                                 </tr>
                             </thead>
