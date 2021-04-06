@@ -6,13 +6,17 @@ const pool = mysql2.createPool({
     user: 'root',
     password: 'root',
     database: 'plasticShop',
-    port: '3306'
+    port: '3306',
+    connectionLimit: 1000,
+    getConnection: 0,
+    waitForConnections: true,
+    queueLimit: 1000,
 });
 
-pool.getConnection((err,con) => {
-    if(err)
+pool.getConnection((err, con) => {
+    if (err)
         console.error("Something went wrong connecting to the database");
-    if(con){
+    if (con) {
         console.log("Successfully connect to database")
         pool.releaseConnection(con);
     }

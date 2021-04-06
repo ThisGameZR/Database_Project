@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { Pagination } from 'react-bootstrap';
-import {Button, Form, InputGroup, Card, Container, Row, Col} from 'react-bootstrap';
-import {Link} from 'react-router-dom';
+import { Button, Form, InputGroup, Card, Container, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import axios from 'axios'
 
 export class CustomerMember extends Component {
 
-    constructor(){
+    constructor() {
         super();
         this.state = {
             active: 0,
@@ -16,34 +16,35 @@ export class CustomerMember extends Component {
             loginYet: false,
         }
         axios.get('/login').then(res => {
-            if(res.data.session?.user){
-                this.setState({loginYet:true})
+            if (res.data.session?.user) {
+                if (res.data.session.user.dno == '100')
+                    if (res.data.session.user.condition == 1)
+                        this.setState({ loginYet: true })
             }
         })
     }
 
     render() {
-
-        if(this.state.loginYet == false){
-            return(
-                <div style={{margin:"20px"}}>
-                    <h2>Sorry.. This page is only for our employee!</h2>
+        if (this.state.loginYet == false) {
+            return (
+                <div style={{ margin: "20px" }}>
+                    <h2>Sorry.. This page is only for employee in Sale Department!</h2>
                     <Link to="/"><Button>GO BACK</Button></Link>
                 </div>
             );
         }
 
         return (
-            <Container fluid style={{display:"flex",justifyContent:"center",alignItems:"center",textAlign:"center", marginTop:"3%"}} >
-                
-                    <Col md={3}>
-                        <Card >
-                            <Card.Header>
-                                    <div className="customer-info-header-text">CUSTOMER INFO</div>
-                            </Card.Header>
-                            <Card.Body>
-                                <Form onSubmit={(e) => this.submitCustomer(e)}>
-                                    <fieldset id="customer-form">
+            <Container fluid style={{ display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", marginTop: "3%" }} >
+
+                <Col md={3}>
+                    <Card >
+                        <Card.Header>
+                            <div className="customer-info-header-text">CUSTOMER INFO</div>
+                        </Card.Header>
+                        <Card.Body>
+                            <Form onSubmit={(e) => this.submitCustomer(e)}>
+                                <fieldset id="customer-form">
                                     <Form.Group controlId="customer-first-name">
                                         <Form.Control type="text" placeholder="First name"></Form.Control>
                                     </Form.Group>
@@ -57,78 +58,57 @@ export class CustomerMember extends Component {
                                         <Form.Control type="text" placeholder="Contact"></Form.Control>
                                     </Form.Group>
                                     <Button variant="success" type="submit">SUBMIT</Button>
-                                    </fieldset>
-                                </Form>
-                            </Card.Body>
-                            <Card.Footer>
-                            </Card.Footer>
-                        </Card>
-                    </Col>
-                    
-                    <Col md={3}>
-                        <Card>
-                            <Card.Header>
-                                    <div className="customer-address-header-text">CUSTOMER ADDRESS</div>
-                            </Card.Header>
-                            <Card.Body>
-                                    <Form onSubmit={(e) => this.submitAddress(e)}>
-                                        <fieldset id="customer-address-form" disabled>
-                                            <Form.Group controlId="customer-id">
-                                                <Form.Control type="text" placeholder="Customer ID" disabled></Form.Control>
-                                            </Form.Group>
-                                            <Form.Group controlId="customer-address">
-                                                <Form.Control type="text" placeholder="Address"></Form.Control>
-                                            </Form.Group>
-                                            <Form.Group controlId="customer-address-city">
-                                                <Form.Control type="text" placeholder="City"></Form.Control>
-                                            </Form.Group>
-                                            <Form.Group controlId="customer-address-province">
-                                                <Form.Control type="text" placeholder="Province"></Form.Control>
-                                            </Form.Group>
-                                            <Form.Group controlId="customer-address-postal-code">
-                                                <Form.Control type="text" placeholder="Postal Code"></Form.Control>
-                                            </Form.Group>
-                                            <Form.Group controlId="customer-address-country">
-                                                <Form.Control type="text" placeholder="Country"></Form.Control>
-                                            </Form.Group>
-                                            <Button variant="success" type="submit">SUBMIT</Button>
-                                        </fieldset>
-                                    </Form>
-                            </Card.Body>
-                            <Card.Footer>
-                            </Card.Footer>
-                        </Card>
-                    </Col>
-                    <Col md={3}>
-                        <Card >
-                        <Card.Header>
-                                <div className="customer-card-header-text">CUSTOMER CARD</div>
-                        </Card.Header>
-                        <Card.Body>
-                                <Form onSubmit={(e) => this.submitCard(e)}>
-                                    <fieldset id="customer-card-form" disabled>
-                                        <Form.Group controlId="customer-id">
-                                            <Form.Control type="text" placeholder="Customer ID" disabled></Form.Control>
-                                        </Form.Group>
-                                        <Form.Group controlId="customer-card-number">
-                                            <Form.Control type="text" placeholder="Card Number"></Form.Control>
-                                        </Form.Group>
-                                        <Button variant="success" type="submit">SUBMIT</Button>
-                                    </fieldset>
-                                </Form>
+                                </fieldset>
+                            </Form>
                         </Card.Body>
                         <Card.Footer>
                         </Card.Footer>
                     </Card>
-                    </Col>
-                
+                </Col>
+
+                <Col md={3}>
+                    <Card>
+                        <Card.Header>
+                            <div className="customer-address-header-text">CUSTOMER ADDRESS</div>
+                        </Card.Header>
+                        <Card.Body>
+                            <Form onSubmit={(e) => this.submitAddress(e)}>
+                                <fieldset id="customer-address-form" disabled>
+                                    <Form.Group controlId="customer-id">
+                                        <Form.Control type="text" placeholder="Customer ID" disabled></Form.Control>
+                                    </Form.Group>
+                                    <Form.Group controlId="customer-address">
+                                        <Form.Control type="text" placeholder="Address"></Form.Control>
+                                    </Form.Group>
+                                    <Form.Group controlId="customer-address-city">
+                                        <Form.Control type="text" placeholder="City"></Form.Control>
+                                    </Form.Group>
+                                    <Form.Group controlId="customer-address-province">
+                                        <Form.Control type="text" placeholder="Province"></Form.Control>
+                                    </Form.Group>
+                                    <Form.Group controlId="customer-address-postal-code">
+                                        <Form.Control type="text" placeholder="Postal Code"></Form.Control>
+                                    </Form.Group>
+                                    <Form.Group controlId="customer-address-country">
+                                        <Form.Control type="text" placeholder="Country"></Form.Control>
+                                    </Form.Group>
+                                    <Button variant="success" type="submit">SUBMIT</Button>
+                                </fieldset>
+                            </Form>
+                        </Card.Body>
+                        <Card.Footer>
+                        </Card.Footer>
+                    </Card>
+                </Col>
+
+
             </Container>
         )
     }
 
     submitCustomer = (e) => {
         e.preventDefault()
-        
+
         let req = {
             firstname: document.getElementById('customer-first-name').value,
             middlename: document.getElementById('customer-middle-name').value,
@@ -140,21 +120,21 @@ export class CustomerMember extends Component {
         document.getElementById('customer-middle-name').value = ""
         document.getElementById('customer-last-name').value = ""
         document.getElementById('customer-contact').value = ""
-        
-        axios.post('/customerMember/submitCustomer',req).then(res => {
+
+        axios.post('/customerMember/submitCustomer', req).then(res => {
             document.getElementById('customer-address-form').disabled = false;
             document.getElementById('customer-id').value = res.data.cid;
-            this.setState({cid: res.data.cid})
-            
+            this.setState({ cid: res.data.cid })
+
         })
 
         document.getElementById('customer-form').disabled = true
-        
+
     }
 
     submitAddress = (e) => {
         e.preventDefault();
-        if(!this.state.cid){
+        if (!this.state.cid) {
             alert("Cheatttt!!!!")
             window.location.reload(false)
             return;
@@ -168,7 +148,7 @@ export class CustomerMember extends Component {
             country: document.getElementById('customer-address-country').value
         }
 
-        axios.post('/customerMember/submitAddress',req).then(res => {
+        axios.post('/customerMember/submitAddress', req).then(res => {
 
             document.getElementById('customer-address').value = ""
             document.getElementById('customer-address').value = ""
@@ -178,30 +158,7 @@ export class CustomerMember extends Component {
             document.getElementById('customer-address-country').value = ""
 
             document.getElementById('customer-address-form').disabled = true
-            document.getElementById('customer-card-form').disabled = false
-
-        })
-
-    }
-
-    submitCard = (e) =>{
-
-        e.preventDefault()
-        if(!this.state.cid){
-            alert("Cheatttt!!!!")
-            window.location.reload(false)
-            return;
-        }
-        let req = {
-            cid: this.state.cid,
-            cardnumber: document.getElementById('customer-card-number').value
-        }
-
-        axios.post('/customerMember/submitCard',req).then(res => {
-            
-            document.getElementById('customer-card-form').disabled = true;
             window.location.href = "/products"
-
         })
 
     }

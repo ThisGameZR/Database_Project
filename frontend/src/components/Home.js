@@ -1,11 +1,36 @@
 import React from 'react';
-import {Row,Col,Container} from 'react-bootstrap';
+import { Row, Col, Container, Carousel } from 'react-bootstrap';
 
-function Home(){
-    return(
-        <div style={{marginRight:'15px',marginLeft:'15px'}}>
-            This is home page
-        </div>
+function Home() {
+    return (
+        <Container fluid>
+            <Carousel >
+                <Carousel.Item interval={1000}>
+                    <img
+                        style={{ width: "100vw", height: "85vh", background: "#000000" }}
+                    />
+                    <Carousel.Caption>
+
+                    </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item interval={1000}>
+                    <img
+                        style={{ width: "100vw", height: "85vh", background: "#000000" }}
+                    />
+                    <Carousel.Caption>
+
+                    </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item interval={1000}>
+                    <img
+                        style={{ width: "100vw", height: "85vh", background: "#000000" }}
+                    />
+                    <Carousel.Caption>
+
+                    </Carousel.Caption>
+                </Carousel.Item>
+            </Carousel>
+        </Container>
     );
 }
 
