@@ -4,6 +4,7 @@ import SelectSearch, { fuzzySearch } from 'react-select-search'
 import Select from 'react-dropdown-select'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import { Link } from 'react-router-dom'
 
 export class AddProduct extends Component {
 
@@ -15,9 +16,13 @@ export class AddProduct extends Component {
             supplierOptions: [],
             sizeOptions: [],
             sizeValue: null,
+            position: null,
         }
         this.getSupplier()
         this.declareOptions()
+        axios.get('/login').then(res => {
+            this.setState({ position: res.data.session.user.position })
+        })
     }
 
     // componentDidUpdate(prevProps) {
@@ -119,67 +124,75 @@ export class AddProduct extends Component {
 
 
     render() {
-        return (
-            <Container>
-                <Row>
-                    <Col sm={6}>
-                        <Card>
-                            <Card.Header></Card.Header>
-                            <Card.Body>
-                                <Form onSubmit={(e) => this.supplier(e)}>
-                                    <Form.Group>
-                                        <h2>ADD SUPPLIER</h2>
-                                        <Form.Control id="sname" placeholder="Supplier Name"></Form.Control>
-                                        <Form.Control id="contact" placeholder="Supplier Contact"></Form.Control>
-                                        <Form.Control id="address" placeholder="Supplier Address"></Form.Control>
-                                        <Button variant="success" type="submit" style={{ marginTop: "20px" }}>ADD SUPPLIER</Button>
-                                    </Form.Group>
-                                </Form>
-                            </Card.Body>
-                            <Card.Footer></Card.Footer>
-                        </Card>
-                    </Col>
-                    <Col sm={6}>
-                        <Card>
-                            <Card.Header></Card.Header>
-                            <Card.Body>
-                                <Form onSubmit={(e) => this.product(e)}>
-                                    <Form.Group>
-                                        <h2>ADD PRODUCT</h2>
-                                        {this.state.supplierOptions.length != 0 ?
-                                            < SelectSearch
-                                                value={this.state.supplierValue}
-                                                onChange={(e) => this.setState({ supplierValue: e })}
-                                                emptyMessage="Result not found"
-                                                placeholder="Select Supplier"
-                                                options={this.state.supplierOptions}
-                                                filterOptions={fuzzySearch}
-                                            ></ SelectSearch>
-                                            : null}
-                                        <Form.Control id="productname" placeholder="Product Name"></Form.Control>
-                                        <Form.Control id="unitprice" placeholder="Unit Price"></Form.Control>
+        if (this.state.position?.includes("Warehouse") || this.state.position?.includes("Manager"))
+            return (
+                <Container>
+                    <Row>
+                        <Col sm={6}>
+                            <Card>
+                                <Card.Header></Card.Header>
+                                <Card.Body>
+                                    <Form onSubmit={(e) => this.supplier(e)}>
+                                        <Form.Group>
+                                            <h2>ADD SUPPLIER</h2>
+                                            <Form.Control id="sname" placeholder="Supplier Name"></Form.Control>
+                                            <Form.Control id="contact" placeholder="Supplier Contact"></Form.Control>
+                                            <Form.Control id="address" placeholder="Supplier Address"></Form.Control>
+                                            <Button variant="success" type="submit" style={{ marginTop: "20px" }}>ADD SUPPLIER</Button>
+                                        </Form.Group>
+                                    </Form>
+                                </Card.Body>
+                                <Card.Footer></Card.Footer>
+                            </Card>
+                        </Col>
+                        <Col sm={6}>
+                            <Card>
+                                <Card.Header></Card.Header>
+                                <Card.Body>
+                                    <Form onSubmit={(e) => this.product(e)}>
+                                        <Form.Group>
+                                            <h2>ADD PRODUCT</h2>
+                                            {this.state.supplierOptions.length != 0 ?
+                                                < SelectSearch
+                                                    value={this.state.supplierValue}
+                                                    onChange={(e) => this.setState({ supplierValue: e })}
+                                                    emptyMessage="Result not found"
+                                                    placeholder="Select Supplier"
+                                                    options={this.state.supplierOptions}
+                                                    filterOptions={fuzzySearch}
+                                                ></ SelectSearch>
+                                                : null}
+                                            <Form.Control id="productname" placeholder="Product Name"></Form.Control>
+                                            <Form.Control id="unitprice" placeholder="Unit Price"></Form.Control>
 
-                                        {this.state.sizeOptions.length != 0 ?
-                                            <Select
-                                                options={this.state.sizeOptions}
-                                                placeholder="Select Product Size"
-                                                onChange={values => this.setState({ sizeValue: values })}
-                                                labelField="name"
-                                                valueField="size"
-                                                color="#ff6984"
-                                            />
-                                            : null}
-                                        <Form.Control id="stock" placeholder="Number in stocks"></Form.Control>
-                                        <Button variant="success" type="submit" style={{ marginTop: "10px" }}>ADD PRODUCT</Button>
-                                    </Form.Group>
-                                </Form>
-                            </Card.Body>
-                            <Card.Footer></Card.Footer>
-                        </Card>
-                    </Col>
-                </Row>
-            </Container >
-        )
+                                            {this.state.sizeOptions.length != 0 ?
+                                                <Select
+                                                    options={this.state.sizeOptions}
+                                                    placeholder="Select Product Size"
+                                                    onChange={values => this.setState({ sizeValue: values })}
+                                                    labelField="name"
+                                                    valueField="size"
+                                                    color="#ff6984"
+                                                />
+                                                : null}
+                                            <Form.Control id="stock" placeholder="Number in stocks"></Form.Control>
+                                            <Button variant="success" type="submit" style={{ marginTop: "10px" }}>ADD PRODUCT</Button>
+                                        </Form.Group>
+                                    </Form>
+                                </Card.Body>
+                                <Card.Footer></Card.Footer>
+                            </Card>
+                        </Col>
+                    </Row>
+                </Container >
+            )
+        else
+            return (
+                <div style={{ margin: "20px" }}>
+                    <h2>Sorry.. This page is only for Warehouse Officer!</h2>
+                    <Link to="/"><Button>GO BACK</Button></Link>
+                </div>
+            )
     }
 }
 export default AddProduct

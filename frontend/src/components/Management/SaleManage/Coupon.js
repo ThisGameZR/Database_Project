@@ -5,6 +5,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import DatePicker from './DatePicker'
 import { FaTrashAlt } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 
 const ReactSwal = withReactContent(Swal)
 
@@ -16,8 +17,12 @@ export class Coupon extends Component {
         this.state = {
             coupon: [],
             expiretime: null,
+            position: null,
         }
         this.setCoupon()
+        axios.get('/login').then(res => {
+            this.setState({ position: res.data.session.user.position })
+        })
     }
 
     componentDidUpdate(prevProps) {
@@ -159,32 +164,40 @@ export class Coupon extends Component {
     }
 
     render() {
-        return (
-            <Container>
-                <InputGroup>
-                    <InputGroup.Prepend>
-                        <InputGroup.Text>SEARCH FOR</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl autoComplete="off" onChange={(e) => this.Search(e)} placeholder="Type Product Name here"></FormControl>
-                </InputGroup>
-                <Table striped bordered hover responsive variant="dark">
-                    <thead>
-                        <tr>
-                            <th>Code</th>
-                            <th>Product ID</th>
-                            <th>Product Name</th>
-                            <th>Discount</th>
-                            <th>Expired Date</th>
-                            <th>Available Number</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.renderCoupon()}
-                    </tbody>
-                </Table>
-            </Container>
-        )
+        if (this.state.position?.includes("Sale") || this.state.position?.includes("Manager"))
+            return (
+                <Container>
+                    <InputGroup>
+                        <InputGroup.Prepend>
+                            <InputGroup.Text>SEARCH FOR</InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <FormControl autoComplete="off" onChange={(e) => this.Search(e)} placeholder="Type Product Name here"></FormControl>
+                    </InputGroup>
+                    <Table striped bordered hover responsive variant="dark">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Product ID</th>
+                                <th>Product Name</th>
+                                <th>Discount</th>
+                                <th>Expired Date</th>
+                                <th>Available Number</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.renderCoupon()}
+                        </tbody>
+                    </Table>
+                </Container>
+            )
+        else
+            return (
+                <div style={{ margin: "20px" }}>
+                    <h2>Sorry.. This page is only for Sale Officer!</h2>
+                    <Link to="/"><Button>GO BACK</Button></Link>
+                </div>
+            )
     }
 }
 

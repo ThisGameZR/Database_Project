@@ -60,8 +60,8 @@ export class NavigationBar extends Component {
                                     <div class="phone-number">@AXIOS</div>
                                 </NavDropdown.Item>
                             </NavDropdown>
-                            {this.state.loginYet == true && this.state.dno == '100' ? <Nav.Link href="/customerMember">Customer Register</Nav.Link> : null}
-                            {this.state.loginYet == true && this.state.dno == '100' ? <Nav.Link href="/EditCustomer">Edit Customer</Nav.Link> : null}
+                            {this.state.loginYet == true && this.state.dno == '100' && (this.state.position?.includes('Sale') || this.state.position?.includes("Manager")) ? <Nav.Link href="/customerMember">Customer Register</Nav.Link> : null}
+                            {this.state.loginYet == true && this.state.dno == '100' && (this.state.position?.includes('Sale') || this.state.position?.includes("Manager")) ? <Nav.Link href="/EditCustomer">Edit Customer</Nav.Link> : null}
                             {this.state.loginYet == true && this.state.dno == '100' ? <Nav.Link href="/SaleManagement">Sale Management</Nav.Link> : null}
                             {this.state.position?.includes("Manager") ? <Nav.Link href="/EmployeeManagement">Employee Management</Nav.Link> : null}
                         </Nav>

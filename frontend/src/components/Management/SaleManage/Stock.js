@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Container, Table, FormControl, InputGroup, Button } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './CSS/stock.css'
 import Swal from 'sweetalert2'
@@ -11,9 +12,13 @@ export class Stock extends Component {
         super(props)
 
         this.state = {
-            products: []
+            products: [],
+            position: null,
         }
         this.setProduct()
+        axios.get('/login').then(res => {
+            this.setState({ position: res.data.session.user.position })
+        })
     }
 
     componentDidUpdate(prevProps) {
@@ -146,32 +151,42 @@ export class Stock extends Component {
     }
 
     render() {
-        return (
-            <Container>
-                <InputGroup>
-                    <InputGroup.Prepend>
-                        <InputGroup.Text>SEARCH FOR</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl autoComplete="off" onChange={(e) => this.Search(e)} placeholder="Type Product Name here"></FormControl>
-                </InputGroup>
-                <Table striped bordered hover variant="dark" responsive>
-                    <thead>
-                        <tr>
-                            <th>Product ID</th>
-                            <th>Product Name</th>
-                            <th>Supplier Name</th>
-                            <th>UnitPrice</th>
-                            <th>Size</th>
-                            <th>Stocks</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.renderStock()}
-                    </tbody>
-                </Table>
-            </Container>
-        )
+        if (this.state.position?.includes("Warehouse") || this.state.position?.includes("Manager")) {
+            return (
+                <Container>
+                    <InputGroup>
+                        <InputGroup.Prepend>
+                            <InputGroup.Text>SEARCH FOR</InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <FormControl autoComplete="off" onChange={(e) => this.Search(e)} placeholder="Type Product Name here"></FormControl>
+                    </InputGroup>
+                    <Table striped bordered hover variant="dark" responsive>
+                        <thead>
+                            <tr>
+                                <th>Product ID</th>
+                                <th>Product Name</th>
+                                <th>Supplier Name</th>
+                                <th>UnitPrice</th>
+                                <th>Size</th>
+                                <th>Stocks</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.renderStock()}
+                        </tbody>
+                    </Table>
+                </Container>
+
+            )
+        } else {
+            return (
+                <div style={{ margin: "20px" }}>
+                    <h2>Sorry.. This page is only for Warehouse Officer!</h2>
+                    <Link to="/"><Button>GO BACK</Button></Link>
+                </div>
+            )
+        }
     }
 }
 

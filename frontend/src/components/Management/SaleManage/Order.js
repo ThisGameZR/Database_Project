@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Container, Table, Button } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { VscClose } from 'react-icons/vsc'
 import Select from 'react-dropdown-select'
@@ -277,17 +278,25 @@ export class Order extends Component {
     }
 
     render() {
-        return (
-            <Container fluid>
-                {this.state.orderStatus.length != 0 ? this.renderSelect() : null}
-                <Table striped bordered hover responsive variant="dark">
-                    {this.renderThead()}
-                    <tbody>
-                        {this.state.orderInfo.length != 0 ? this.renderOrderInfo() : null}
-                    </tbody>
-                </Table>
-            </Container>
-        )
+        if (this.state.position?.includes("Sale") || this.state.position?.includes("Manager"))
+            return (
+                <Container fluid>
+                    {this.state.orderStatus.length != 0 ? this.renderSelect() : null}
+                    <Table striped bordered hover responsive variant="dark">
+                        {this.renderThead()}
+                        <tbody>
+                            {this.state.orderInfo.length != 0 ? this.renderOrderInfo() : null}
+                        </tbody>
+                    </Table>
+                </Container>
+            )
+        else
+            return (
+                <div style={{ margin: "20px" }}>
+                    <h2>Sorry.. This page is only for Sale Officer!</h2>
+                    <Link to="/"><Button>GO BACK</Button></Link>
+                </div>
+            )
     }
 }
 

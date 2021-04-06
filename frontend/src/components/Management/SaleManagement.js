@@ -32,10 +32,13 @@ export class SaleManagement extends Component {
         if (this.state?.loginYet === true) {
             return (
                 <Container fluid>
-                    <Tab.Container id="tab" defaultActiveKey="addproduct">
+                    <Tab.Container id="tab" defaultActiveKey="main">
                         <Row>
                             <Col sm={2}>
                                 <Nav className="flex-column" variant="pills">
+                                    <Nav.Item >
+                                        <Nav.Link eventKey="main">Main</Nav.Link>
+                                    </Nav.Item>
                                     <Nav.Item >
                                         <Nav.Link eventKey="addproduct">Add Product</Nav.Link>
                                     </Nav.Item>
@@ -58,6 +61,11 @@ export class SaleManagement extends Component {
                             </Col>
                             <Col sm={10}>
                                 <Tab.Content>
+                                    <Tab.Pane eventKey="main">
+                                        <div style={{ margin: "20px" }}>
+                                            <h2>This page is for Stuffs Management</h2>
+                                        </div>
+                                    </Tab.Pane>
                                     <Tab.Pane eventKey="addproduct">
                                         <AddProduct ></AddProduct>
                                     </Tab.Pane>

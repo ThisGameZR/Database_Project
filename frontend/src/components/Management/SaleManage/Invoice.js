@@ -6,6 +6,7 @@ import Swal from 'sweetalert2'
 import DatePicker from './DatePicker'
 import Select from 'react-dropdown-select'
 import withReactContent from 'sweetalert2-react-content'
+import { Link } from 'react-router-dom'
 
 const ReactSwal = withReactContent(Swal)
 
@@ -226,17 +227,25 @@ export class Invoice extends Component {
     }
 
     render() {
-        return (
-            <Container>
-                {this.state.paymentStatus.length != 0 ? this.renderSelect() : null}
-                <Table striped bordered hover responsive variant="dark">
-                    {this.renderThead()}
-                    <tbody>
-                        {this.state.paymentInfo.length != 0 ? this.renderPaymentInfo() : null}
-                    </tbody>
-                </Table>
-            </Container>
-        )
+        if (this.state.position?.includes("Sale") || this.state.position?.includes("Manager"))
+            return (
+                <Container>
+                    {this.state.paymentStatus.length != 0 ? this.renderSelect() : null}
+                    <Table striped bordered hover responsive variant="dark">
+                        {this.renderThead()}
+                        <tbody>
+                            {this.state.paymentInfo.length != 0 ? this.renderPaymentInfo() : null}
+                        </tbody>
+                    </Table>
+                </Container>
+            )
+        else
+            return (
+                <div style={{ margin: "20px" }}>
+                    <h2>Sorry.. This page is only for Sale Officer!</h2>
+                    <Link to="/"><Button>GO BACK</Button></Link>
+                </div>
+            )
     }
 }
 
