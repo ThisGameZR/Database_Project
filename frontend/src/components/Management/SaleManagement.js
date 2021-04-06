@@ -57,6 +57,9 @@ export class SaleManagement extends Component {
                                     <Nav.Item onClick={() => this.setState({ onChange2: !this.state.onChange2 })} >
                                         <Nav.Link eventKey="invoice">Edit Payment</Nav.Link>
                                     </Nav.Item>
+                                    <Nav.Item>
+                                        <Nav.Link href="/SaleManagement/OrderDetails">Show Order</Nav.Link>
+                                    </Nav.Item>
                                 </Nav>
                             </Col>
                             <Col sm={10}>

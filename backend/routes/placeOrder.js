@@ -179,7 +179,7 @@ router.post('/submitOrder', async (req, res) => {
 })
 
 router.get('/getOrder', (req, res) => {
-    if (req.session.user.position != "Manager") {
+    if (!req.session.user.position.includes("Manager")) {
         let sql = `select * from (((\`order\` natural join customer) natural join customer_addr) natural join order_status) natural join payment where eid = ${req.query.eid} order by orderid`
         pool.query(sql, (err, result) => {
             return res.send(JSON.stringify(result))
@@ -338,7 +338,25 @@ router.post('/confirmPayment', (req, res) => {
                 connection.execute(sql, (err, result) => {
                     if (err)
                         throw err
-                    return res.send({ status: 'success', message: `Successfully update payment status of payment with id ${req.body.PaymentID} to 'Confirm Payment'` })
+
+                    sql = `select cid,totalpoints from \`order\` where paymentid = ${req.body.PaymentID}`
+
+                    pool.query(sql, (err, result) => {
+                        if (err) {
+                            throw err
+                        }
+
+                        sql = `update customer set points = points + ${result[0].totalpoints} where cid = ${result[0].cid} `
+
+                        pool.query(sql, (err, result) => {
+                            if (err)
+                                throw err
+
+                        })
+
+                        return res.send({ status: 'success', message: `Successfully confirm payment status with id ${req.body.PaymentID}` })
+                    })
+
                 })
             })
             connection.commit()

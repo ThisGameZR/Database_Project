@@ -111,9 +111,8 @@ router.post('/updatepassword', async (req, res) => {
     let data = req.body;
     console.log(data)
 
-    if(regex.test(data.value))
-    {
-        return res.send({status:'error', message: 'password must not contain special characters'})
+    if (regex.test(data.value)) {
+        return res.send({ status: 'error', message: 'password must not contain special characters' })
     }
 
     let hashedPassword = await bcrypt.hash(data.value, 10);
@@ -121,9 +120,25 @@ router.post('/updatepassword', async (req, res) => {
     let sql = `update employee_account set password = '${hashedPassword}' where eid = ${data.eid}`
 
     pool.query(sql, (err, result) => {
-        if(err) return res.send({status: 'error', message: err.message})
-        return res.send({status: 'success', message: `Successfully update password on EID: ${data.eid}`})
+        if (err) return res.send({ status: 'error', message: err.message })
+        return res.send({ status: 'success', message: `Successfully update password on EID: ${data.eid}` })
     })
 })
 
+router.get('/getEmployee', (req, res) => {
+    let sql = `select EID,concat(Firstname,' ',Middlename,' ',Lastname) Name, Position, Salary
+            from employee where eid = ${req.query.eid}`
+    pool.query(sql, (err, result) => {
+
+        return res.send(JSON.stringify(result))
+    })
+})
+
+router.get('/getOrderDetail', (req, res) => {
+    let sql = `select * from order_detail where orderid = ${req.query.oid}`
+
+    pool.query(sql, (err, result) => {
+        return res.send(JSON.stringify(result))
+    })
+})
 module.exports = router

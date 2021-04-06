@@ -148,4 +148,11 @@ router.post('/editAddress/deleteAddress', (req, res) => {
 
 })
 
+router.get('/getAddress', (req, res) => {
+    let sql = `select * from customer_addr where caddrid = ${req.query.caddrid}`
+    pool.query(sql, (err, result) => {
+        return res.send(JSON.stringify(result))
+    })
+})
+
 module.exports = router

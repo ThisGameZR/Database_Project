@@ -5,6 +5,7 @@ import {
   Home, Product, NavigationBar, SQLInjection, CustomerMember,
   PlaceOrder, EditCustomer, SaleManagement, EmployeeManagement
 } from './PathRoutes'
+import OrderDetails from './components/Management/SaleManage/OrderDetails';
 
 export class App extends Component {
 
@@ -31,6 +32,7 @@ export class App extends Component {
               <Route path="/PlaceOrder" exact component={PlaceOrder} />
               <Route path="/EditCustomer" exact component={EditCustomer} />
               <Route path="/SaleManagement" exact component={SaleManagement}></Route>
+              <Route path="/SaleManagement/OrderDetails" exact component={OrderDetails}></Route>
               <Route path="/EmployeeManagement" exact component={EmployeeManagement}></Route>
             </Switch>
           </Router>

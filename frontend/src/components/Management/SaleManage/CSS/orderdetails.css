@@ -1,0 +1,11 @@
+.table-head{
+  background: rgb(255,175,189);
+background: linear-gradient(90deg, rgba(255,175,189,1) 0%, rgba(252,176,69,1) 100%);
+}
+.bold{
+    font-weight: bold;
+    color: #de6400;
+}
+table,th,td{
+    border: 1px solid black
+}
