@@ -107,4 +107,23 @@ router.post('/addEmployee', async (req, res) => {
     })
 })
 
+router.post('/updatepassword', async (req, res) => {
+    let data = req.body;
+    console.log(data)
+
+    if(regex.test(data.value))
+    {
+        return res.send({status:'error', message: 'password must not contain special characters'})
+    }
+
+    let hashedPassword = await bcrypt.hash(data.value, 10);
+
+    let sql = `update employee_account set password = '${hashedPassword}' where eid = ${data.eid}`
+
+    pool.query(sql, (err, result) => {
+        if(err) return res.send({status: 'error', message: err.message})
+        return res.send({status: 'success', message: `Successfully update password on EID: ${data.eid}`})
+    })
+})
+
 module.exports = router
