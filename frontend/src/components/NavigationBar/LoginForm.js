@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Navbar, Form } from 'react-bootstrap';
 import axios from "axios";
 import Swal from 'sweetalert2';
+import {FaCaretDown} from "react-icons/fa";
 
 export default function LoginForm(props) {
     const [loginyet, setLoginyet] = useState(false);
@@ -38,8 +39,10 @@ export default function LoginForm(props) {
 
         return (
             <>
-                <Navbar.Brand id="welcomeMessage">{user}</Navbar.Brand>
-                <Button variant="success" onClick={(e) => logout(e)}>LOG OUT</Button>
+                <Navbar.Text>
+                    Signed in as: <a href="#">{user}<FaCaretDown/></a>
+                </Navbar.Text>
+                {/* <Button variant="success" onClick={(e) => logout(e)}>LOG OUT</Button> */}
             </>
         );
     }

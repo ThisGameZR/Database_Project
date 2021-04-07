@@ -3,34 +3,28 @@ import { Row, Col, Container, Carousel } from 'react-bootstrap';
 
 function Home() {
     return (
-        <Container fluid>
+        
             <Carousel >
                 <Carousel.Item interval={1000}>
-                    <img
-                        style={{ width: "100vw", height: "85vh", background: "#000000" }}
-                    />
+                    <img style={{ width: "100vw", background: "#000000" }} src="https://cdn.minethost.com/aun/Brand_Png/slide1.png"/>
                     <Carousel.Caption>
 
                     </Carousel.Caption>
                 </Carousel.Item>
                 <Carousel.Item interval={1000}>
-                    <img
-                        style={{ width: "100vw", height: "85vh", background: "#000000" }}
-                    />
+                    <img style={{ width: "100vw", background: "#000000" }} src="https://cdn.minethost.com/aun/Brand_Png/slide2.png"/>
                     <Carousel.Caption>
 
                     </Carousel.Caption>
                 </Carousel.Item>
                 <Carousel.Item interval={1000}>
-                    <img
-                        style={{ width: "100vw", height: "85vh", background: "#000000" }}
-                    />
+                    <img style={{ width: "100vw", background: "#000000" }} src="https://cdn.minethost.com/aun/Brand_Png/slide1.png"/>
                     <Carousel.Caption>
 
                     </Carousel.Caption>
                 </Carousel.Item>
             </Carousel>
-        </Container>
+        
     );
 }
 

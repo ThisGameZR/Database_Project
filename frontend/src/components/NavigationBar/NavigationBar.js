@@ -5,6 +5,7 @@ import shoppingCart from '../Images/shoppingCart.png';
 import LoginForm from './LoginForm';
 import '../CSS/Navigation.css';
 
+
 export class NavigationBar extends Component {
 
     constructor(props) {
@@ -36,12 +37,11 @@ export class NavigationBar extends Component {
     render() {
 
         return (
-            <Container fluid>
+            <Navbar bg="light" expand="lg" collapseOnSelect>
                 {/* Header bar */}
-                <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+                <Container>
                     <Navbar.Brand href="/">
-                        <Image src={shoppingCart} roundedCircle style={{ width: "80px", height: "80px" }} />
-                        PLASTIC SHOP
+                       PlastShop
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
@@ -60,15 +60,15 @@ export class NavigationBar extends Component {
                                     <div class="phone-number">@AXIOS</div>
                                 </NavDropdown.Item>
                             </NavDropdown>
-                            {this.state.loginYet == true && this.state.dno == '100' && (this.state.position?.includes('Sale') || this.state.position?.includes("Manager")) ? <Nav.Link href="/customerMember">Customer Register</Nav.Link> : null}
-                            {this.state.loginYet == true && this.state.dno == '100' && (this.state.position?.includes('Sale') || this.state.position?.includes("Manager")) ? <Nav.Link href="/EditCustomer">Edit Customer</Nav.Link> : null}
+                            {this.state.loginYet == true && this.state.dno == '100' ? <Nav.Link href="/customerMember">Customer Register</Nav.Link> : null}
+                            {this.state.loginYet == true && this.state.dno == '100' ? <Nav.Link href="/EditCustomer">Edit Customer</Nav.Link> : null}
                             {this.state.loginYet == true && this.state.dno == '100' ? <Nav.Link href="/SaleManagement">Sale Management</Nav.Link> : null}
                             {this.state.position?.includes("Manager") ? <Nav.Link href="/EmployeeManagement">Employee Management</Nav.Link> : null}
                         </Nav>
                         <LoginForm setLoginYet={(bool) => this.setLoginYet(bool)} />
                     </Navbar.Collapse>
-                </Navbar>
-            </Container>
+                </Container>
+            </Navbar>
         );
     }
 }
