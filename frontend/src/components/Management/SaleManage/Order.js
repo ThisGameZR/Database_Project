@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Table, Button } from 'react-bootstrap'
+import { Container, Table, Button, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { VscClose } from 'react-icons/vsc'
@@ -79,6 +79,11 @@ export class Order extends Component {
                                 {el.PaymentDate ? new Date(el.PaymentDate).toLocaleString() : <VscClose></VscClose>}
                             </td>
                             <td>
+                            <Button variant="info" style={{width:"100%"}} onClick={() => this.addComment(el.OrderID, el.Comment)}>
+                                    Comment
+                                </Button>
+                            </td>
+                            <td>
                                 {el.Description == 'In progress' ?
                                     <Button variant="info" style={{ width: "100%" }}
                                         onClick={() => this.updateOrderStatus(el.OrderID)}>
@@ -127,6 +132,11 @@ export class Order extends Component {
                                 {el.PaymentDate ? new Date(el.PaymentDate).toLocaleString() : <VscClose></VscClose>}
                             </td>
                             <td>
+                                <Button variant="info" style={{width:"100%"}} onClick={() => this.addComment(el.OrderID, el.Comment)}>
+                                    Comment
+                                </Button>
+                            </td>
+                            <td>
                                 {el.Description == 'In progress' ?
                                     <Button variant="info" style={{ width: "100%" }}
                                         onClick={() => this.updateOrderStatus(el.OrderID)}>
@@ -160,6 +170,28 @@ export class Order extends Component {
                     )
             })
         }
+    }
+
+    addComment(orderid, comment1){
+        Swal.fire({
+            title: 'Comment',
+            html: comment1,
+            input:'textarea',
+            inputPlaceholder: 'Enter new comment here',
+            icon:'info',
+            showCancelButton: true,
+            showLoaderOnConfirm:true,
+            preConfirm: (input) => {
+                axios.post('/placeOrder/addComment',{comment: input, orderid: orderid}).then(res => {
+                    Swal.fire({
+                        title: res.data.status.toUpperCase(),
+                        text: res.data.message,
+                        icon: res.data.status,
+                    })
+                    this.setOrderInfo()
+                })
+            }
+        })
     }
 
     updateOrderStatus(orderid) {
@@ -254,6 +286,7 @@ export class Order extends Component {
                         <th>OrderDate</th>
                         <th>RequiredDate</th>
                         <th>PaymentDate</th>
+                        <th>Comment</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -270,6 +303,7 @@ export class Order extends Component {
                         <th>OrderDate</th>
                         <th>RequiredDate</th>
                         <th>PaymentDate</th>
+                        <th>Comment</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -281,13 +315,18 @@ export class Order extends Component {
         if (this.state.position?.includes("Sale") || this.state.position?.includes("Manager"))
             return (
                 <Container fluid>
-                    {this.state.orderStatus.length != 0 ? this.renderSelect() : null}
-                    <Table striped bordered hover responsive variant="dark">
-                        {this.renderThead()}
-                        <tbody>
-                            {this.state.orderInfo.length != 0 ? this.renderOrderInfo() : null}
-                        </tbody>
-                    </Table>
+                    <Card>
+                        <Card.Header>Edit Order</Card.Header>
+                        <Card.Body>
+                            {this.state.orderStatus.length != 0 ? this.renderSelect() : null}
+                            <Table striped bordered hover responsive style={{ marginTop: "12px" }}>
+                                {this.renderThead()}
+                                <tbody>
+                                    {this.state.orderInfo.length != 0 ? this.renderOrderInfo() : null}
+                                </tbody>
+                            </Table>
+                        </Card.Body>
+                    </Card>
                 </Container>
             )
         else

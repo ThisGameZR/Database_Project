@@ -60,10 +60,26 @@ export class NavigationBar extends Component {
                                     <div class="phone-number">@AXIOS</div>
                                 </NavDropdown.Item>
                             </NavDropdown>
-                            {this.state.loginYet == true && this.state.dno == '100' ? <Nav.Link href="/customerMember">Customer Register</Nav.Link> : null}
+                            {this.state.loginYet == true && this.state.dno == '100' ?
+                            <NavDropdown title="Employee Menu" id="responsive-nav-dropdown" variant="dark">
+                                <NavDropdown.Item href="/customerMember">
+                                    {this.state.loginYet == true && this.state.dno == '100' ? <Nav.Link href="/customerMember">Customer Register</Nav.Link> : null}
+                                </NavDropdown.Item>
+                                <NavDropdown.Item href="/EditCustomer">
+                                    {this.state.loginYet == true && this.state.dno == '100' ? <Nav.Link href="/EditCustomer">Edit Customer</Nav.Link> : null}
+                                </NavDropdown.Item>
+                                <NavDropdown.Item href="/SaleManagement">
+                                    {this.state.loginYet == true && this.state.dno == '100' ? <Nav.Link href="/SaleManagement">Sale Management</Nav.Link> : null}
+                                </NavDropdown.Item>
+                                <NavDropdown.Item href="/EmployeeManagement">
+                                    {this.state.position?.includes("Manager") ? <Nav.Link href="/EmployeeManagement">Employee Management</Nav.Link> : null}
+                                </NavDropdown.Item>
+                            </NavDropdown>
+                            : null}
+                            {/* {this.state.loginYet == true && this.state.dno == '100' ? <Nav.Link href="/customerMember">Customer Register</Nav.Link> : null}
                             {this.state.loginYet == true && this.state.dno == '100' ? <Nav.Link href="/EditCustomer">Edit Customer</Nav.Link> : null}
                             {this.state.loginYet == true && this.state.dno == '100' ? <Nav.Link href="/SaleManagement">Sale Management</Nav.Link> : null}
-                            {this.state.position?.includes("Manager") ? <Nav.Link href="/EmployeeManagement">Employee Management</Nav.Link> : null}
+                            {this.state.position?.includes("Manager") ? <Nav.Link href="/EmployeeManagement">Employee Management</Nav.Link> : null} */}
                         </Nav>
                         <LoginForm setLoginYet={(bool) => this.setLoginYet(bool)} />
                     </Navbar.Collapse>

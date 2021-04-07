@@ -30,7 +30,7 @@ export default function LoginForm(props) {
                     <Form.Group className="mr-sm-2">
                         <Form.Control autoComplete="off" type="text" placeholder="Employee ID" id="username" style={{ marginRight: "10px" }}></Form.Control>
                         <Form.Control type="password" placeholder="Password" id="password" style={{ marginRight: "10px" }}></Form.Control>
-                        <Button variant="success" type="submit">LOGIN</Button>
+                        <Button variant="success" type="submit">Login</Button>
                     </Form.Group>
                 </Form>
             </div>
@@ -40,9 +40,12 @@ export default function LoginForm(props) {
         return (
             <>
                 <Navbar.Text>
-                    Signed in as: <a href="#">{user}<FaCaretDown/></a>
+                    Signed in as: 
+                    
+                    <a href="#">{user} </a>
                 </Navbar.Text>
-                {/* <Button variant="success" onClick={(e) => logout(e)}>LOG OUT</Button> */}
+                
+                <Button variant="success" onClick={(e) => logout(e)}>LOG OUT</Button>
             </>
         );
     }

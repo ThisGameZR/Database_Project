@@ -14,13 +14,14 @@ export class SaleManagement extends Component {
             onChange: false,
             onChange1: false,
             onChange2: false,
+            position: null,
         }
 
         axios.get('/login').then(res => {
             if (res.data.session?.user) {
                 if (res.data.session.user.condition == 1)
                     if (res.data.session.user.dno == "100") {
-                        this.setState({ loginYet: true })
+                        this.setState({ loginYet: true , position: res.data.session.user.position})
                     }
             }
         })
@@ -31,44 +32,115 @@ export class SaleManagement extends Component {
     render() {
         if (this.state?.loginYet === true) {
             return (
-                <Container fluid>
-                    <Tab.Container id="tab" defaultActiveKey="main">
+                <Container style={{ marginTop: "30px" }} fluid>
+                    {this.state.position?.includes("Warehouse") || this.state.position.includes("Manager") ?
+                    <Tab.Container id="tab" defaultActiveKey="addproduct">
+                    <Row>
+                        <Col sm={2}>
+                            <Nav className="flex-column" variant="pills">
+                                {this.state.position.includes("Warehouse") || this.state.position.includes("Manager") ?
+                                <Nav.Item >
+                                    <Nav.Link eventKey="addproduct">Add Product</Nav.Link>
+                                </Nav.Item>
+                            : null}
+                                {this.state.position.includes("Sale") || this.state.position.includes("Manager") ?
+                                <Nav.Item>
+                                    <Nav.Link eventKey="addcoupon">Add Coupon</Nav.Link>
+                                </Nav.Item>
+                                : null}
+                                {this.state.position.includes("Warehouse") || this.state.position.includes("Manager") ?
+                                <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })} >
+                                    <Nav.Link eventKey="stock">Edit Stock</Nav.Link>
+                                </Nav.Item>
+                                : null}
+                                {this.state.position.includes("Sale") || this.state.position.includes("Manager") ?
+                                <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })} >
+                                    <Nav.Link eventKey="coupon">Edit Coupon</Nav.Link>
+                                </Nav.Item>
+                                : null}
+                                {this.state.position.includes("Sale") || this.state.position.includes("Manager") ?
+                                    <Nav.Item onClick={() => this.setState({ onChange1: !this.state.onChange1 })} >
+                                    <Nav.Link eventKey="order">Edit Order</Nav.Link>
+                                </Nav.Item>
+                                : null}
+                                {this.state.position.includes("Sale") || this.state.position.includes("Manager") ?
+                                <Nav.Item onClick={() => this.setState({ onChange2: !this.state.onChange2 })} >
+                                    <Nav.Link eventKey="invoice">Edit Payment</Nav.Link>
+                                </Nav.Item>
+                                : null}
+                                {this.state.position.includes("Sale") || this.state.position.includes("Manager") ?
+                                    <Nav.Item>
+                                    <Nav.Link href="/SaleManagement/OrderDetails">Show Order</Nav.Link>
+                                </Nav.Item>
+                                : null}
+                            </Nav>
+                        </Col>
+                        <Col sm={10}>
+                            <Tab.Content>
+                                <Tab.Pane eventKey="addproduct">
+                                    <AddProduct ></AddProduct>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="addcoupon">
+                                    <AddCoupon onChange={this.state.onChange}></AddCoupon>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="stock">
+                                    <Stock onChange={this.state.onChange}></Stock>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="coupon">
+                                    <Coupon onChange={this.state.onChange}></Coupon>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="order">
+                                    <Order onChange1={this.state.onChange1}></Order>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="invoice">
+                                    <Invoice onChange2={this.state.onChange2}></Invoice>
+                                </Tab.Pane>
+                            </Tab.Content>
+                        </Col>
+                    </Row>
+                </Tab.Container> : <Tab.Container id="tab" defaultActiveKey="addcoupon">
                         <Row>
                             <Col sm={2}>
                                 <Nav className="flex-column" variant="pills">
-                                    <Nav.Item >
-                                        <Nav.Link eventKey="main">Main</Nav.Link>
-                                    </Nav.Item>
+                                    {this.state.position.includes("Warehouse") || this.state.position.includes("Manager") ?
                                     <Nav.Item >
                                         <Nav.Link eventKey="addproduct">Add Product</Nav.Link>
                                     </Nav.Item>
+                                : null}
+                                    {this.state.position.includes("Sale") || this.state.position.includes("Manager") ?
                                     <Nav.Item>
                                         <Nav.Link eventKey="addcoupon">Add Coupon</Nav.Link>
                                     </Nav.Item>
+                                    : null}
+                                    {this.state.position.includes("Warehouse") || this.state.position.includes("Manager") ?
                                     <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })} >
                                         <Nav.Link eventKey="stock">Edit Stock</Nav.Link>
                                     </Nav.Item>
+                                    : null}
+                                    {this.state.position.includes("Sale") || this.state.position.includes("Manager") ?
                                     <Nav.Item onClick={() => this.setState({ onChange: !this.state.onChange })} >
                                         <Nav.Link eventKey="coupon">Edit Coupon</Nav.Link>
                                     </Nav.Item>
-                                    <Nav.Item onClick={() => this.setState({ onChange1: !this.state.onChange1 })} >
+                                    : null}
+                                    {this.state.position.includes("Sale") || this.state.position.includes("Manager") ?
+                                        <Nav.Item onClick={() => this.setState({ onChange1: !this.state.onChange1 })} >
                                         <Nav.Link eventKey="order">Edit Order</Nav.Link>
                                     </Nav.Item>
+                                    : null}
+                                    {this.state.position.includes("Sale") || this.state.position.includes("Manager") ?
                                     <Nav.Item onClick={() => this.setState({ onChange2: !this.state.onChange2 })} >
                                         <Nav.Link eventKey="invoice">Edit Payment</Nav.Link>
                                     </Nav.Item>
-                                    <Nav.Item>
+                                    : null}
+                                    {this.state.position.includes("Sale") || this.state.position.includes("Manager") ?
+                                        <Nav.Item>
                                         <Nav.Link href="/SaleManagement/OrderDetails">Show Order</Nav.Link>
                                     </Nav.Item>
+                                    : null}
                                 </Nav>
                             </Col>
                             <Col sm={10}>
                                 <Tab.Content>
-                                    <Tab.Pane eventKey="main">
-                                        <div style={{ margin: "20px" }}>
-                                            <h2>This page is for Stuffs Management</h2>
-                                        </div>
-                                    </Tab.Pane>
                                     <Tab.Pane eventKey="addproduct">
                                         <AddProduct ></AddProduct>
                                     </Tab.Pane>
@@ -90,7 +162,7 @@ export class SaleManagement extends Component {
                                 </Tab.Content>
                             </Col>
                         </Row>
-                    </Tab.Container>
+                    </Tab.Container>}
                 </Container>
             )
         } else {

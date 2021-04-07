@@ -89,11 +89,11 @@ router.get('/coupon', (req, res) => {
 })
 
 router.post('/editCoupon', (req, res) => {
-
+    
     if (regex.test(req.body.value)) {
         return res.send({ status: 'error', message: 'Value cannot contain special characters' })
     }
-
+    
     if (req.body.type == "Discount" || req.body.type == "Available_number" || req.body.type == "PID") {
         if (isNaN(req.body.value)) {
             return res.send({ status: 'error', message: 'Value cannot contain character' })
@@ -104,7 +104,7 @@ router.post('/editCoupon', (req, res) => {
             return res.send({ status: 'error', message: 'Value cannot be negative' })
         }
     }
-
+    
     if (req.body.type == "ExpiredDate") {
 
         let date = new Date(req.body.value)
@@ -113,48 +113,49 @@ router.post('/editCoupon', (req, res) => {
         req.body.value = new Date(date).toISOString().slice(0, 19).replace('T', ' ')
 
     }
-
+    
     let sql
     if (req.body.type == "Code") {
 
         if (req.body.value.length > 20) {
             return res.send({ status: 'error', message: 'Code cannot be more than 20 characters' })
         }
+       
+    }
 
-        sql = `select Code from promocode`
+    sql = `select Code from promocode`
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.log(err)
+            return res.send({ status: 'error', message: err.message })
+        }
+        let duplicate = false
+        result.map(el => {
+            if (el.Code == req.body.value) {
+                res.send({ status: 'error', message: 'Code already exists' })
+                duplicate = true
+            }
+        })
+        if (duplicate == true)
+            return
+
+        if (req.body.type == "Code" || req.body.type == "ExpiredDate") {
+            sql = `update promocode set ${req.body.type} = '${req.body.value}' where Code = '${req.body.code}'`
+        } else {
+            sql = `update promocode set ${req.body.type} = ${req.body.value} where Code = '${req.body.code}'`
+        }
         pool.query(sql, (err, result) => {
             if (err) {
+                if (req.body.type == "PID") {
+                    console.log(err)
+                    return res.send({ status: 'error', message: `There is no such product with id ${req.body.value}` })
+                }
                 console.log(err)
                 return res.send({ status: 'error', message: err.message })
             }
-            let duplicate = false
-            result.map(el => {
-                if (el.Code == req.body.value) {
-                    res.send({ status: 'error', message: 'Code already exists' })
-                    duplicate = true
-                }
-            })
-            if (duplicate == true)
-                return
-
-            if (req.body.type == "Code" || req.body.type == "ExpiredDate") {
-                sql = `update promocode set ${req.body.type} = '${req.body.value}' where Code = '${req.body.code}'`
-            } else {
-                sql = `update promocode set ${req.body.type} = ${req.body.value} where Code = '${req.body.code}'`
-            }
-            pool.query(sql, (err, result) => {
-                if (err) {
-                    if (req.body.type == "PID") {
-                        console.log(err)
-                        return res.send({ status: 'error', message: `There is no such product with id ${req.body.value}` })
-                    }
-                    console.log(err)
-                    return res.send({ status: 'error', message: err.message })
-                }
-                return res.send({ status: 'success', message: 'Successfully change the value' })
-            })
+            return res.send({ status: 'success', message: 'Successfully change the value' })
         })
-    }
+    })
 
 })
 

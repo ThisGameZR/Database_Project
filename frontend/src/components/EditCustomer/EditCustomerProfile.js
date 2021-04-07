@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { Component } from 'react'
 import { Button,Card, InputGroup, FormControl, Badge} from 'react-bootstrap'
+import Swal from 'sweetalert2'
 import EditInfo from './EditInfo'
 
 export class EditCustomerProfile extends Component {
@@ -23,6 +24,18 @@ export class EditCustomerProfile extends Component {
             document.getElementById('contact').value = res.data.customerInfo.Contact
             document.getElementById('point').innerHTML = res.data.customerInfo.Points
         })
+    }
+
+    deleteCustomer(){
+        
+        axios.post('/customer/deleteCustomer', {cid : this.props.cid}).then(res => {
+            Swal.fire({
+                title: res.data.status.toUpperCase(),
+                text: res.data.message,
+                icon: res.data.status,
+            })
+        })
+        
     }
 
     render() {
@@ -71,6 +84,7 @@ export class EditCustomerProfile extends Component {
                             </InputGroup.Append>
                         </InputGroup>
                         <Button variant="outline-success">POINTS <span style={{fontSize:"26", fontWeight:"600"}} id="point"></span></Button>
+                        
                     </Card.Body>
                     <Card.Footer>
                     </Card.Footer>

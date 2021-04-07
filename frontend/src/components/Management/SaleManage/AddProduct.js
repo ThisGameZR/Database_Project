@@ -126,32 +126,29 @@ export class AddProduct extends Component {
     render() {
         if (this.state.position?.includes("Warehouse") || this.state.position?.includes("Manager"))
             return (
-                <Container>
+                <Container style={{ marginTop: "0px" }}>
                     <Row>
                         <Col sm={6}>
                             <Card>
-                                <Card.Header></Card.Header>
+                                <Card.Header>Add Supplier</Card.Header>
                                 <Card.Body>
                                     <Form onSubmit={(e) => this.supplier(e)}>
                                         <Form.Group>
-                                            <h2>ADD SUPPLIER</h2>
                                             <Form.Control id="sname" placeholder="Supplier Name"></Form.Control>
-                                            <Form.Control id="contact" placeholder="Supplier Contact"></Form.Control>
-                                            <Form.Control id="address" placeholder="Supplier Address"></Form.Control>
-                                            <Button variant="success" type="submit" style={{ marginTop: "20px" }}>ADD SUPPLIER</Button>
+                                            <Form.Control style={{ marginTop: "8px" }} id="contact" placeholder="Supplier Contact"></Form.Control>
+                                            <Form.Control style={{ marginTop: "8px" }} id="address" placeholder="Supplier Address"></Form.Control>
+                                            <Button variant="success" type="submit" style={{ marginTop: "10px" }}>ADD SUPPLIER</Button>
                                         </Form.Group>
                                     </Form>
                                 </Card.Body>
-                                <Card.Footer></Card.Footer>
                             </Card>
                         </Col>
                         <Col sm={6}>
                             <Card>
-                                <Card.Header></Card.Header>
+                                <Card.Header>Add Product</Card.Header>
                                 <Card.Body>
                                     <Form onSubmit={(e) => this.product(e)}>
                                         <Form.Group>
-                                            <h2>ADD PRODUCT</h2>
                                             {this.state.supplierOptions.length != 0 ?
                                                 < SelectSearch
                                                     value={this.state.supplierValue}
@@ -162,11 +159,11 @@ export class AddProduct extends Component {
                                                     filterOptions={fuzzySearch}
                                                 ></ SelectSearch>
                                                 : null}
-                                            <Form.Control id="productname" placeholder="Product Name"></Form.Control>
-                                            <Form.Control id="unitprice" placeholder="Unit Price"></Form.Control>
+                                            <Form.Control style={{ marginTop: "8px" }} id="productname" placeholder="Product Name"></Form.Control>
+                                            <Form.Control style={{ marginTop: "8px" }} id="unitprice" placeholder="Unit Price"></Form.Control>
 
                                             {this.state.sizeOptions.length != 0 ?
-                                                <Select
+                                                <Select style={{ marginTop: "8px" }}
                                                     options={this.state.sizeOptions}
                                                     placeholder="Select Product Size"
                                                     onChange={values => this.setState({ sizeValue: values })}
@@ -175,12 +172,11 @@ export class AddProduct extends Component {
                                                     color="#ff6984"
                                                 />
                                                 : null}
-                                            <Form.Control id="stock" placeholder="Number in stocks"></Form.Control>
+                                            <Form.Control style={{ marginTop: "8px" }} id="stock" placeholder="Number in stocks"></Form.Control>
                                             <Button variant="success" type="submit" style={{ marginTop: "10px" }}>ADD PRODUCT</Button>
                                         </Form.Group>
                                     </Form>
                                 </Card.Body>
-                                <Card.Footer></Card.Footer>
                             </Card>
                         </Col>
                     </Row>

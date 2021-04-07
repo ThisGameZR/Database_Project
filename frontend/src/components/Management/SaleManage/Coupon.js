@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { Component } from 'react'
-import { Button, Container, Table, InputGroup, FormControl } from 'react-bootstrap'
+import { Button, Container, Table, InputGroup, FormControl, Card } from 'react-bootstrap'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import DatePicker from './DatePicker'
@@ -41,6 +41,7 @@ export class Coupon extends Component {
 
         return this.state.coupon?.map((el, i) => {
             return (
+                
                 <tr key={i}>
                     <td>
                         <Button variant="danger" style={{ width: "100%" }}
@@ -167,28 +168,34 @@ export class Coupon extends Component {
         if (this.state.position?.includes("Sale") || this.state.position?.includes("Manager"))
             return (
                 <Container>
-                    <InputGroup>
-                        <InputGroup.Prepend>
-                            <InputGroup.Text>SEARCH FOR</InputGroup.Text>
-                        </InputGroup.Prepend>
-                        <FormControl autoComplete="off" onChange={(e) => this.Search(e)} placeholder="Type Product Name here"></FormControl>
-                    </InputGroup>
-                    <Table striped bordered hover responsive variant="dark">
-                        <thead>
-                            <tr>
-                                <th>Code</th>
-                                <th>Product ID</th>
-                                <th>Product Name</th>
-                                <th>Discount</th>
-                                <th>Expired Date</th>
-                                <th>Available Number</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.renderCoupon()}
-                        </tbody>
-                    </Table>
+                    <Card>
+                        <Card.Header>Edit Coupon</Card.Header>
+                        <Card.Body>
+                            <InputGroup>
+                                <InputGroup.Prepend>
+                                    <InputGroup.Text>SEARCH FOR</InputGroup.Text>
+                                </InputGroup.Prepend>
+                                <FormControl autoComplete="off" onChange={(e) => this.Search(e)} placeholder="Type Product Name here"></FormControl>
+                            </InputGroup>
+
+                            <Table style={{ marginTop: "12px" }}  striped bordered hover responsive>
+                                <thead>
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Product ID</th>
+                                        <th>Product Name</th>
+                                        <th>Discount</th>
+                                        <th>Expired Date</th>
+                                        <th>Available Number</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.renderCoupon()}
+                                </tbody>
+                            </Table>
+                        </Card.Body>
+                    </Card>
                 </Container>
             )
         else

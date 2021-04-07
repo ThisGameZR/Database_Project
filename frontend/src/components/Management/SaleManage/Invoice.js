@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Table, Button } from 'react-bootstrap'
+import { Container, Table, Button, Card } from 'react-bootstrap'
 import axios from 'axios'
 import { VscClose } from 'react-icons/vsc'
 import Swal from 'sweetalert2'
@@ -230,13 +230,21 @@ export class Invoice extends Component {
         if (this.state.position?.includes("Sale") || this.state.position?.includes("Manager"))
             return (
                 <Container>
-                    {this.state.paymentStatus.length != 0 ? this.renderSelect() : null}
-                    <Table striped bordered hover responsive variant="dark">
-                        {this.renderThead()}
-                        <tbody>
-                            {this.state.paymentInfo.length != 0 ? this.renderPaymentInfo() : null}
-                        </tbody>
-                    </Table>
+                    
+                    <Card>
+                        <Card.Header>
+                            Edit Payment
+                        </Card.Header>
+                        <Card.Body>
+                            {this.state.paymentStatus.length != 0 ? this.renderSelect() : null}
+                            <Table striped bordered hover responsive style={{ marginTop: "12px" }}>
+                                {this.renderThead()}
+                                <tbody>
+                                    {this.state.paymentInfo.length != 0 ? this.renderPaymentInfo() : null}
+                                </tbody>
+                            </Table>
+                        </Card.Body>
+                    </Card>
                 </Container>
             )
         else

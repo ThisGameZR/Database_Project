@@ -171,6 +171,12 @@ export class PlaceOrder extends Component {
                     'Please try again...',
                     'error'
                 )
+            }else{
+                Swal.fire({
+                    title: 'Completed',
+                    text: res.data.message,
+                    icon: 'success'
+            })
             }
             this.setState({ coupon: res.data.coupon })
         })
@@ -276,19 +282,17 @@ export class PlaceOrder extends Component {
 
         if (this.state?.loginYet === true) {
             return (
-                <Container fluid>
+                <Container style={{ marginTop: "40px" }}>
                     <Row>
-                        <Col sm={6}>
+                        <Col sm={12}>
                             <Card>
                                 <Card.Header>
                                     <Row>
-                                        <Col sm={6}>
-                                            <Button variant="outline-dark">CUSTOMER : </Button>
-                                            <Button variant="dark">{this.state?.cname}</Button>
+                                        <Col sm={9}>
+                                            Customer : {this.state?.cname}
                                         </Col>
-                                        <Col sm={6}>
-                                            <Button variant="outline-dark">EMPLOYEE : </Button>
-                                            <Button variant="dark">{this.state?.ename}</Button>
+                                        <Col sm={3}>
+                                            EMPLOYEE : {this.state?.ename}
                                         </Col>
                                     </Row>
                                 </Card.Header>
@@ -307,34 +311,39 @@ export class PlaceOrder extends Component {
                                         </tbody>
                                     </Table>
                                 </Card.Body>
-                                <Card.Footer>
-                                    <Table style={{ justifyContent: "center", alignItems: "center", textAlign: "center" }}>
-                                        <thead>
-                                            <tr>
-                                                <th><Button variant="info">SUBTOTAL</Button></th>
-                                                <th><Button variant="warning" style={{ color: "#fff", background: "#d1b02e" }}>DISCOUNTED</Button></th>
-                                                <th><Button variant="danger">TAX</Button></th>
-                                                <th><Button variant="success">TOTAL</Button></th>
-                                                <th><Button variant="primary">POINTS</Button></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr style={{ fontWeight: "bold" }}>
-                                                <td>{parseFloat(this.SubTotal()).toFixed(2)}</td>
-                                                <td>{parseFloat(this.Discount()).toFixed(2)}</td>
-                                                <td>{parseFloat(this.Tax()).toFixed(2)}</td>
-                                                <td>{parseFloat(this.Total()).toFixed(2)}</td>
-                                                <td>{this.Point()}</td>
-                                            </tr>
-                                        </tbody>
-                                    </Table>
-                                </Card.Footer>
                             </Card>
                         </Col>
-                        <Col sm={6}>
+                        <Col sm={12}>
+                        <Card style={{ marginTop: "20px" }}>
+                            <Card.Header>Summary</Card.Header>
+                            <Card.Body>
+                                <Table  striped bordered hover responsive style={{ justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+                                    <thead>
+                                        <tr>
+                                            <th><Button variant="info">SUBTOTAL</Button></th>
+                                            <th><Button variant="warning" style={{ color: "#fff", background: "#d1b02e" }}>DISCOUNTED</Button></th>
+                                            <th><Button variant="danger">TAX</Button></th>
+                                            <th><Button variant="success">TOTAL</Button></th>
+                                            <th><Button variant="primary">POINTS</Button></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style={{ fontWeight: "bold" }}>
+                                            <td>{parseFloat(this.SubTotal()).toFixed(2)}</td>
+                                            <td>{parseFloat(this.Discount()).toFixed(2)}</td>
+                                            <td>{parseFloat(this.Tax()).toFixed(2)}</td>
+                                            <td>{parseFloat(this.Total()).toFixed(2)}</td>
+                                            <td>{this.Point()}</td>
+                                        </tr>
+                                    </tbody>
+                                </Table>
+                            </Card.Body>
+                        </Card>
+                        </Col>
+                        <Col sm={12} style={{ marginTop: "20px" }}>
                             <Card>
                                 <Card.Header>
-
+                                    Customer Details
                                 </Card.Header>
                                 <Card.Body>
 

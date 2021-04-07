@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Table, InputGroup, FormControl, Button } from 'react-bootstrap'
+import { Container, Table, InputGroup, FormControl, Button, Card } from 'react-bootstrap'
 import axios from 'axios'
 import './CSS/orderdetails.css'
 import Swal from 'sweetalert2'
@@ -234,33 +234,41 @@ export class OrderDetails extends Component {
     render() {
         if (this.state.position?.includes("Sale")) {
             return (
-                <Container fluid>
-                    <InputGroup>
-                        <InputGroup.Prepend>
-                            <InputGroup.Text>SEARCH FOR</InputGroup.Text>
-                        </InputGroup.Prepend>
-                        <FormControl autoComplete="off" onChange={(e) => this.Search(e)} placeholder="Type Order ID here"></FormControl>
-                    </InputGroup>
-                    <Table striped bordered hover responsive>
-                        <thead className="table-head">
-                            <tr>
-                                <th>OID</th>
-                                <th>EID</th>
-                                <th>CID</th>
-                                <th>CAddrID</th>
-                                <th>TotalPrice</th>
-                                <th>TotalPoints</th>
-                                <th>Coupon</th>
-                                <th>OrderDate</th>
-                                <th>RequiredDate</th>
-                                <th>PaymentDate</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.renderInfo()}
-                        </tbody>
-                    </Table>
+                <Container style={{ marginTop: "30px" }}>
+                    <Card>
+                        <Card.Header>
+                            Order Detail
+                        </Card.Header>
+                        <Card.Body>
+                            <InputGroup>
+                                <InputGroup.Prepend>
+                                    <InputGroup.Text>SEARCH FOR</InputGroup.Text>
+                                </InputGroup.Prepend>
+                                <FormControl autoComplete="off" onChange={(e) => this.Search(e)} placeholder="Type Order ID here"></FormControl>
+                            </InputGroup>
+
+                            <Table striped bordered hover responsive style={{ marginTop: "12px" }}>
+                                <thead className="table-head">
+                                    <tr>
+                                        <th>OID</th>
+                                        <th>EID</th>
+                                        <th>CID</th>
+                                        <th>CAddrID</th>
+                                        <th>TotalPrice</th>
+                                        <th>TotalPoints</th>
+                                        <th>Coupon</th>
+                                        <th>OrderDate</th>
+                                        <th>RequiredDate</th>
+                                        <th>PaymentDate</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.renderInfo()}
+                                </tbody>
+                            </Table>
+                        </Card.Body>
+                    </Card>
                 </Container>
             )
         } else {

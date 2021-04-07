@@ -8,8 +8,13 @@ router.post('/submitCustomer', async (req, res) => {
     let middlename = req.body.middlename
     let lastname = req.body.lastname
     let contact = req.body.contact
+
+    if(firstname == "" || lastname == "" || contact == ""){
+        return res.send({status: 'error', message: 'Please fill in the blanks'})
+    }
+
     if (regex.test(firstname) || regex.test(middlename) || regex.test(lastname) || regex.test(contact)) {
-        return res.send("Error special characters are not allowed")
+        return res.send({status: 'error' , message: "Error special characters are not allowed"})
     }
     let sql = `insert into customer (firstname,middlename,lastname,contact,points) values 
         ('${firstname}','${middlename}','${lastname}','${contact}',0)
@@ -23,7 +28,7 @@ router.post('/submitCustomer', async (req, res) => {
                 if (err)
                     console.log(err)
 
-                return res.send({ cid: result[0].cid })
+                return res.send({status: 'success', message:`Add customer with id : ${result[0].cid}`, cid: result[0].cid })
             })
         })
     } catch {
@@ -43,6 +48,14 @@ router.post('/submitAddress', async (req, res) => {
         data[key] = value
     })
 
+    if(regex.test(data.cid + data.address + data.city + data.province + data.postalcode + data.country)){
+        return res.send({status: 'error', message: 'Special character are not allowed'})
+    }
+
+    if(data.cid == "" || data.address == "" || data.city == "" || data.province == "" || data.postalcode == "" || data.country == ""){
+        return res.send({status: 'error', message: 'Please fill in the blanks'})
+    }
+
     let sql = `insert into customer_addr (CID,Address,City,Province,PostalCode,Country)
         values(
             ${data.cid},
@@ -58,7 +71,7 @@ router.post('/submitAddress', async (req, res) => {
 
             err ? console.log(err) : null
 
-            res.send("Success");
+            res.send({status: "success", message: `Successfully create address for customer id ${data.cid}`});
 
         })
     } catch {

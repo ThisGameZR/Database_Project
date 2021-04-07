@@ -24,7 +24,11 @@ router.post('/checkCoupon', (req, res) => {
 
         pool.query(sql, (err, result) => {
             if (err) console.log(err)
-            return res.send({ coupon: result[0] })
+            sql = `select productname from product where pid = ${result[0].PID}`
+            pool.query(sql,(err,ret) => {
+                if(err) console.log(err)
+                return res.send({message: `Discount ${result[0].Discount}% on ${ret[0].productname}`, coupon: result[0] })
+            })
         })
     } catch {
         return res.status(200).send("Coupon not found")
@@ -372,6 +376,17 @@ router.get('/getPaymentStatus', (req, res) => {
     let sql = `select * from payment_status`
     pool.query(sql, (err, result) => {
         return res.send(JSON.stringify(result))
+    })
+})
+
+router.post('/addComment',(req,res) => {
+    let sql = `update \`order\` set comment = concat(comment,'<div>${req.body.comment}</div>') where orderid = ${req.body.orderid}`
+    pool.query(sql,(err,result) => {
+        if(err){
+            console.log(err)
+            return res.send({status: 'error', message: err.message})
+        }
+        return res.send({status: 'success', message: 'Successfully comments'})
     })
 })
 

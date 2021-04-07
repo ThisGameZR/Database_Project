@@ -59,9 +59,8 @@ export class AddCoupon extends Component {
         if (this.state.position?.includes("Sale") || this.state.position?.includes("Manager"))
             return (
                 <Container>
-                    <Col sm={9}>
                         <Card>
-                            <Card.Header></Card.Header>
+                            <Card.Header>Add Coupon</Card.Header>
                             <Card.Body>
                                 <InputGroup>
                                     <InputGroup.Prepend>
@@ -112,9 +111,7 @@ export class AddCoupon extends Component {
                                 </InputGroup>
                                 <Button variant="success" onClick={() => this.AddCoupon()}>ADD COUPON</Button>
                             </Card.Body>
-                            <Card.Footer></Card.Footer>
                         </Card>
-                    </Col>
                 </Container>
             )
         else

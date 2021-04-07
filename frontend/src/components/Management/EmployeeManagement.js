@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { Component } from 'react'
-import { Container, Table, Button, InputGroup, FormControl, Row, Col } from 'react-bootstrap'
+import { Container, Table, Button, InputGroup, FormControl, Row, Col, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { FaUserPlus } from 'react-icons/fa'
@@ -229,39 +229,41 @@ export class EmployeeManagement extends Component {
     render() {
         if (this.state.visible == true) {
             return (
-                <Container style={{ marginTop: "20px" }}>
-                    <Row>
-
-                        <Col sm={8}>
-                            <InputGroup>
-                                <InputGroup.Prepend>
-                                    <InputGroup.Text>SEARCH FOR</InputGroup.Text>
-                                </InputGroup.Prepend>
-                                <FormControl autoComplete="off" onChange={(e) => this.Search(e)} placeholder="Type Employee Name here"></FormControl>
-                            </InputGroup>
-                        </Col>
-                        <Col sm={4}>
-                            <Button variant="success" style={{ width: "100%" }} onClick={() => this.addEmployee()}>
+                <Container style={{ marginTop: "30px" }}>
+                    <Card>
+                        <Card.Header>Employee Management</Card.Header>
+                        <Card.Body>
+                            <Row>
+                                <Col sm={8}>
+                                    <InputGroup>
+                                        <InputGroup.Prepend>
+                                            <InputGroup.Text>SEARCH FOR</InputGroup.Text>
+                                        </InputGroup.Prepend>
+                                        <FormControl autoComplete="off" onChange={(e) => this.Search(e)} placeholder="Type Employee Name here"></FormControl>
+                                    </InputGroup>
+                                </Col>
+                                <Col sm={4}>
+                                    <Button variant="success" style={{ width: "100%" }} onClick={() => this.addEmployee()}>
                                 ADD EMPLOYEE <FaUserPlus style={{ color: "white" }} /></Button>
-                        </Col>
-                    </Row>
-                    <Row style={{ marginTop: "20px" }}>
-                        <Table striped bordered hover responsive>
-                            <thead>
-                                <tr>
-                                    <th>EID</th>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Salary</th>
-                                    <th>Account</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.renderEmployee()}
-                            </tbody>
-                        </Table>
-                    </Row>
+                                </Col>
+                            </Row>
+                            <Table striped bordered hover responsive style={{ marginTop: "12px" }}>
+                                <thead>
+                                    <tr>
+                                        <th>EID</th>
+                                        <th>Name</th>
+                                        <th>Position</th>
+                                        <th>Salary</th>
+                                        <th>Account</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.renderEmployee()}
+                                </tbody>
+                            </Table>
+                        </Card.Body>
+                    </Card>
                 </Container>
             )
         } else {

@@ -301,10 +301,10 @@ export default class Product extends Component {
 
     render() {
         return (
-            < Container fluid='xl' >
+            <Container>
                 {/*Searching Bar*/}
                 <div style={{ width: "32%", marginTop: "20px", display: "inline-block", marginRight: "2%" }}>
-                    <InputGroup className="mb-3">
+                    <InputGroup>
                         <InputGroup.Prepend>
                             <InputGroup.Text>Search</InputGroup.Text>
                         </InputGroup.Prepend>

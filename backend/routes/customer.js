@@ -155,4 +155,16 @@ router.get('/getAddress', (req, res) => {
     })
 })
 
+router.post('/deleteCustomer',(req,res) => {
+    
+    let sql = `delete from customer where cid = ${req.body.cid}`
+    pool.query(sql,(err,result) => {
+        if(err){
+            console.log(err)
+            return res.send({status: 'error', message:'Failed to delete customer'})
+        }
+        return res.send({status: 'success', message: 'Successfully delete customer'})
+    })
+})
+
 module.exports = router

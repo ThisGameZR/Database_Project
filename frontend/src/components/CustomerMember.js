@@ -3,6 +3,7 @@ import { Pagination } from 'react-bootstrap';
 import { Button, Form, InputGroup, Card, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export class CustomerMember extends Component {
 
@@ -35,71 +36,74 @@ export class CustomerMember extends Component {
         }
 
         return (
-            <Container fluid style={{ display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", marginTop: "3%" }} >
-
-                <Col md={3}>
-                    <Card >
-                        <Card.Header>
-                            <div className="customer-info-header-text">CUSTOMER INFO</div>
-                        </Card.Header>
-                        <Card.Body>
-                            <Form onSubmit={(e) => this.submitCustomer(e)}>
-                                <fieldset id="customer-form">
-                                    <Form.Group controlId="customer-first-name">
-                                        <Form.Control type="text" placeholder="First name"></Form.Control>
-                                    </Form.Group>
-                                    <Form.Group controlId="customer-middle-name">
-                                        <Form.Control type="text" placeholder="Middle name"></Form.Control>
-                                    </Form.Group>
-                                    <Form.Group controlId="customer-last-name">
-                                        <Form.Control type="text" placeholder="Last name"></Form.Control>
-                                    </Form.Group>
-                                    <Form.Group controlId="customer-contact">
-                                        <Form.Control type="text" placeholder="Contact"></Form.Control>
-                                    </Form.Group>
-                                    <Button variant="success" type="submit">SUBMIT</Button>
-                                </fieldset>
-                            </Form>
-                        </Card.Body>
-                        <Card.Footer>
-                        </Card.Footer>
-                    </Card>
-                </Col>
-
-                <Col md={3}>
-                    <Card>
-                        <Card.Header>
-                            <div className="customer-address-header-text">CUSTOMER ADDRESS</div>
-                        </Card.Header>
-                        <Card.Body>
-                            <Form onSubmit={(e) => this.submitAddress(e)}>
-                                <fieldset id="customer-address-form" disabled>
-                                    <Form.Group controlId="customer-id">
-                                        <Form.Control type="text" placeholder="Customer ID" disabled></Form.Control>
-                                    </Form.Group>
-                                    <Form.Group controlId="customer-address">
-                                        <Form.Control type="text" placeholder="Address"></Form.Control>
-                                    </Form.Group>
-                                    <Form.Group controlId="customer-address-city">
-                                        <Form.Control type="text" placeholder="City"></Form.Control>
-                                    </Form.Group>
-                                    <Form.Group controlId="customer-address-province">
-                                        <Form.Control type="text" placeholder="Province"></Form.Control>
-                                    </Form.Group>
-                                    <Form.Group controlId="customer-address-postal-code">
-                                        <Form.Control type="text" placeholder="Postal Code"></Form.Control>
-                                    </Form.Group>
-                                    <Form.Group controlId="customer-address-country">
-                                        <Form.Control type="text" placeholder="Country"></Form.Control>
-                                    </Form.Group>
-                                    <Button variant="success" type="submit">SUBMIT</Button>
-                                </fieldset>
-                            </Form>
-                        </Card.Body>
-                        <Card.Footer>
-                        </Card.Footer>
-                    </Card>
-                </Col>
+            // style={{ display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", marginTop: "3%" }}
+            <Container style={{ marginTop: "30px" }}>
+                <Card>
+                    <Card.Header>Customer Register</Card.Header>
+                    <Card.Body>
+                        <Row>
+                            <Col sm={6}>
+                                <Card >
+                                    <Card.Header>
+                                        <div className="customer-info-header-text">Customer Info</div>
+                                    </Card.Header>
+                                    <Card.Body>
+                                        <Form onSubmit={(e) => this.submitCustomer(e)}>
+                                            <fieldset id="customer-form">
+                                                <Form.Group controlId="customer-first-name">
+                                                    <Form.Control type="text" placeholder="First name"></Form.Control>
+                                                </Form.Group>
+                                                <Form.Group controlId="customer-middle-name">
+                                                    <Form.Control type="text" placeholder="Middle name"></Form.Control>
+                                                </Form.Group>
+                                                <Form.Group controlId="customer-last-name">
+                                                    <Form.Control type="text" placeholder="Last name"></Form.Control>
+                                                </Form.Group>
+                                                <Form.Group controlId="customer-contact">
+                                                    <Form.Control type="text" placeholder="Contact"></Form.Control>
+                                                </Form.Group>
+                                                <Button variant="success" type="submit">SUBMIT</Button>
+                                            </fieldset>
+                                        </Form>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                            <Col sm={6}>
+                                <Card>
+                                    <Card.Header>
+                                        <div className="customer-address-header-text">Customer Address</div>
+                                    </Card.Header>
+                                    <Card.Body>
+                                        <Form onSubmit={(e) => this.submitAddress(e)}>
+                                            <fieldset id="customer-address-form" disabled>
+                                                <Form.Group controlId="customer-id">
+                                                    <Form.Control type="text" placeholder="Customer ID" disabled></Form.Control>
+                                                </Form.Group>
+                                                <Form.Group controlId="customer-address">
+                                                    <Form.Control type="text" placeholder="Address"></Form.Control>
+                                                </Form.Group>
+                                                <Form.Group controlId="customer-address-city">
+                                                    <Form.Control type="text" placeholder="City"></Form.Control>
+                                                </Form.Group>
+                                                <Form.Group controlId="customer-address-province">
+                                                    <Form.Control type="text" placeholder="Province"></Form.Control>
+                                                </Form.Group>
+                                                <Form.Group controlId="customer-address-postal-code">
+                                                    <Form.Control type="text" placeholder="Postal Code"></Form.Control>
+                                                </Form.Group>
+                                                <Form.Group controlId="customer-address-country">
+                                                    <Form.Control type="text" placeholder="Country"></Form.Control>
+                                                </Form.Group>
+                                                <Button variant="success" type="submit">SUBMIT</Button>
+                                            </fieldset>
+                                        </Form>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        </Row>
+                        
+                    </Card.Body>
+                </Card>
 
 
             </Container>
@@ -116,26 +120,39 @@ export class CustomerMember extends Component {
             contact: document.getElementById('customer-contact').value
         }
 
-        document.getElementById('customer-first-name').value = ""
-        document.getElementById('customer-middle-name').value = ""
-        document.getElementById('customer-last-name').value = ""
-        document.getElementById('customer-contact').value = ""
+        
 
         axios.post('/customerMember/submitCustomer', req).then(res => {
-            document.getElementById('customer-address-form').disabled = false;
-            document.getElementById('customer-id').value = res.data.cid;
-            this.setState({ cid: res.data.cid })
+            
+            Swal.fire({
+                title: res.data.status.toUpperCase(),
+                text: res.data.message,
+                icon: res.data.status
+            })
+
+            if(res.data.status == "success"){
+                document.getElementById('customer-first-name').value = ""
+                document.getElementById('customer-middle-name').value = ""
+                document.getElementById('customer-last-name').value = ""
+                document.getElementById('customer-contact').value = ""
+                document.getElementById('customer-address-form').disabled = false;
+                document.getElementById('customer-id').value = res.data.cid;
+                this.setState({ cid: res.data.cid })
+                document.getElementById('customer-form').disabled = true
+            }
 
         })
 
-        document.getElementById('customer-form').disabled = true
 
     }
 
     submitAddress = (e) => {
         e.preventDefault();
         if (!this.state.cid) {
-            alert("Cheatttt!!!!")
+            Swal.fire({
+                title: `Don't script!!!!`,
+                icon:'error'
+            })
             window.location.reload(false)
             return;
         }
@@ -150,15 +167,22 @@ export class CustomerMember extends Component {
 
         axios.post('/customerMember/submitAddress', req).then(res => {
 
-            document.getElementById('customer-address').value = ""
-            document.getElementById('customer-address').value = ""
-            document.getElementById('customer-address-city').value = ""
-            document.getElementById('customer-address-province').value = ""
-            document.getElementById('customer-address-postal-code').value = ""
-            document.getElementById('customer-address-country').value = ""
-
-            document.getElementById('customer-address-form').disabled = true
-            window.location.href = "/products"
+            Swal.fire({
+                title: res.data.status.toUpperCase(),
+                text: res.data.message,
+                icon: res.data.status
+            })
+            if(res.data.status == "success"){
+                document.getElementById('customer-address').value = ""
+                document.getElementById('customer-address').value = ""
+                document.getElementById('customer-address-city').value = ""
+                document.getElementById('customer-address-province').value = ""
+                document.getElementById('customer-address-postal-code').value = ""
+                document.getElementById('customer-address-country').value = ""
+    
+                document.getElementById('customer-address-form').disabled = true
+                window.location.href = "/products"   
+            }
         })
 
     }
